@@ -14,6 +14,6 @@ body:
     attributes:
       label: Description
       description: Explain your idea. Provide as much information as possible trying to be short.
-      placeholder: Describe your desire.
+      placeholder: Describe your desire
     validations:
       required: true
