@@ -1,0 +1,19 @@
+name: Suggestion⭐
+description: Submit an improvement or a new feature
+labels: ["Enhancement"]
+assignees:
+  - DavideBlade
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill out this form to speed up the management of your request. Thanks for your contribution!
+
+  - type: textarea
+    id: information
+    attributes:
+      label: Description
+      description: Explain your idea. Provide as much information as possible trying to be short.
+      placeholder: Describe your desire.
+    validations:
+      required: true
