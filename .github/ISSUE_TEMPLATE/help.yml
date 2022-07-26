@@ -17,8 +17,6 @@ body:
       options:
         - label: "I have read the [wiki](https://github.com/DavideBlade/Clash-of-Minecrafters/wiki)."
           required: false
-        - label: "I made sure the bug hasn't already been reported on the [issue tracker](https://github.com/DavideBlade/Clash-of-Minecrafters/issues?q=is%3Aissue)."
-          required: false
 
   - type: textarea
     id: information
