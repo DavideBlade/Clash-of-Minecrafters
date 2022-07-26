@@ -7,7 +7,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Please fill out this form accurately to improve the handling of the issue. Thanks for your time.
+        Please fill out this form accurately to improve the handling of the issue. Thanks for your time!
 
   - type: checkboxes
     id: tasks
