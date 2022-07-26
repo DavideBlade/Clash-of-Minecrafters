@@ -8,16 +8,18 @@ body:
     attributes:
       value: |
         Please fill out this form accurately to improve the handling of the issue. Thanks for your time.
+
   - type: checkboxes
     id: tasks
     attributes:
       label: Tasks
       description: Specify what tasks you completed before opening this report.
       options:
-       - label: "I have read the [Wiki](https://github.com/DavideBlade/Clash-of-Minecrafters/wiki)."
-         required: true
-       - label: "I made sure the bug hasn't already been reported on the [issue tracker](https://github.com/DavideBlade/Clash-of-Minecrafters/issues?q=is%3Aissue)."
-         required: false
+        - label: "I have read the [Wiki](https://github.com/DavideBlade/Clash-of-Minecrafters/wiki)."
+          required: true
+        - label: "I made sure the bug hasn't already been reported on the [issue tracker](https://github.com/DavideBlade/Clash-of-Minecrafters/issues?q=is%3Aissue)."
+          required: false
+
 - type: textarea
     id: what-happened
     attributes:
@@ -32,11 +34,11 @@ body:
       label: Reproduction of the problem
       description: List of steps to replicate the bug.
       placeholder: |
-       1.
-       2.
-       3.
-       4.
-       ...
+        1.
+        2.
+        3.
+        4.
+        ...
     validations:
       required: true
   - type: input
@@ -44,7 +46,7 @@ body:
     attributes:
       label: Server version
       description: Copy and paste the output of the `/version` command
-      placeholder: "This server is running CraftBukkit version 3132-Spigot-66f9d3c-40caacc (MC: 1.17) (Implementing API version 1.17-R0.1-SNAPSHOT)"
+      placeholder: "This server is running CraftBukkit version 3475-Spigot-ffceeae-b5559f8 (MC: 1.18.2) (Implementing API version 1.18.2-R0.1-SNAPSHOT)"
     validations:
       required: true
   - type: dropdown
