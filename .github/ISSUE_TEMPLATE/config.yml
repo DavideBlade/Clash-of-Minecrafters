@@ -2,4 +2,7 @@ blank_issues_enabled: false
 contact_links:
   - name: Community
     url: https://www.spigotmc.org/threads/190277
-    about: To discuss with the community or ask general questions use the SpigotMC page
+    about: Discuss with the community on SpigotMC and ask general questions.
+  - name: Wiki
+    url: https://github.com/DavideBlade/Clash-of-Minecrafters/wiki
+    about: If you have any doubts, check the wiki first!
