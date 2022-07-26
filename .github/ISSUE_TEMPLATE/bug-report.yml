@@ -1,6 +1,6 @@
-name: Bug Report😭
+name: Bug report😭
 description: Report a bug or unexpected behavior
-labels: ["bug"]
+labels: ["Bug"]
 assignees:
   - DavideBlade
 body:
@@ -49,6 +49,15 @@ body:
       label: Server version
       description: Copy and paste the output of the `/version` command
       placeholder: "This server is running CraftBukkit version 3475-Spigot-ffceeae-b5559f8 (MC: 1.18.2) (Implementing API version 1.18.2-R0.1-SNAPSHOT)"
+    validations:
+      required: true
+
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Plugin version
+      description: Version displayed with the `/CoM` command
+      placeholder: "3.0 alpha"
     validations:
       required: true
 
