@@ -1,4 +1,4 @@
-name: Bug Report :bug:
+name: Bug Report😭
 description: Report a bug or unexpected behavior
 labels: ["bug"]
 assignees:
@@ -22,19 +22,29 @@ body:
     id: what-happened
     attributes:
       label: What happened?
-      description: Also tell us, what did you expect to happen?
+      description: Describe what happened and what you expected to happen instead.
       placeholder: Tell us what you see!
-      value: "A bug happened!"
     validations:
       required: true
-  - type: dropdown
-    id: version
+- type: textarea
+    id: how-to-reproduce
     attributes:
-      label: Version
-      description: What version of our software are you running?
-      options:
-        - 1.0.2 (Default)
-        - 1.0.3 (Edge)
+      label: Reproduction of the problem
+      description: List of steps to replicate the bug.
+      placeholder: |
+       1.
+       2.
+       3.
+       4.
+       ...
+    validations:
+      required: true
+  - type: input
+    id: server-version
+    attributes:
+      label: Server version
+      description: Copy and paste the output of the `/version` command
+      placeholder: "This server is running CraftBukkit version 3132-Spigot-66f9d3c-40caacc (MC: 1.17) (Implementing API version 1.17-R0.1-SNAPSHOT)"
     validations:
       required: true
   - type: dropdown
