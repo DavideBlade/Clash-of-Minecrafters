@@ -17,6 +17,8 @@ body:
       options:
         - label: "I have read the [wiki](https://github.com/DavideBlade/Clash-of-Minecrafters/wiki)."
           required: false
+        - label: "I tried to ask the [community](https://www.spigotmc.org/threads/190277) for help."
+          required: false
 
   - type: textarea
     id: information
