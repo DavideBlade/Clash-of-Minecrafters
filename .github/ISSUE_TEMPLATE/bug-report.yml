@@ -19,6 +19,8 @@ body:
           required: false
         - label: "I made sure the bug hasn't already been reported on the [issue tracker](https://github.com/DavideBlade/Clash-of-Minecrafters/issues?q=is%3Aissue)."
           required: false
+        - label: "I have tested the [latest version](https://www.spigotmc.org/resources/31180/history) of Clash of Minecrafters and the bug is still there."
+          required: false
 
   - type: textarea
     id: what-happened
