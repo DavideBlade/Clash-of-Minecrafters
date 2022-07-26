@@ -23,7 +23,7 @@ body:
           required: false
 
   - type: textarea
-    id: what-happened
+    id: information
     attributes:
       label: What happened?
       description: |
@@ -62,10 +62,3 @@ body:
       placeholder: "3.0 alpha"
     validations:
       required: true
-
-  - type: textarea
-    id: logs
-    attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      render: java
