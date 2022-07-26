@@ -20,7 +20,7 @@ body:
         - label: "I made sure the bug hasn't already been reported on the [issue tracker](https://github.com/DavideBlade/Clash-of-Minecrafters/issues?q=is%3Aissue)."
           required: false
 
-- type: textarea
+  - type: textarea
     id: what-happened
     attributes:
       label: What happened?
@@ -28,7 +28,8 @@ body:
       placeholder: Tell us what you see!
     validations:
       required: true
-- type: textarea
+
+  - type: textarea
     id: how-to-reproduce
     attributes:
       label: Reproduction of the problem
@@ -41,6 +42,7 @@ body:
         ...
     validations:
       required: true
+
   - type: input
     id: server-version
     attributes:
@@ -49,6 +51,7 @@ body:
       placeholder: "This server is running CraftBukkit version 3475-Spigot-ffceeae-b5559f8 (MC: 1.18.2) (Implementing API version 1.18.2-R0.1-SNAPSHOT)"
     validations:
       required: true
+
   - type: dropdown
     id: browsers
     attributes:
@@ -59,12 +62,14 @@ body:
         - Chrome
         - Safari
         - Microsoft Edge
+
   - type: textarea
     id: logs
     attributes:
       label: Relevant log output
       description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
       render: shell
+
   - type: checkboxes
     id: terms
     attributes:
