@@ -24,7 +24,9 @@ body:
     id: what-happened
     attributes:
       label: What happened?
-      description: Describe what happened and what you expected to happen instead.
+      description: |
+        Describe what happened and what you expected to happen instead.
+        Provide screenshots, logs, configuration files, and anything else that might be helpful.
       placeholder: Tell us what you see!
     validations:
       required: true
@@ -38,7 +40,6 @@ body:
         1.
         2.
         3.
-        4.
         ...
     validations:
       required: true
