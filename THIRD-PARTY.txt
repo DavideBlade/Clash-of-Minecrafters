@@ -1,0 +1,6 @@
+Clash of Minecrafters contains code from the following third-party open source projects, listed with their license information.
+
+HikariCP
+   URL: https://github.com/brettwooldridge/HikariCP
+   License name: Apache License 2.0
+   License file: /licenses/LICENSE-HikariCP.txt

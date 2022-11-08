@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.gmail.davideblade99.clashofminecrafters</groupId>
+    <artifactId>com-parent</artifactId>
+    <name>CoM Parent</name>
+    <version>3.1 alpha</version>
+    <packaging>pom</packaging>
+
+    <url>https://davideblade.github.io</url>
+    <description>The first fantastic plugin of Clash of Clans for the minecraft world!</description>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <spigot-api.version>1.14</spigot-api.version>
+        <spigot-api.maven-version>${spigot-api.version}-R0.1-SNAPSHOT</spigot-api.maven-version>
+        <worldedit.version>7.2.11-SNAPSHOT</worldedit.version>
+    </properties>
+
+    <modules>
+        <module>nms</module>
+        <module>plugin</module>
+    </modules>
+
+    <repositories>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+
+        <repository>
+            <id>nms-repo</id>
+            <url>https://repo.codemc.io/repository/nms/</url>
+        </repository>
+
+        <repository>
+            <id>enginehub-maven</id>
+            <url>https://maven.enginehub.org/repo/</url>
+        </repository>
+    </repositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>com-nms-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>com-nms-v1_14_r1</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>com-nms-v1_15_r1</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>com-nms-v1_16_r1</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>com-nms-v1_16_r2</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>com-nms-v1_16_r3</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>com-nms-v1_17_r1</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>com-nms-v1_18_r1</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>com-nms-v1_18_r2</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>com-nms-v1_19_r1</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sk89q.worldedit</groupId>
+                <artifactId>worldedit-bukkit</artifactId>
+                <version>${worldedit.version}</version>
+                <scope>provided</scope>
+                <optional>true</optional>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sk89q.worldedit</groupId>
+                <artifactId>worldedit-core</artifactId>
+                <version>${worldedit.version}</version>
+                <scope>provided</scope>
+                <optional>true</optional>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>23.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>4.0.3</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Vanilla Mockito
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>4.4.0</version>
+            <scope>test</scope>
+        </dependency>
+        -->
+
+        <!-- Enhanced Mockito
+        <dependency>
+            <groupId>com.github.seeseemelk</groupId>
+            <artifactId>MockBukkit-v${spigot-api.version}</artifactId>
+            <version>0.2.2</version>
+            <scope>test</scope>
+        </dependency>
+        -->
+    </dependencies>
+
+    <build>
+        <defaultGoal>clean package</defaultGoal>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.2.4</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

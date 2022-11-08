@@ -1,0 +1,179 @@
+name: CoM
+version: ${project.version}
+main: com.gmail.davideblade99.clashofminecrafters.CoM
+api-version: ${spigot-api.version}
+author: DavideBlade
+description: ${project.description}
+load: POSTWORLD
+website: https://www.spigotmc.org/resources/clash-of-minecrafters.31180/
+softdepend: [WorldEdit]
+commands:
+  com:
+    usage: /<command> [help] [page]
+    description: "Plugin information."
+  clan:
+    usage: /<command> <join|leave|create> [clan name]
+    description: "Leave, join or create a clan."
+  island:
+    usage: /<command> [setspawn]
+    aliases: [is]
+    description: "Create and go to island. You can also edit island spawn."
+  add:
+    usage: /<command> <amount> <gems|gold|elixir> [player]
+    description: "Add gems, gold or elixir."
+  take:
+    usage: /<command> <amount> <gems|gold|elixir> [player]
+    description: "Remove gems, gold or elixir."
+  raid:
+    usage: /<command>
+    description: "Search the islands of enemies in war."
+  balance:
+    usage: /<command>
+    aliases: [bal]
+    description: "Get your balance."
+  open:
+    usage: /<command> <menu name> [player]
+    description: "Open the specified menu."
+  upgrade:
+    usage: /<command>
+    description: "Open the menu with buildings' upgrades."
+  war:
+    usage: /<command> state
+    description: "Check the state of clan war."
+  trophies:
+    usage: /<command>
+    description: "Check how many trophies you have."
+  schem:
+    usage: /<command> <list|save> [<x1> <y1> <z1> <x2> <y2> <z2> <schematic name>]
+    description: "Save a schematic between specified blocks or list all available schematics."
+  extractors:
+    usage: /<command> [collect]
+    description: "Check the details of own extractors or collect what they have produced."
+
+permissions:
+  com.*:
+    description: Gives access to all Clash of Minecrafters' permissions.
+    children:
+      com.commands.*: true
+      com.island.*: true
+  com.commands.*:
+    description: Gives access to all Clash of Minecrafters' commands.
+    children:
+      com.commands.clan.*: true
+      com.commands.island.*: true
+      com.commands.war.*: true
+      com.commands.schem.*: true
+      com.command.raid: true
+      com.command.balance: true
+      com.command.open: true
+      com.command.open.other: true
+      com.command.add: true
+      com.command.add.other: true
+      com.command.take: true
+      com.command.take.other: true
+      com.command.upgrade: true
+      com.command.trophies: true
+      com.command.extractors: true
+  com.commands.clan.*:
+    description: Gives access to all /clan commands.
+    children:
+      com.command.clan.join: true
+      com.command.clan.leave: true
+      com.command.clan.create: true
+  com.commands.island.*:
+    description: Gives access to all /island commands.
+    children:
+      com.command.island: true
+      com.command.island.setspawn: true
+  com.commands.war.*:
+    description: Gives access to use all /war commands.
+    children:
+      com.command.war.state: true
+  com.commands.schem.*:
+    description: Gives access to use all /schem commands.
+    children:
+      com.command.schem.save: true
+      com.command.schem.list: true
+  com.island.*:
+    description: Gives access to build, drop, pick-up and interact with items or blocks in all islands.
+    children:
+      com.island.build: true
+      com.island.drop: true
+      com.island.pickup: true
+      com.island.interact: true
+
+  com.command.clan.join:
+    description: Gives access to use /clan join command.
+    default: op
+  com.command.clan.leave:
+    description: Gives access to use /clan leave command.
+    default: op
+  com.command.clan.create:
+    description: Gives access to use /clan create command.
+    default: op
+  com.command.island:
+    description: Gives access to use /island command.
+    default: op
+  com.command.island.setspawn:
+    description: Gives access to use /island setspawn command.
+    default: op
+  com.command.raid:
+    description: Gives access to use /raid command.
+    default: op
+  com.command.balance:
+    description: Gives access to use /balance command.
+    default: op
+  com.command.open:
+    description: Gives access to use /open command.
+    default: op
+  com.command.open.other:
+    description: Gives access to use /open command also for others player.
+    default: op
+    children:
+      com.command.open: true
+  com.command.add:
+    description: Gives access to use /add command.
+    default: op
+  com.command.add.other:
+    description: Gives access to use /add command also for others player.
+    default: op
+    children:
+      com.command.add: true
+  com.command.take:
+    description: Gives access to use /take command.
+    default: op
+  com.command.take.other:
+    description: Gives access to use /take command also for others player.
+    default: op
+    children:
+      com.command.take: true
+  com.command.upgrade:
+    description: Gives access to use /upgrade command.
+    default: op
+  com.command.war.state:
+    description: Gives access to use /war state command.
+    default: op
+  com.command.trophies:
+    description: Gives access to use /trophies command.
+    default: op
+  com.command.schem.save:
+    description: Gives access to use /schem save command.
+    default: op
+  com.command.schem.list:
+    description: Gives access to use /schem list command.
+    default: op
+  com.command.extractors:
+    description: Gives access to use /extractors command.
+    default: op
+  com.island.build:
+    description: Gives access to build on island's worlds.
+    default: op
+  com.island.drop:
+    description: Gives access to drop items on island's worlds.
+    default: op
+  com.island.pickup:
+    description: Gives access to pick-up items on island's worlds.
+    default: op
+  com.island.interact:
+    description: Gives access to interact with items and entities on island's worlds.
+    default: op

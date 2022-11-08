@@ -1,0 +1,335 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                   GLOBAL SETTINGS                    | #
+# +------------------------------------------------------+ #
+############################################################
+# Clash of Minecrafters' configuration file
+# Spigot page: https://www.spigotmc.org/resources/clash-of-minecrafters.31180/
+# For more information visit: https://github.com/DavideBlade/Clash-of-Minecrafters/wiki/Configuration
+
+# Language of messages. Only "en" and "it" allowed.
+Locale: en
+# Number of expansions (in all directions) for villages.
+Max expansions: 8
+# Set the default spawn for all players.
+Default spawn: world, 0.5, 72, 0.5
+# Set the reward for killing the guardian of a village during a raid.
+# Currency can only be "gems", "gold" or "elixir".
+Raid rewards:
+  Amount: 10
+  Currency: gems
+  Trophies won: 25
+# Penalty received by a player who leaves or is killed by the village guardian during a raid.
+# Currency can only be "gems", "gold" or "elixir".
+Raid failure:
+  Amount: 5
+  Currency: gems
+  Trophies lost: 15
+# Seconds after which the raid ends
+Raid timeout: 180
+# Islands' schematic should use WorldEdit?
+Island schematic: false
+# Elixir extractor's schematic should use WorldEdit?
+Elixir extractor schematic: false
+# Gold extractor's schematic should use WorldEdit?
+Gold extractor schematic: false
+# Archers tower's schematic should use WorldEdit?
+Archer schematic: false
+# How many players can stay in a clan?
+Max players per clan: 15
+# How many exp must receive the attacker's clan if raid has been successful?
+Exp for raid: 2
+# MySQL data
+MySQL:
+  Enabled: false
+  Host: localhost
+  Port: 3306
+  Username: user
+  Password: pass
+  Database: CoM
+# Set to false if plugin doesn't check for new updates.
+Check for update: true
+# Set the starting balance for new players. Set to 0 to not give that currency.
+Starting balance:
+  Gold: 45
+  Elixir: 45
+  Gems: 5
+# Set the number of players that should be in the cache.
+# The players that are expected to perform the most operations
+# (e.g. the most active players on the server) will be cached.
+Max player cache: 1500
+
+############################################################
+# +------------------------------------------------------+ #
+# |                         MENU                         | #
+# +------------------------------------------------------+ #
+############################################################
+# Row - is the number of menu rows - REQUIRED
+# Title - menu title - REQUIRED
+# Item - item material - REQUIRED
+# Name - item's name - OPTIONAL
+# Lore - lore of the item - OPTIONAL
+# Durability - item's durability - OPTIONAL
+# Enchantments - item enchantments - OPTIONAL
+# Color - item color in RGB - OPTIONAL
+# Skull - name of the head owner - OPTIONAL
+# Pattern - banner pattern(s) - OPTIONAL
+# Attributes - details of the item (e.g. enchantments) are to be displayed? - OPTIONAL
+# Slot - is the slot number where item will be placed - REQUIRED
+# Required balance - is the value the player must have in order to execute the command - OPTIONAL
+# Required item - is the item that the player must have in order to execute the command - OPTIONAL
+# Command - command executed by player (player: ) or by console (console: ) on item click. Use ';' for multiple commands - OPTIONAL
+Menus:
+  Main:
+    Settings:
+      Row: 1
+      Title: '&8Shop'
+    Items:
+      Help:
+        Item: leather_helmet
+        Name: '&6List of commands'
+        Enchantments:
+          - unbreaking, 3
+        Color: '255, 0, 0'
+        Attributes: false
+        Slot: 0
+        Command: 'player: com help'
+      Island:
+        Item: bow
+        Name: '&6Go to your island'
+        Lore:
+          - '&cRun the /island command:'
+          - '&cif you do not have the island it will be created'
+          - '&cotherwise you will only be teleported'
+        Durability: 300
+        Slot: 1
+        Command: 'player: island'
+      Balance:
+        Item: player_head
+        Name: '&6Check your balance'
+        Skull: 'DavideBlade'
+        Slot: 2
+        Command: 'player: balance'
+      Trophies:
+          Item: black_banner
+          Name: '&6Check your trophies'
+          Pattern:
+            - 'red, cbo'
+            - 'yellow, cre'
+          Slot: 3
+          Command: 'player: trophies'
+      Food:
+        Item: blaze_rod
+        Name: '&6Open food shop'
+        Lore:
+          - '&cShop where you can buy food with in-game currency'
+        Slot: 7
+        Command: 'player: open Food'
+      Tools:
+        Item: iron_pickaxe
+        Name: '&6Open tools shop'
+        Lore:
+          - '&cShop where you can sell tools with in-game currency'
+        Slot: 8
+        Command: 'player: open Tools'
+  
+  Food:
+    Settings:
+      Row: 1
+      Title: '&8Food shop'
+    Items:
+      Apple:
+        Item: apple
+        Lore:
+          - '&cThis command/action will be executed only'
+          - '&cif you have at least 100 gold'
+          - ''
+          - '&cIt gives you an apple'
+        Slot: 3
+        Required balance: '100, gold'
+        Command: 'console: tell %player You bought an apple!; console: take 100 gold %player; console: give %player apple 1'
+      Cake:
+        Item: cake
+        Lore:
+          - '&cBuy a cake for 50 gems!'
+        Slot: 5
+        Required balance: '50, gems'
+        Command: 'tell %player You bought a cake!; take 50 gems %player; give %player cake 1'
+
+  Tools:
+    Settings:
+      Row: 1
+      Title: '&8Tools shop'
+    Items:
+      Iron:
+        Item: iron_sword
+        Lore:
+          - '&6Sell an iron sword for 15 gems!'
+          - '&6&oThe sword will automatically be removed from your inventory.'
+        Data: 0
+        Slot: 4
+        Required item: iron_sword
+        Command: 'tell %player You sold an iron sword!; add 15 gems %player'
+
+############################################################
+# +------------------------------------------------------+ #
+# |                       TOWN HALL                      | #
+# +------------------------------------------------------+ #
+############################################################
+# Price - is the price to buy the upgrade.
+# Currency - is the currency of the price.
+# Command - Command executed (by the console) when a player upgrades the town hall - OPTIONAL
+# Guardian - Statistics of the guardian which defends the village under attack - OPTIONAL
+# Health - Number of hearts (for comparison: one player has 10) - OPTIONAL
+# Equipment - Material of the 4 armor pieces (Helmet, Chestplate, Leggings, Boots) - OPTIONAL
+# Potions - List of guardian effects - OPTIONAL
+TownHall:
+  2:
+    Price: 4000
+    Currency: elixir
+    Command: 'say %player''s town hall has reached level 2!'
+    Guardian:
+      Health: 15
+  3:
+    Price: 9000
+    Currency: gold
+    Command: 'say %player''s town hall has reached level 3!'
+    Guardian:
+      Health: 20
+  4:
+    Price: 16000
+    Currency: elixir
+    Command: 'say %player''s town hall has reached level 4!'
+    Guardian:
+      Health: 20
+      Equipment:
+        Helmet: LEATHER_HELMET
+        Chestplate: LEATHER_CHESTPLATE
+        Leggings: LEATHER_LEGGINGS
+        Boots: LEATHER_BOOTS
+  5:
+    Price: 25000
+    Currency: gold
+    Command: 'say %player''s town hall has reached level 5!'
+    Guardian:
+      Health: 20
+      Equipment:
+        Helmet: IRON_HELMET
+        Chestplate: IRON_CHESTPLATE
+        Leggings: IRON_LEGGINGS
+        Boots: IRON_BOOTS
+      Potions:
+        - Speed
+        - Regeneration
+
+############################################################
+# +------------------------------------------------------+ #
+# |                     EXTRACTORS                       | #
+# +------------------------------------------------------+ #
+############################################################
+# Configuration covering both elixir and gold extractors.
+# Production - is the hourly production of the extractor
+# Price - is the price to buy the extractor.
+# Currency - is the currency of the price.
+# Capacity - is the maximum capacity of the extractor.
+Extractors:
+  1:
+    Production: 12
+    Price: 10
+    Currency: gems
+    Capacity: 576
+  2:
+    Production: 20
+    Price: 30
+    Currency: gems
+    Capacity: 960
+  3:
+    Production: 43
+    Price: 80
+    Currency: gems
+    Capacity: 2064
+  4:
+    Production: 60
+    Price: 150
+    Currency: gems
+    Capacity: 2880
+  5:
+    Production: 100
+    Price: 235
+    Currency: gems
+    Capacity: 4800
+  6:
+    Production: 202
+    Price: 650
+    Currency: gems
+    Capacity: 9696
+  7:
+    Production: 300
+    Price: 1000
+    Currency: gems
+    Capacity: 14400
+  8:
+    Production: 470
+    Price: 2000
+    Currency: gems
+    Capacity: 22560
+  9:
+    Production: 750
+    Price: 2650
+    Currency: gems
+    Capacity: 36000
+  10:
+    Production: 1000
+    Price: 4000
+    Currency: gems
+    Capacity: 48000
+
+############################################################
+# +------------------------------------------------------+ #
+# |                     ARCHER TOWERS                    | #
+# +------------------------------------------------------+ #
+############################################################
+# Damage - is the damage (in hearts) of the archer tower.
+# Price - is the price to buy this archer tower.
+# Currency - is the currency of the price.
+ArcherTowers:
+  1:
+    Damage: 0.5
+    Price: 20
+    Currency: gems
+  2:
+    Damage: 1.2
+    Price: 100
+    Currency: gems
+  3:
+    Damage: 1.7
+    Price: 230
+    Currency: gems
+  4:
+    Damage: 2.1
+    Price: 300
+    Currency: gems
+  5:
+    Damage: 2.8
+    Price: 510
+    Currency: gems
+
+############################################################
+# +------------------------------------------------------+ #
+# |                         CLAN                         | #
+# +------------------------------------------------------+ #
+############################################################
+# Exp required - is the experience required for bring up the clan to next level.
+# Command - Command executed (by the console) when a clan levels up - OPTIONAL
+Clans:
+  1:
+    Exp required: 100
+  2:
+    Exp required: 350
+  3:
+    Exp required: 1000
+  4:
+    Exp required: 4800
+  5:
+    Exp required: 10000
+    Command: 'say The clan "%clan" has reached level 5!'

@@ -1,0 +1,255 @@
+﻿############################################################
+# +------------------------------------------------------+ #
+# |                      VARIABILI                       | #
+# +------------------------------------------------------+ #
+############################################################
+# Qui è presente un elenco, con una breve spiegazione, delle variabili.
+# che verranno sostituite una volta che il messaggio viene inviato:
+# %player è il nome del giocatore.
+# %currency è la valuta (Oro, Elisir o Gemme).
+# %amount è la quantità.
+# %clan è il nome del clan.
+# %time è il tempo rimanente all'inizio della guerra fra clan.
+# %type cambia la parola al plurale o al singolare (vedi le voci "Seconds" e "Second").
+# %level è il livello della costruzione (es. estrattore di livello 1).
+# %building è il nome della struttura (vedi le voci "Gold extractor", "Elixir extractor"...).
+# %schem è il nome della schematic.
+# %reason è la causa dell'evento.
+# %resources è la quantità di risorse contenute nell'estrattore.
+# %capacity è la massima capacità dell'estrattore.
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                       GENERALI                       | #
+# +------------------------------------------------------+ #
+############################################################
+# Usa & per i colori. La lista dei colori può essere trovata qui: http://goo.gl/VCscSk.
+# Quando deve essere inserito un numero intero (senza decimali).
+Integer required: '&cQuesto numero non è corretto. L''importo deve essere espresso in numeri interi!'
+# Quando un comando può essere eseguito solo dai giocatori.
+Command only for player: '&cQuesto comando può essere usato solo dai giocatori.'
+# Quando il giocatore cercato non è online.
+Player not online: '&c%player non è online.'
+# Quando un giocatore non ha il permesso per eseguire una specifica azione.
+No permission: '&cNon hai il permesso per compiere quest''azione.'
+# Quando inizia il teletrasporto.
+Teleportation: '&6Teletrasporto...'
+# Quando un giocatore viene teletrasportato allo spawn.
+Teleport to spawn: '&6Sarai teletrasportato allo spawn.'
+# Quando un teletrasporto viene annullato.
+Teleportation cancelled: '&cTeletrasporto cancellato.'
+# Quando il potenziamento di una costruzione viene eseguito con successo.
+Upgrade completed: '&6%building ha raggiunto il livello %level.'
+Gold extractor: 'L''estrattore di oro'
+Elixir extractor: 'L''estrattore di elisir'
+Archer tower: 'La torre dell''arciere'
+Town hall: 'Il municipio'
+# Quando una costruzione raggiunge il suo massimo livello.
+Max level reached: '&c%building ha raggiunto il suo massimo livello.'
+# Quando un giocatore usa il comando /trophies.
+Show trophies: '&Hai %amount trofei.'
+# Quando vengono aggiunti trofei a un giocatore.
+Added trophies: '&6Hai ricevuto %amount trofei.'
+# Quando vengono rimossi trofei a un giocatore.
+Removed trophies: '&6Ti sono stati tolti %amount trofei.'
+# Quando un giocatore raggiunge il numero massimo di trofei.
+Max trophies: '&cHai raggiunto il massimo numero di trofei.'
+# Quando si bersaglia un giocatore mai entrato nel server.
+Player never joined: '&cIl giocatore %player non ha mai giocato nel server!'
+# Quando viene fornito (per esempio tramite comandi) un numero troppo grande.
+Too big number: '&cHai inserito un numero troppo grande. Verrà utilizzato %amount.'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                 UTILIZZO DEI COMANDI                 | #
+# +------------------------------------------------------+ #
+############################################################
+Add command usage: '&cUsa /add <importo> <gems|gold|elixir> [giocatore]'
+Take command usage: '&cUsa /take <importo> <gems|gold|elixir> [giocatore]'
+Possible clan command usage: '&cUsa /clan join, /clan leave o /clan create'
+Clan join usage: '&cUsa /clan join <nome>'
+Clan create usage: '&cUsa /clan create <nome>'
+Open command usage: '&cUsa /open <shop> [giocatore]'
+War command usage: '&cUsa /war state'
+Possible schem command usage: '&cUsa /schem save o /schem list'
+Schem save usage: '&cUsa /schem save <x1> <y1> <z1> <x2> <y2> <z2> <nome schematic>'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                    PARTE DEI CLAN                    | #
+# +------------------------------------------------------+ #
+############################################################
+# Quando il clan specificato non esiste.
+Clan not found: '&cQuesto clan non esiste!'
+# Quando un giocatore entra con successo in un clan.
+Joined the clan: '&6Sei entrato nel clan %clan.'
+# Quando un giocatore prova a entrare in un clan anche se ne ha già uno.
+Already have clan: '&cHai già un clan!'
+# Quando un giocatore, senza clan, esegue un'azione che ne richiede uno.
+Must have a clan: '&cDevi avere un clan per poter compiere quest''azione.'
+# Quando un giocatore lascia il suo clan.
+Left clan: '&6Hai lasciato il clan %clan.'
+# Quando un giocatore crea un clan.
+Created clan: '&6Hai creato il clan %clan.'
+# Quando un giocatore prova a creare un clan con un nome troppo lungo.
+Max length: '&cIl nome del clan non può superare i 30 caratteri.'
+# Quando un giocatore prova a creare un clan il cui nome contiene un punto (.).
+Cannot contains dot: '&cIl nome del clan non può contenete punti (".").'
+# Quando un giocatore prova a creare un clan con un nome già preso.
+Already exists: '&cEsiste già un clan con questo nome.'
+# Quando un giocatore prova a entrare in un clan pieno.
+Full clan: '&cQuesto clan è pieno!'
+# Quando si verifica un errore durante il salvataggio del clan di un giocatore.
+Impossible save properly clan: '&cNon è stato possibile salvare correttamente il tuo clan.'
+# Quando il proprio clan raggiunge il livello successivo.
+Increased level: '&6Il clan ha raggiunto il livello %level!'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                PARTE DEGLI ESTRATTORI                | #
+# +------------------------------------------------------+ #
+############################################################
+# Quando un giocatore compra un estrattore che viene posizionato correttamente.
+Extractor placed: '&6Estrattore posizionato con successo.'
+# Quando un giocatore prova a posizionare un estrattore fuori della sua isola.
+Extractor not placed: '&cL''estrattore può essere posizionato solo all''interno della tua isola!'
+# Quando un giocatore prova ad usare il comando /extractors senza possedere alcun estrattore.
+No extractor: '&cNon possiedi nessun estrattore! Acquistane con /upgrade.'
+# Quando le risorse negli estrattori vengono raccolte (quando si usa /extractors collect, quando si fa l'upgrade di un estrattore...)
+Collected resources: '&6Tutte le risorse negli estrattori sono state raccolte con successo.'
+# Quando un giocatore usa il comando /extractors per vedere le informazioni dei propri estrattori.
+Extractors info: '&6&l%building &cLivello:&6 %level&c, produzione oraria:&6 %amount&c, capacità:&6 %resources/%capacity'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                  PARTE DELLE GUERRE                  | #
+# +------------------------------------------------------+ #
+############################################################
+# Quando inizia la guerra fra clan.
+War started: '&6La guerra fra clan è iniziata!'
+# Quando finisce la guerra fra clan.
+War finished: '&6La guerra fra clan è finita!'
+# Quando la guerra tra clan sta per iniziare.
+Starting war: '&6La guerra fra clan inizierà tra %time %type.'
+# Quando la guerra tra clan sta per finire.
+Ending war: '&6La guerra fra clan finirà tra %time %type.'
+Seconds: 'secondi'
+Second: 'secondo'
+# Quando un giocatore usa il comando /raid e comincia la ricerca di un villaggio da attaccare.
+Searching: '&6Ricerca villaggio...'
+# Quando un giocatore cerca delle isole da attaccare (comando /raid) ma nessuna è disponibile.
+Island not available: '&cNessuna isola da attaccare trovata. Riprova tra qualche minuto.'
+# Quando un giocatore prova ad attaccare un'altra isola nonostante la guerra non sia ancora iniziata.
+Must be in war: '&cPrima di combattere deve iniziare la guerra!'
+# Quando un giocatore prova a colpire il guardiano di un'isola sotto attacco da un altro giocatore.
+Cannot hit guardian: '&cNon puoi colpire i guardiani delle isole sotto attacco da altri giocatori!'
+# Quando un giocatore prova a colpire l'arciere di un'isola sotto attacco da un altro giocatore.
+Cannot hit archer: '&cNon puoi colpire gli arcieri delle isole sotto attacco da altri giocatori!'
+# Quando un giocatore prova ad attaccare un'isola nonostante ne stia già attaccando una.
+Already attacking: '&cStai già attaccando un villaggio!'
+# Quando un giocatore, durante un raid, uccide il guardiano dell'isola che sta attaccando.
+Raid successful: '&6Hai distrutto con successo il villaggio di %player.'
+# Quando un giocatore perde un raid.
+Raid failure: '&6Hai perso il raid contro il villaggio di %player.'
+# Quando il raid viene cancellato.
+Raid cancelled: '&cIl raid è stato cancellato %reason. Verrai portato allo spawn.'
+# Possibili motivi
+Reload: 'a causa di un riavvio'
+War ended: 'perché la guerra fra clan è finita'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                  PARTE DELLE ISOLE                   | #
+# +------------------------------------------------------+ #
+############################################################
+# Quando viene generata un'isola.
+Island creation: '&6Creazione dell''isola...'
+# Quando lo spawn dell'isola non è sicuro.
+Island spawn not safe: '&cLo spawn dell''isola non è sicuro.'
+# Quando si verifica un problema durante la creazione di un'isola.
+Impossible create properly island: '&cNon è stato possibile creare correttamente la tua isola.'
+# Quando è impossibile creare un'altra isola perché è stata raggiunta la fine del mondo.
+Island world limit reached: '&cIl limite del mondo è stato raggiunto: non è possibile creare altre isole.'
+# Quando è necessario avere un'isola per compiere una certa azione (es. comando /island setspawn).
+Must have an island: '&cDevi avere un''isola per poter compiere quest''azione.'
+# Quando un giocatore prova ad entrare nel server mentre la sua isola è sotto attacco.
+Island under attack: '&cLa tua isola è sotto attacco! Per favore, prova ad entrare tra qualche minuto.'
+# Quando un giocatore esce dalla sua isola.
+Left island: '&6Sei uscito dalla tua isola.'
+# Quando un giocatore entra nella sua isola.
+Entered into the island: '&6Sei entrato nella tua isola.'
+# Quando un player prova ad impostare lo spawn della sua isola fuori da essa.
+Cannot set spawn: '&cPuoi impostare lo spawn solo nella tua isola.'
+# Quando un giocatore prova ad impostare lo spawn in una posizione non sicura.
+Location not safe: '&cNon puoi impostare lo spawn della tua isola qui. Scegli un''altra posizione.'
+# Quando un giocatore imposta con successo lo spawn della sua isola.
+Island spawn set: '&6Hai impostato lo spawn della tua isola.'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                       ECONOMIA                       | #
+# +------------------------------------------------------+ #
+############################################################
+# Quando un giocatore usa il comando /balance.
+Show balance: '&6Hai %amount %currency.'
+# Quando un giocatore esegue un'azione che richiede un saldo più alto di quello che ha.
+Not enough money: '&cNon hai abbastanza %currency.'
+# Quando un giocatore riceve una somma sul proprio saldo.
+Added to balance: '&6%amount %currency sono state aggiunte al tuo conto.'
+# Quando si aggiunge una somma al saldo di un giocatore.
+Added to others balance: '&6%amount %currency sono state aggiunte al conto di %player.'
+# Quando un giocatore perde una somma dal proprio saldo.
+Removed from balance: '&6%amount %currency sono state rimosse dal tuo conto.'
+# Quando viene rimossa una somma dal saldo di un giocatore.
+Removed from others balance: '&6%amount %currency sono state rimosse dal conto di %player.'
+# Quando un giocatore raggiunge il saldo massimo.
+Max money: '&cHai raggiunto il saldo massimo.'
+# Traduzione delle valute
+Gold: 'oro'
+Elixir: 'elisir'
+Gems: 'gemme'
+Gem: 'gemma'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                    PARTE DEI MENU                    | #
+# +------------------------------------------------------+ #
+############################################################
+# Quando un menu cercato non viene trovato.
+Menu not found: '&cQuesto menu non esiste.'
+# Quando un giocatore non ha l'item richiesto per cliccare nel menu.
+Item not found: '&cNon hai l''oggetto richiesto!'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |           PARTE DELLE TORRI DEGLI ARCIERI            | #
+# +------------------------------------------------------+ #
+############################################################
+# Quando un giocatore acquista la torre dell'arciere che viene posizionata con successo.
+Tower placed: '&6Torre dell''arciere posizionata.'
+# Quando un giocatore prova a posizionare la torre degli arcieri fuori dalla propria isola.
+Tower not placed: '&cLa torre degli arcieri può essere posizionata solo dentro la tua isola!'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                 PARTE DELLE SCHEMATIC                | #
+# +------------------------------------------------------+ #
+############################################################
+# Quando un giocatore salva una schematic.
+Schematic saved: '&6La schematic %schem è stata salvata con successo.'
+# Quando si verifica un errore durante il caricamento di una schematic.
+Load error: '&cNon è stato possibile caricare correttamente la schematic %schem.'
+# Quando si verifica un errore durante il salvataggio di una schematic.
+Save error: '&cNon è stato possibile salvare correttamente la schematic %schem.'
+# Quando un giocatore usa il comando /schem list senza però nessuna schematic disponibile.
+No schematic found: '&cNon è stata trovata nessuna schematic.'

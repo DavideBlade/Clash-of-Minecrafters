@@ -1,0 +1,255 @@
+﻿############################################################
+# +------------------------------------------------------+ #
+# |                      VARIABLES                       | #
+# +------------------------------------------------------+ #
+############################################################
+# Here is a list, with a brief explanation, of the variables.
+# that will be replaced once the message is sent:
+# %player is the name of the player.
+# %currency is the currency (Gold, Elixir or Gems).
+# %amount is the quantity.
+# %clan is the clan name.
+# %time is the time remaining until the start of the clan war.
+# %type changes the word to plural or singular (see 'Seconds' and 'Second').
+# %level is the level of the building (e.g. extractor level 1).
+# %building is the name of the building (see 'Gold extractor', 'Elixir extractor', ...).
+# %schem is the name of the schematic.
+# %reason is the cause of the event.
+# %resources is the amount of resources contained in the extractor.
+# %capacity is the maximum capacity of the extractor.
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                       GENERALS                       | #
+# +------------------------------------------------------+ #
+############################################################
+# Use & for color codes. List of color can be found here: http://goo.gl/VCscSk.
+# When an integer (without decimals) must be entered.
+Integer required: '&cThis number is not correct. The amount must be expressed in integers!'
+# When a command can only be executed by players.
+Command only for player: '&cThis command can only be used by players.'
+# When a specified player is not online.
+Player not online: '&c%player is not online.'
+# When player has not the permission required.
+No permission: '&cYou do not have permission to do that.'
+# When starts the teleport for a player.
+Teleportation: '&6Teleportation...'
+# When a player is teleported to spawn.
+Teleport to spawn: '&6You will be teleported to spawn.'
+# When a teleport is cancelled.
+Teleportation cancelled: '&cTeleportation cancelled.'
+# When a building is successfully upgraded.
+Upgrade completed: '&6%building has been upgraded to level %level.'
+Gold extractor: 'Your gold extractor'
+Elixir extractor: 'Your elixir extractor'
+Archer tower: 'Your archer tower'
+Town hall: 'Town hall'
+# When a building has reached its maximum level.
+Max level reached: '&c%building has reached the maximum level.'
+# When a player uses the /trophies command.
+Show trophies: '&6You have %amount trophies.'
+# When trophies are added to a player.
+Added trophies: '&6You have received %amount trophies.'
+# When trophies are removed from a player.
+Removed trophies: '&6You were removed %amount trophies.'
+# When a player reaches the maximum number of trophies.
+Max trophies: '&cYou have reached the maximum number of trophies.'
+# When targeting a player who has never joined the server.
+Player never joined: '&cThe player %player has never played on the server!'
+# When a too big number is provided (e.g. via commands).
+Too big number: '&cYou entered a number too big. %amount will be used.'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                    USE OF COMMANDS                   | #
+# +------------------------------------------------------+ #
+############################################################
+Add command usage: '&cUse /add <amount> <gems|gold|elixir> [player].'
+Take command usage: '&cUse /take <amount> <gems|gold|elixir> [player].'
+Possible clan command usage: '&cUse /clan join, /clan leave or /clan create.'
+Clan join usage: '&cUse /clan join <clan name>.'
+Clan create usage: '&cUse /clan create <clan name>.'
+Open command usage: '&cUse /open <shop> [player].'
+War command usage: '&cUse /war state.'
+Possible schem command usage: '&cUse /schem save or /schem list.'
+Schem save usage: '&cUse /schem save <x1> <y1> <z1> <x2> <y2> <z2> <schematic name>.'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                     CLAN SECTION                     | #
+# +------------------------------------------------------+ #
+############################################################
+# When a selected clan does not exist.
+Clan not found: '&cThis clan does not exist!'
+# When a player successfully joins a clan.
+Joined the clan: '&6You have joined the clan %clan.'
+# When a player tries to join a clan even if he already has one.
+Already have clan: '&cYou already have a clan!'
+# When a player, without a clan, performs an action that requires one.
+Must have a clan: '&cYou must have a clan to do that.'
+# When a player leaves his clan.
+Left clan: '&6You have left the clan %clan.'
+# When a player creates a clan.
+Created clan: '&6You have created the clan %clan.'
+# When a player tries to create a clan with a name that is too long.
+Max length: '&cThe clan name can not exceed 30 characters.'
+# When a player tries to create a clan whose name contains a dot (.).
+Cannot contains dot: '&cThe clan name can not contains dots (".").'
+# When a player tries to create a clan with a name already taken.
+Already exists: '&cA clan with this name already exists.'
+# When a player tries to join a full clan.
+Full clan: '&cThis clan is full!'
+# When an error occurs while saving a player's clan.
+Impossible save properly clan: '&cIt was not possible to save your clan properly.'
+# When your clan reaches the next level.
+Increased level: '&6The clan has reached level %level!'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                    EXTRACTOR PART                    | #
+# +------------------------------------------------------+ #
+############################################################
+# When a player buys an extractor which is placed successfully.
+Extractor placed: '&6Extractor placed.'
+# When a player tries to place the extractor out of his island.
+Extractor not placed: '&cThe extractor can only be placed inside your island!'
+# When a player tries to use the /extractors command without owning any extractors.
+No extractor: '&cYou do not own any extractor! Buy one with /upgrade.'
+# When resources in extractors are collected (when using /extractors collect, when upgrading an extractor...)
+Collected resources: '&6All resources in the extractors were successfully collected.'
+# When a player uses the /extractors command to see their extractors' information.
+Extractors info: '&6&l%building &cLevel:&6 %level&c, hourly production:&6 %amount&c, capacity:&6 %resources/%capacity'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                       WAR PART                       | #
+# +------------------------------------------------------+ #
+############################################################
+# When the war between clans starts.
+War started: '&6The clan war has begun!'
+# When the clan war ends.
+War finished: '&6The clan war is over!'
+# When the clan war is about to begin.
+Starting war: '&6The clan war will start in %time %type.'
+# When the clan war is about to end.
+Ending war: '&6The clan war will end in %time %type.'
+Seconds: 'seconds'
+Second: 'second'
+# When a player uses the /raid command and a search for a village to attack begins.
+Searching: '&6Searching village...'
+# When a player searches for islands to attack (command /raid) but none is available.
+Island not available: '&cNo island to attack found. Try again after a few minutes.'
+# When a player tries to raid another island even though the war has not yet started.
+Must be in war: '&cBefore fighting, war must begin!'
+# When a player tries to hit the guardian of an island under attack by another player.
+Cannot hit guardian: '&cYou cannot hit guardians of islands under attack by other players!'
+# When a player tries to hit the archer of an island under attack by another player.
+Cannot hit archer: '&cYou cannot hit archers of islands under attack by other players!'
+# When a player tries to raid an island even though he is already attacking one.
+Already attacking: '&cYou are already attacking a village.'
+# When a player, during a raid, kills the guardian of the island he is attacking.
+Raid successful: '&6You have successfully destroyed the village of %player.'
+# When a player loses a raid.
+Raid failure: '&6You lost the raid against %player''s village.'
+# When a raid is cancelled.
+Raid cancelled: '&cThe raid has been cancelled %reason. You will be brought to the spawn.'
+# Possible reasons
+Reload: 'due to a reload'
+War ended: 'because the clan war is over'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                    ISLAND SECTION                    | #
+# +------------------------------------------------------+ #
+############################################################
+# When an island is generated.
+Island creation: '&6Island creation...'
+# When the island spawn is not safe.
+Island spawn not safe: '&cThe island spawn is not safe.'
+# When a problem occurs while creating an island.
+Impossible create properly island: '&cIt was not possible to create your island properly.'
+# When is impossible create another island because the end of the world has been reached.
+Island world limit reached: '&cThe world limit has been reached: no more islands can be created.'
+# When it is necessary to have an island to perform a certain action (e.g. command /island setspawn).
+Must have an island: '&cYou must have an island before do that.'
+# When a player tries to join the server while his island is under attack.
+Island under attack: '&cYour island is under attack! Please try to join in a few minutes.'
+# When a player leaves his island.
+Left island: '&6You have left your island.'
+# When a player enters his island.
+Entered into the island: '&6You have entered your island.'
+# When a player tries to set spawn of his island out of it.
+Cannot set spawn: '&cYou can only set spawn inside your island.'
+# When a player tries to set spawn in an unsafe location.
+Location not safe: '&cYou can not set your island spawn here. Select another location.'
+# When a player successfully sets his island spawn.
+Island spawn set: '&6You have set the spawn of your island.'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                       ECONOMY                        | #
+# +------------------------------------------------------+ #
+############################################################
+# When a player uses the /balance command.
+Show balance: '&6You have %amount %currency.'
+# When a player performs an action that requires a higher balance than he has.
+Not enough money: '&cYou do not have enough %currency.'
+# When a player receives an amount on their balance.
+Added to balance: '&6%amount %currency has been added to your balance.'
+# When an amount is added to the balance of a player.
+Added to others balance: '&6%amount %currency have been added to the balance of %player.'
+# When a player loses an amount from his balance.
+Removed from balance: '&6%amount %currency have been removed from your balance.'
+# When an amount is removed from the balance of a player.
+Removed from others balance: '&6%amount %currency have been removed from the balance of %player.'
+# When a player reaches the maximum balance.
+Max money: '&cYou have reached your maximum balance.'
+# Currency translation
+Gold: 'gold'
+Elixir: 'elixir'
+Gems: 'gems'
+Gem: 'gem'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                     MENU SECTION                     | #
+# +------------------------------------------------------+ #
+############################################################
+# When a searched menu is not found.
+Menu not found: '&cThis menu does not exist.'
+# When a player does not have the required item to click in the menu.
+Item not found: '&cYou do not have the required item!'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                ARCHERS' TOWER SECTION                | #
+# +------------------------------------------------------+ #
+############################################################
+# When a player purchases the archer's tower which is successfully placed.
+Tower placed: '&6Archer tower placed.'
+# When a player attempts to place the archer's tower out of his island.
+Tower not placed: '&cThe archer tower can only be placed inside your island!'
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                    SCHEMATIC PART                    | #
+# +------------------------------------------------------+ #
+############################################################
+# When a player saves a schematic.
+Schematic saved: '&6The schematic %schem has been saved with success.'
+# When an error occurs while loading a schematic.
+Load error: '&cThe schematic %schem could not be loaded correctly.'
+# When an error occurs while saving a schematic.
+Save error: '&cThe schematic %schem could not be saved correctly.'
+# When a player uses the command /schem list without any schematic available.
+No schematic found: '&cNo schematic has been found.'
