@@ -176,6 +176,7 @@ Menus:
 # |                       TOWN HALL                      | #
 # +------------------------------------------------------+ #
 ############################################################
+# If you want to disable town hall levels, delete this section.
 # Price - is the price to buy the upgrade.
 # Currency - is the currency of the price.
 # Command - Command executed (by the console) when a player upgrades the town hall - OPTIONAL
@@ -227,6 +228,7 @@ Town halls:
 # |                    GOLD EXTRACTOR                    | #
 # +------------------------------------------------------+ #
 ############################################################
+# If you want to disable gold extractors, delete this section.
 # Production - is the hourly production of the extractor
 # Price - is the price to buy the extractor.
 # Currency - is the currency of the price.
@@ -288,6 +290,7 @@ Gold extractors:
 # |                   ELIXIR EXTRACTOR                   | #
 # +------------------------------------------------------+ #
 ############################################################
+# If you want to disable elixir extractors, delete this section.
 # Production - is the hourly production of the extractor
 # Price - is the price to buy the extractor.
 # Currency - is the currency of the price.
@@ -349,6 +352,7 @@ Elixir extractors:
 # |                     ARCHER TOWER                     | #
 # +------------------------------------------------------+ #
 ############################################################
+# If you want to disable archer towers, delete this section.
 # Damage - is the damage (in hearts) of the archer tower.
 # Price - is the price to buy this archer tower.
 # Currency - is the currency of the price.
@@ -379,6 +383,7 @@ Archer towers:
 # |                         CLAN                         | #
 # +------------------------------------------------------+ #
 ############################################################
+# If you want to disable clan levels, delete this section.
 # Exp required - is the experience required for bring up the clan to next level.
 # Command - Command executed (by the console) when a clan levels up - OPTIONAL
 Clans:
