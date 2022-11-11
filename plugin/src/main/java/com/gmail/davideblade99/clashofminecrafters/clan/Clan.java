@@ -7,12 +7,12 @@
 package com.gmail.davideblade99.clashofminecrafters.clan;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.yaml.ClanConfiguration;
 import com.gmail.davideblade99.clashofminecrafters.configuration.Config;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.collection.Sets;
+import com.gmail.davideblade99.clashofminecrafters.yaml.ClanConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -64,7 +64,7 @@ public final class Clan {
         exp += config.getClanRaidRewards();
         clanConfig.setExp(exp);
 
-        // If the clan has enough exp to level up
+        // If clan levels exist and the clan has enough exp to level up
         if (exp >= config.getRequiredClanExp(level + 1)) {
             // Increase the level
             clanConfig.setLevel(++level);
