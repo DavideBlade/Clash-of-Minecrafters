@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.command;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -35,7 +35,7 @@ public abstract class CommandFramework implements CommandExecutor {
         }
         catch (final CommandException e) {
             if (e.getMessage() != null && !e.getMessage().isEmpty())
-                ChatUtil.sendMessage(sender, ChatColor.RED + e.getMessage());
+                MessageUtil.sendMessage(sender, ChatColor.RED + e.getMessage());
         }
 
         return true;

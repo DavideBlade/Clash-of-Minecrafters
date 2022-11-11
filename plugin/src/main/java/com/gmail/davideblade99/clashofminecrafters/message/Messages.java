@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.message;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.EnumUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.FileUtil;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -36,7 +36,7 @@ public final class Messages {
     public static String getMessage(@Nonnull final MessageKey message) {
         final String text = MESSAGES.getString(message.getPath());
         if (text == null || text.isEmpty())
-            return "&cMissing message: \"" + message + "\"";
+            return "§cMissing message: \"" + message + "\"";
 
         return text;
     }
@@ -73,8 +73,8 @@ public final class Messages {
                 final File broken = new File(plugin.getDataFolder() + "/Messages", "messages_" + extension + ".broken." + System.currentTimeMillis());
                 messagesFile.renameTo(broken);
 
-                ChatUtil.sendMessage("&cNot found all messages in messages_" + extension + ". It has been renamed to " + broken.getName());
-                ChatUtil.sendMessage("&cIt was created a new messages_" + extension + ".yml file.");
+                MessageUtil.sendError("Not found all messages in messages_" + extension + ". It has been renamed to " + broken.getName());
+                MessageUtil.sendError("It was created a new messages_" + extension + ".yml file.");
 
                 FileUtil.copyFile("messages_" + extension + ".yml", messagesFile);
 
@@ -91,8 +91,8 @@ public final class Messages {
         catch (final Exception e) {
             e.printStackTrace();
 
-            ChatUtil.sendMessage("&cFailed to load " + messagesFile.getName() + ".");
-            ChatUtil.sendMessage("&cClash of minecrafters " + plugin.getDescription().getVersion() + " was disabled.");
+            MessageUtil.sendError("Failed to load " + messagesFile.getName() + ".");
+            MessageUtil.sendError("Clash of minecrafters " + plugin.getDescription().getVersion() + " was disabled.");
 
             plugin.disablePlugin();
         }

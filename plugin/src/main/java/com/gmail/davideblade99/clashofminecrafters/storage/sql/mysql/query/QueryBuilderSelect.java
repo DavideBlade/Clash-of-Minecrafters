@@ -78,7 +78,7 @@ public final class QueryBuilderSelect extends WhereableQueryBuilder {
      * @return This builder
      */
     @Nonnull
-    public QueryBuilderSelect orderBy(@Nonnull final Function function) {
+    public QueryBuilderSelect orderBy(@Nonnull final MySQLFunction function) {
         this.orders.add(function + " ASC");
         return this;
     }

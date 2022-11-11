@@ -7,11 +7,11 @@
 package com.gmail.davideblade99.clashofminecrafters.clan;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.configuration.ClanConfiguration;
+import com.gmail.davideblade99.clashofminecrafters.yaml.ClanConfiguration;
 import com.gmail.davideblade99.clashofminecrafters.configuration.Config;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.collection.Sets;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -78,7 +78,7 @@ public final class Clan {
             for (UUID uuid : members) {
                 final Player player = Bukkit.getPlayer(uuid);
                 if (player != null) // Player online
-                    ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.INCREASED_LEVEL, String.valueOf(level)));
+                    MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.INCREASED_LEVEL, String.valueOf(level)));
             }
         }
         clanConfig.save();

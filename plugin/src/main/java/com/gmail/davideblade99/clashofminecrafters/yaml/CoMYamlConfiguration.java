@@ -4,10 +4,10 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.configuration;
+package com.gmail.davideblade99.clashofminecrafters.yaml;
 
 import com.gmail.davideblade99.clashofminecrafters.util.FileUtil;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 
-abstract class CoMYamlConfiguration extends YamlConfiguration {
+public abstract class CoMYamlConfiguration extends YamlConfiguration {
 
     private final static byte DEFAULT_NUMBER = 0;
 
@@ -34,7 +34,7 @@ abstract class CoMYamlConfiguration extends YamlConfiguration {
      * @see #save()
      * @see #setAndSave(String, Object)
      */
-    final boolean autoSave;
+    protected final boolean autoSave;
 
     /**
      * Creates a new configuration that does not automatically save changes in the file
@@ -57,7 +57,7 @@ abstract class CoMYamlConfiguration extends YamlConfiguration {
             //TODO: togliere try-catch e far propagare l'errore all'esterno -> l'utente deve essere informato in caso ci siano errori con i file (così come con il MySQL) + va creato un file di errore (come con MySQL)
             e.printStackTrace();
 
-            ChatUtil.sendMessage("&cIt wasn't possible to load " + file.getName() + " file.");
+            MessageUtil.sendError("It wasn't possible to load " + file.getName() + " file.");
         }
     }
 
@@ -307,11 +307,11 @@ abstract class CoMYamlConfiguration extends YamlConfiguration {
             //TODO: come su MySQL creare un file con le informazioni per la diagnostica
             //TODO: togliere il try-catch, far propagare l'errore all'esterno e informare l'utente del problema?
             e.printStackTrace();
-            ChatUtil.sendMessage("&cIt wasn't possible to save " + file.getName() + " file. Some data may be lost.");
+            MessageUtil.sendError("It wasn't possible to save " + file.getName() + " file. Some data may be lost.");
         }
     }
 
-    void load() throws Exception {
+    protected void load() throws Exception {
         if (!file.exists())
             FileUtil.createFile(file);
 

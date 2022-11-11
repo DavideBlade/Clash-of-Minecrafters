@@ -4,7 +4,7 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.configuration;
+package com.gmail.davideblade99.clashofminecrafters.yaml;
 
 import com.gmail.davideblade99.clashofminecrafters.Currency;
 import com.gmail.davideblade99.clashofminecrafters.island.building.BuildingType;
@@ -12,6 +12,7 @@ import com.gmail.davideblade99.clashofminecrafters.storage.Columns;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size2D;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
+import com.gmail.davideblade99.clashofminecrafters.yaml.CoMYamlConfiguration;
 import org.bukkit.Location;
 
 import javax.annotation.Nonnull;

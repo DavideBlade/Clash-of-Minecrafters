@@ -12,7 +12,7 @@ import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.Permissions;
 import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
 import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -47,14 +47,14 @@ public final class SchemCommand extends CommandFramework {
                 y2 = Integer.parseInt(args[5]);
                 z2 = Integer.parseInt(args[6]);
             } catch (final NumberFormatException ignored) {
-                ChatUtil.sendMessage(sender, Messages.getMessage(MessageKey.INTEGER_REQUIRED));
+                MessageUtil.sendMessage(sender, Messages.getMessage(MessageKey.INTEGER_REQUIRED));
                 return;
             }
 
             if (Schematic.save(args[7], Schematic.getBlocks(new Location(player.getWorld(), x1, y1, z1), new Location(player.getWorld(), x2, y2, z2))))
-                ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.SCHEMATIC_SAVED, args[7]));
+                MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.SCHEMATIC_SAVED, args[7]));
             else
-                ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.SAVE_ERROR, args[7]));
+                MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.SAVE_ERROR, args[7]));
             return;
         }
 
@@ -72,6 +72,6 @@ public final class SchemCommand extends CommandFramework {
             return;
         }
 
-        ChatUtil.sendMessage(sender, Messages.getMessage(MessageKey.POSSIBLE_SCHEM_COMMANDS));
+        MessageUtil.sendMessage(sender, Messages.getMessage(MessageKey.POSSIBLE_SCHEM_COMMANDS));
     }
 }

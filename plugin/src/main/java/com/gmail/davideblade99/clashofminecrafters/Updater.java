@@ -6,7 +6,7 @@
 
 package com.gmail.davideblade99.clashofminecrafters;
 
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.IllegalPluginAccessException;
 
@@ -57,14 +57,14 @@ public final class Updater {
                     }
                 }
                 catch (final IOException e) {
-                    ChatUtil.sendMessage("&cCould not contact Spigot to check for updates.");
+                    MessageUtil.sendError("Could not contact Spigot to check for updates.");
                 }
                 catch (final IllegalPluginAccessException ignored) {
                     // Plugin not enabled
                 }
                 catch (final Exception e) {
                     e.printStackTrace();
-                    ChatUtil.sendMessage("&cUnable to check for updates: unhandled exception.");
+                    MessageUtil.sendError("Unable to check for updates: unhandled exception.");
                 }
             }
         }).start();

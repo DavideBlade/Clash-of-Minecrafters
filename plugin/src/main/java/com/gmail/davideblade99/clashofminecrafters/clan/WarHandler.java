@@ -15,9 +15,9 @@ import com.gmail.davideblade99.clashofminecrafters.island.building.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.Pair;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.thread.NullableCallback;
-import javafx.util.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -82,7 +82,7 @@ public final class WarHandler {
         //TODO: se non ci sono isole nemiche non cominciare neanche a cercare
         new IslandFinder(attacker, targetIsland -> {
             if (targetIsland == null) {
-                ChatUtil.sendMessage(attacker, Messages.getMessage(MessageKey.ISLAND_NOT_AVAILABLE));
+                MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.ISLAND_NOT_AVAILABLE));
                 return;
             }
 
@@ -96,14 +96,14 @@ public final class WarHandler {
             setUnderAttack(attacker, targetIsland, taskID);
 
             // Spawn creature
-            plugin.getGuardianHandler().spawn(targetIsland.owner, targetIsland.spawn);
+            plugin.getGuardianHandler().spawn(targetUser, targetIsland.owner, targetIsland.spawn);
 
             final Building archerTower = targetUser.getBuilding(BuildingType.ARCHER_TOWER);
             if (archerTower != null) // If the player has archer tower
                 plugin.getArcherHandler().spawn(targetIsland.owner, ((ArcherTower) archerTower).damage, targetUser.getTowerLoc());
 
             // Teleport player
-            ChatUtil.sendMessage(attacker, Messages.getMessage(MessageKey.TELEPORTATION));
+            MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.TELEPORTATION));
             attacker.teleport(targetIsland.spawn);
         });
     }
@@ -168,7 +168,7 @@ public final class WarHandler {
             Bukkit.getScheduler().cancelTask(taskID);
 
             attacker.teleport(plugin.getConfig().getSpawn());
-            ChatUtil.sendMessage(attacker, Messages.getMessage(MessageKey.RAID_CANCELLED, reason));
+            MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.RAID_CANCELLED, reason));
 
             plugin.getGuardianHandler().kill(island.owner);
             plugin.getArcherHandler().kill(island.owner);
@@ -202,13 +202,13 @@ public final class WarHandler {
                     timer.set(COUNTDOWN);
                     currentState.set(WarState.PREPARATION);
 
-                    ChatUtil.broadcast(Messages.getMessage(MessageKey.WAR_FINISHED));
+                    MessageUtil.broadcast(Messages.getMessage(MessageKey.WAR_FINISHED));
                 } else // War started
                 {
                     // Start clan war
                     timer.set(DURATION);
                     currentState.set(WarState.STARTED);
-                    ChatUtil.broadcast(Messages.getMessage(MessageKey.WAR_STARTED));
+                    MessageUtil.broadcast(Messages.getMessage(MessageKey.WAR_STARTED));
                 }
             } else // Countdown messages
             {
@@ -216,13 +216,13 @@ public final class WarHandler {
                     if (timer.get() <= 10) {
                         final String word = Messages.getMessage(timer.get() == 1 ? MessageKey.SECOND : MessageKey.SECONDS);
 
-                        ChatUtil.broadcast(Messages.getMessage(MessageKey.STARTING_WAR, Integer.toString(timer.get()), word));
+                        MessageUtil.broadcast(Messages.getMessage(MessageKey.STARTING_WAR, Integer.toString(timer.get()), word));
                     }
                 } else if (currentState.get() == WarState.STARTED) {
                     if (timer.get() <= 10) {
                         final String word = Messages.getMessage(timer.get() == 1 ? MessageKey.SECOND : MessageKey.SECONDS);
 
-                        ChatUtil.broadcast(Messages.getMessage(MessageKey.ENDING_WAR, Integer.toString(timer.get()), word));
+                        MessageUtil.broadcast(Messages.getMessage(MessageKey.ENDING_WAR, Integer.toString(timer.get()), word));
                     }
                 }
 
@@ -301,7 +301,7 @@ public final class WarHandler {
             try {
                 return future.get();
             } catch (final Exception e) {
-                ChatUtil.sendMessage(attacker, "§cAn error occurred while searching for the island to attack. Contact an administrator.");
+                MessageUtil.sendError(attacker, "An error occurred while searching for the island to attack. Contact an administrator.");
                 e.printStackTrace();
                 return null;
             }

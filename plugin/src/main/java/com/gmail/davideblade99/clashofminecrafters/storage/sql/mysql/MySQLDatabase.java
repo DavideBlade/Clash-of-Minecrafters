@@ -17,7 +17,7 @@ import com.gmail.davideblade99.clashofminecrafters.storage.sql.AbstractSQLDataba
 import com.gmail.davideblade99.clashofminecrafters.storage.sql.mysql.query.*;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size2D;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
 import org.bukkit.Bukkit;
@@ -100,7 +100,7 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
                         .orColumn(Columns.ISLAND_ORIGIN).isNotNull()
                         .orColumn(Columns.ISLAND_SIZE).isNotNull()
                         .orColumn(Columns.ISLAND_EXPANSIONS).isNotNull())
-                .orderBy(Function.RAND)
+                .orderBy(MySQLFunction.RAND)
                 .limit(1);
 
         final UUID[] playerUUID = {null}; // Workaround to allow the use of the variable in the inner anonymous class
@@ -151,7 +151,7 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
                         .closeParenthesis()
                         .andColumn(Columns.CLAN).isNotNull()
                         .andColumn(Columns.CLAN).differsFrom(clanName))
-                .orderBy(Function.RAND)
+                .orderBy(MySQLFunction.RAND)
                 .limit(1);
 
         final UUID[] playerUUID = {null}; // Workaround to allow the use of the variable in the inner anonymous class
@@ -412,7 +412,7 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
 
             queryBuilderAlterTable.execute(getConnectionPool());
         } catch (final SQLException ex) {
-            ChatUtil.sendMessage("&cThe database could not be initialized. Error: " + ex.getMessage() + ".");
+            MessageUtil.sendError("The database could not be initialized. Error: " + ex.getMessage() + ".");
             new ErrorLog(plugin, ex, "attempt to create the table '" + TABLE_NAME + "'").writeLog();
 
             throw ex;
@@ -466,9 +466,9 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
      */
     private void notifyAndLogError(@Nullable final Player executor, @Nonnull final UUID targetUUID, @Nonnull final SQLException ex, @Nonnull final Operation op, @Nonnull final String action) {
         if (executor != null)
-            ChatUtil.sendMessage(executor, op == Operation.FETCH ? FETCH_ERROR_MESSAGE : SAVE_ERROR_MESSAGE);
+            MessageUtil.sendMessage(executor, op == Operation.FETCH ? FETCH_ERROR_MESSAGE : SAVE_ERROR_MESSAGE);
 
-        ChatUtil.sendMessage("&cDatabase error: " + ex.getMessage() + ".");
+        MessageUtil.sendError("Database error: " + ex.getMessage() + ".");
         new ErrorLog(plugin, ex, "UUID: " + targetUUID, action, getDataDump(targetUUID)).writeLog();
     }
 

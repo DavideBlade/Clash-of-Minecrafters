@@ -8,7 +8,7 @@ package com.gmail.davideblade99.clashofminecrafters.menu.item;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Currency;
-import javafx.util.Pair;
+import com.gmail.davideblade99.clashofminecrafters.util.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

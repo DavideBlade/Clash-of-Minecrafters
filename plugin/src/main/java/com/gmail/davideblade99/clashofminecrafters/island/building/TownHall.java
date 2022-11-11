@@ -9,6 +9,7 @@ package com.gmail.davideblade99.clashofminecrafters.island.building;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Currency;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ItemBuilder;
+import com.google.common.collect.ImmutableList;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -34,42 +35,53 @@ public final class TownHall extends Building {
      *
      * @since v3.1
      */
-    private final byte hearts;
+    public final byte hearts;
 
     /**
      * Material of the guardian's helmet
      *
      * @since v3.1
      */
-    private final Material helmet;
+    public final Material helmet;
 
     /**
      * Material of the guardian's chestplate
      *
      * @since v3.1
      */
-    private final Material chestplate;
+    public final Material chestplate;
 
     /**
      * Material of the guardian's leggings
      *
      * @since v3.1
      */
-    private final Material leggings;
+    public final Material leggings;
 
     /**
      * Material of the guardian's boots
      *
      * @since v3.1
      */
-    private final Material boots;
+    public final Material boots;
 
     /**
-     * List of effects to be applied to the guardian
+     * (Immutable) list of effects to be applied to the guardian
      *
      * @since v3.1
      */
-    private final List<PotionEffectType> potions;
+    public final List<PotionEffectType> potions;
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param command Command to be executed when {@code this} level is reached
+     *
+     * @throws IllegalArgumentException If the level is less than 2 or if the number of hearts is not positive.
+     */
+    public TownHall(final int level, final int price, @Nonnull final Currency currency, @Nullable final String command) {
+        this(level, price, currency, command, (byte) 10, null, null, null, null, null);
+    }
 
     /**
      * {@inheritDoc}
@@ -81,12 +93,17 @@ public final class TownHall extends Building {
      * @param leggings   Leggings of the island guardian
      * @param boots      Boots of the island guardian
      * @param potions    Effects to apply to the island guardian
+     *
+     * @throws IllegalArgumentException If the level is less than 2 or if the number of hearts is not positive.
+     * @since v3.1
      */
     public TownHall(final int level, final int price, @Nonnull final Currency currency, @Nullable final String command, final byte hearts, @Nullable final Material helmet, @Nullable final Material chestplate, @Nullable final Material leggings, @Nullable final Material boots, @Nullable final List<PotionEffectType> potions) {
         super(level, price, currency);
 
         if (level < 2)
             throw new IllegalArgumentException("Invalid level: must be greater than or equal to 2");
+        if (hearts <= 0)
+            throw new IllegalArgumentException("Invalid health: must be a positive number");
 
         this.command = command;
         this.hearts = hearts;
@@ -94,7 +111,7 @@ public final class TownHall extends Building {
         this.chestplate = chestplate;
         this.leggings = leggings;
         this.boots = boots;
-        this.potions = potions;
+        this.potions = potions == null ? null : ImmutableList.copyOf(potions);
     }
 
     /**

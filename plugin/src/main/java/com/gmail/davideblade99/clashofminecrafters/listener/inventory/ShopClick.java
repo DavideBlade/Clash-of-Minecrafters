@@ -16,8 +16,8 @@ import com.gmail.davideblade99.clashofminecrafters.menu.item.ConfigItem;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
-import javafx.util.Pair;
+import com.gmail.davideblade99.clashofminecrafters.util.Pair;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -83,7 +83,7 @@ public final class ShopClick extends CoMListener {
                                     default:
                                         throw new IllegalStateException("Unexpected value: " + currency);
                                 }
-                                ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NOT_ENOUGH_MONEY, currencyTranslation));
+                                MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NOT_ENOUGH_MONEY, currencyTranslation));
                                 player.closeInventory();
                                 return;
                             }
@@ -93,7 +93,7 @@ public final class ShopClick extends CoMListener {
                     // Check if the player has the required item
                     if (requiredItem != null) {
                         if (!player.getInventory().containsAtLeast(requiredItem, requiredItem.getAmount())) {
-                            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.ITEM_NOT_FOUND));
+                            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.ITEM_NOT_FOUND));
                             player.closeInventory();
                             return;
                         }

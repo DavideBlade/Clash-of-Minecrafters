@@ -28,7 +28,7 @@ import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicHandler;
 import com.gmail.davideblade99.clashofminecrafters.storage.DatabaseFactory;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.sql.AbstractSQLDatabase;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -86,13 +86,13 @@ import java.util.UUID;
 
 //TODO: 1.18 Clash of Clans buildings: https://www.planetminecraft.com/project/clash-of-clans-every-building-with-every-upgrade-th-1-to-th12/
 
+//TODO: altre idee da https://www.spigotmc.org/resources/1-13-1-18-craftofclans.22966/
+
 //TODO: per le valute anziché usare gli int perché non uso un BigInt?
 
 //TODO: ottimizzare codice e migliorarlo (aggiungere alle features No lag)
 
 //TODO: catch errori non gestiti da nessuno: https://stackoverflow.com/a/13507137 + https://docs.oracle.com/javase/6/docs/api/java/lang/Thread.html#setDefaultUncaughtExceptionHandler%28java.lang.Thread.UncaughtExceptionHandler%29 + https://www.javatpoint.com/java-thread-setdefaultuncaughtexceptionhandler-method + https://stackoverflow.com/a/46591885
-
-//TODO: altre idee da https://www.spigotmc.org/resources/1-13-1-18-craftofclans.22966/
 public final class CoM extends JavaPlugin {
 
     /**
@@ -128,15 +128,28 @@ public final class CoM extends JavaPlugin {
     public void onEnable() {
         // Added: Controllo sulle colonne sul MySQL (adesso verranno aggiunte in automatico le nuove colonne delle future versioni dopo che un database è già stato creato)
         // Added: Statistiche (configurabili) del guardiano che difende i villaggi in base al livello del municipio
-        // Added: Adesso è possibile rimuovere la sezione dei town hall, degli estrattori e delle torri dell'arciere dal config.yml per rimuovere la funzionalità (non verrà più mostrato nel menù /upgrade) //TODO: scriverlo sulla wiki
+        // Added: Adesso è possibile rimuovere la sezione dei town hall, degli estrattori, delle torri dell'arciere e dei clan dal config.yml per rimuovere la funzionalità (nei primi 3 casi, non verranno più mostrate nel menù /upgrade) //TODO: scriverlo sulla wiki
+        // Added: Separate le configurazioni dell'estrattore di elisir e d'oro //TODO: aggiornare wiki
 
-        // Removed: Rimossi i valori di default in caso di dati mancanti dal config (dalle sezioni town hall, estrattori e torri dell'arciere) per una migliore manutenibilità del codice: adesso se mancheranno i valori obbligatori la funzionalità verrà disattivata (non verrà più mostrata nel menù /upgrade) con un alert
+        // Removed: Rimossi i valori di default in caso di dati mancanti dal config (dalle sezioni town hall, estrattori e torri dell'arciere) per una migliore manutenibilità del codice: adesso se mancheranno i valori obbligatori la funzionalità verrà disattivata (non verrà più mostrata nel menù /upgrade) con un alert //TODO: scrivere sulla wiki (tra cui sulle FAQ: se si disattiva la funzionalità del town hall/estrattori/... significa che c'è un errore nella configurazione. Controlla i log per risolverlo. Nessun dato andrà perso, solo verrà disattivata la funzionalità di incremento livello tramite il menù /upgrade così come (fino alla risoluzione del problema) gli estrattori non produrranno più, i guardiani non avranno più le statistiche ecc.)
 
+        // Fixed: Adesso se vengono eliminati dei livelli dal config.yml dopo che qualche giocatore ne ha già acquistato qualcosa non viene più lanciato errore in console.
+        // Fixed: Corretto il messaggio di errore in caso di comando sconosciuto.
+
+        // Other: Pubblicato codice sorgente
         // Other: Aggiunto messaggio di warning in caso manchi una delle seguenti sezioni: town hall, estrattori e torri dell'arciere
         // Other: Modificato il metodo di salvataggio su file o MySQL dei dati dei giocatori
         // Other: Migliorato il codice
         // Other: Modificata la comunicazione con il MySQL
         // Other: Modificato esteticamente il file di log degli errori sul database MySQL
+        // Other: Divisa l'etichetta "Extractors" con "Gold extractors" e "Elixir extractors" nel confg.yml
+        // Other: Modificata l'etichetta "TownHall" con "Town halls" nel config.yml
+        // Other: Modificata l'etichetta "ArcherTowers" con "Archer towers" nel config.yml
+        // Other: Modificata colorazione dei messaggi in console: gli errori saranno in rosso, i warning in giallo //TODO: scrivere sulla wiki
+        // Other: Aggiunti messaggi "No buildings" e "Disabled extractors" tra i messaggi traducibili
+        //TODO: scrivere nei commenti sul config.yml che se una sezione delle costruzioni viene rimossa, questo significa disabilitare la funzionalità
+        //TODO: aggiornare wiki con il nuovo config.yml
+
 
         //TODO: Aggiungere statistiche diverse al guardiano in base al livello del municipio (es. effetti di pozioni, diverse velocità, teletrasporto casuale dietro il giocatore (purché possa sempre raggiungerlo) ecc.) + aggiornare wiki
 
@@ -149,7 +162,7 @@ public final class CoM extends JavaPlugin {
 
         try {
             if (!checkVersion()) {
-                ChatUtil.sendMessage("&cThis version is only compatible with the following versions:" + String.join(", ", SUPPORTED_VERSIONS));
+                MessageUtil.sendError("This version is only compatible with the following versions:" + String.join(", ", SUPPORTED_VERSIONS));
                 disablePlugin();
                 return;
             }
@@ -181,9 +194,9 @@ public final class CoM extends JavaPlugin {
                     public void onUpdateFound(@Nonnull final String newVersion) {
                         final String currentVersion = pluginVersion.contains(" ") ? pluginVersion.split(" ")[0] : pluginVersion;
 
-                        ChatUtil.sendMessage("&6Found a new version: " + newVersion + " (Yours: v" + currentVersion + ")");
-                        ChatUtil.sendMessage("&6Download it on spigot:");
-                        ChatUtil.sendMessage("&6spigotmc.org/resources/31180");
+                        MessageUtil.sendWarning("Found a new version: " + newVersion + " (Yours: v" + currentVersion + ")");
+                        MessageUtil.sendWarning("Download it on spigot:");
+                        MessageUtil.sendWarning("spigotmc.org/resources/31180");
                     }
                 });
             }
@@ -207,8 +220,8 @@ public final class CoM extends JavaPlugin {
 
 
             if (pluginVersion.contains("alpha"))
-                ChatUtil.sendMessage("&cWARNING! &6This is an alpha version and backward compatibility of future versions is not guaranteed. Do not use on active servers.");
-            getServer().getConsoleSender().sendMessage("§6Clash of minecrafters has been enabled. (Version: " + pluginVersion + ")");
+                MessageUtil.sendWarning("WARNING! This is an alpha version and backward compatibility of future versions is not guaranteed. Do not use on active servers.");
+            MessageUtil.sendWarning("Clash of minecrafters has been enabled. (Version: " + pluginVersion + ")");
         } catch (final Throwable throwable) {
             // Any unexpected issues not handled
             throwable.printStackTrace();
@@ -245,7 +258,7 @@ public final class CoM extends JavaPlugin {
         archerHandler = null;
         guardianHandler = null;
 
-        getServer().getConsoleSender().sendMessage("§6Clash of minecrafters has been disabled. (Version: " + getDescription().getVersion() + ")");
+        MessageUtil.sendWarning("Clash of minecrafters has been disabled. (Version: " + getDescription().getVersion() + ")");
     }
 
     @Override
@@ -388,14 +401,14 @@ public final class CoM extends JavaPlugin {
         world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false);
 
 
-        ChatUtil.sendMessage("&8World of islands has been loaded.");
+        MessageUtil.sendInfo("World of islands has been loaded.");
     }
 
     private void checkDependencies() {
         final Plugin worldEdit = Bukkit.getPluginManager().getPlugin("WorldEdit");
         if (worldEdit == null || !worldEdit.isEnabled()) {
-            ChatUtil.sendMessage("&cWorldEdit should handle the schematic(s) but it isn't\n enabled.");
-            ChatUtil.sendMessage("&cClash of minecrafters " + getDescription().getVersion() + " was disabled.");
+            MessageUtil.sendError("WorldEdit should handle the schematic(s) but it isn't enabled.");
+            MessageUtil.sendError("Clash of minecrafters " + getDescription().getVersion() + " was disabled.");
             disablePlugin();
         }
     }

@@ -4,9 +4,10 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.configuration;
+package com.gmail.davideblade99.clashofminecrafters.yaml;
 
 import com.gmail.davideblade99.clashofminecrafters.util.collection.CollectionUtil;
+import com.gmail.davideblade99.clashofminecrafters.yaml.CoMYamlConfiguration;
 
 import javax.annotation.Nonnull;
 import java.io.File;

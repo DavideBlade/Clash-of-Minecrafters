@@ -12,7 +12,7 @@ import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.Permissions;
 import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -31,6 +31,6 @@ public final class TrophiesCommand extends CommandFramework {
 
 
         final User user = plugin.getUser(((Player) sender));
-        ChatUtil.sendMessage(sender, Messages.getMessage(MessageKey.SHOW_TROPHIES, String.valueOf(user.getTrophies())));
+        MessageUtil.sendMessage(sender, Messages.getMessage(MessageKey.SHOW_TROPHIES, String.valueOf(user.getTrophies())));
     }
 }

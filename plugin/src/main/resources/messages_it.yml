@@ -59,6 +59,8 @@ Max trophies: '&cHai raggiunto il massimo numero di trofei.'
 Player never joined: '&cIl giocatore %player non ha mai giocato nel server!'
 # Quando viene fornito (per esempio tramite comandi) un numero troppo grande.
 Too big number: '&cHai inserito un numero troppo grande. Verrà utilizzato %amount.'
+# Quando un giocatore invoca il comando /upgrade ma tutte le costruzioni sono disabilitate.
+No buildings: '&cTutte le costruzioni sono disabilitate. Non c''è niente da potenziare.'
 
 
 ############################################################
@@ -123,6 +125,8 @@ No extractor: '&cNon possiedi nessun estrattore! Acquistane con /upgrade.'
 Collected resources: '&6Tutte le risorse negli estrattori sono state raccolte con successo.'
 # Quando un giocatore usa il comando /extractors per vedere le informazioni dei propri estrattori.
 Extractors info: '&6&l%building &cLivello:&6 %level&c, produzione oraria:&6 %amount&c, capacità:&6 %resources/%capacity'
+# Quando un giocatore usa il comando /extractors ma tutti gli estrattori sono disabilitati.
+Disabled extractors: '&cTutti gli estrattori sono disabilitati :('
 
 
 ############################################################

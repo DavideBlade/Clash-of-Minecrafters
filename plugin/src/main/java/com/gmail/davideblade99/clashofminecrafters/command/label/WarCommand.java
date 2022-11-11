@@ -12,7 +12,7 @@ import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.Permissions;
 import com.gmail.davideblade99.clashofminecrafters.clan.WarHandler;
 import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.command.CommandSender;
 
 import javax.annotation.Nonnull;
@@ -31,11 +31,11 @@ public final class WarCommand extends CommandFramework {
 
         final WarHandler warHandler = plugin.getWarHandler();
         if (warHandler.isStarted())
-            ChatUtil.sendMessage(sender, Messages.getMessage(MessageKey.WAR_STARTED));
+            MessageUtil.sendMessage(sender, Messages.getMessage(MessageKey.WAR_STARTED));
         else {
             final int timeToStart = warHandler.getTimeToStart();
 
-            ChatUtil.sendMessage(sender, Messages.getMessage(MessageKey.STARTING_WAR, String.valueOf(timeToStart), Messages.getMessage(timeToStart == 1 ? MessageKey.SECOND : MessageKey.SECONDS)));
+            MessageUtil.sendMessage(sender, Messages.getMessage(MessageKey.STARTING_WAR, String.valueOf(timeToStart), Messages.getMessage(timeToStart == 1 ? MessageKey.SECOND : MessageKey.SECONDS)));
         }
     }
 }

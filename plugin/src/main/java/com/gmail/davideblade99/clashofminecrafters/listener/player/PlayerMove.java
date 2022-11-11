@@ -11,7 +11,7 @@ import com.gmail.davideblade99.clashofminecrafters.island.Island;
 import com.gmail.davideblade99.clashofminecrafters.listener.IslandListener;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,8 +47,8 @@ public final class PlayerMove extends IslandListener {
 
         //TODO: funziona?
         if (island.canBuildOnLocation(from) && !island.canBuildOnLocation(to))
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.LEFT_ISLAND));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.LEFT_ISLAND));
         else if (island.canBuildOnLocation(to) && !island.canBuildOnLocation(from))
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.ENTERED_IN_ISLAND));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.ENTERED_IN_ISLAND));
     }
 }

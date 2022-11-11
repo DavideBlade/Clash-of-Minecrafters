@@ -13,7 +13,7 @@ import com.gmail.davideblade99.clashofminecrafters.Permissions;
 import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
 import com.gmail.davideblade99.clashofminecrafters.island.Island;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -39,10 +39,10 @@ public final class IslandCommand extends CommandFramework {
             final User user = plugin.getUser(player);
             final Island island = user.getIsland();
             if (island != null) {
-                ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.TELEPORTATION));
+                MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.TELEPORTATION));
                 island.teleportToSpawn(player);
             } else {
-                ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.ISLAND_CREATION));
+                MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.ISLAND_CREATION));
                 user.createIsland();
             }
 
@@ -64,10 +64,10 @@ public final class IslandCommand extends CommandFramework {
 
             user.setIslandSpawn(loc);
 
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.ISLAND_SPAWN_SET));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.ISLAND_SPAWN_SET));
             return;
         }
 
-        ChatUtil.sendMessage(player, "&cUnknow sub-command \"" + args[0] + "\". Use /com help.");
+        MessageUtil.sendError(player, "Unknown sub-command \"" + args[0] + "\". Use /com help.");
     }
 }

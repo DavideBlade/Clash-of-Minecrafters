@@ -183,7 +183,7 @@ Menus:
 # Health - Number of hearts (for comparison: one player has 10) - OPTIONAL
 # Equipment - Material of the 4 armor pieces (Helmet, Chestplate, Leggings, Boots) - OPTIONAL
 # Potions - List of guardian effects - OPTIONAL
-TownHall:
+Town halls:
   2:
     Price: 4000
     Currency: elixir
@@ -224,15 +224,14 @@ TownHall:
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                     EXTRACTORS                       | #
+# |                    GOLD EXTRACTOR                    | #
 # +------------------------------------------------------+ #
 ############################################################
-# Configuration covering both elixir and gold extractors.
 # Production - is the hourly production of the extractor
 # Price - is the price to buy the extractor.
 # Currency - is the currency of the price.
 # Capacity - is the maximum capacity of the extractor.
-Extractors:
+Gold extractors:
   1:
     Production: 12
     Price: 10
@@ -286,13 +285,74 @@ Extractors:
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                     ARCHER TOWERS                    | #
+# |                   ELIXIR EXTRACTOR                   | #
+# +------------------------------------------------------+ #
+############################################################
+# Production - is the hourly production of the extractor
+# Price - is the price to buy the extractor.
+# Currency - is the currency of the price.
+# Capacity - is the maximum capacity of the extractor.
+Elixir extractors:
+  1:
+    Production: 12
+    Price: 10
+    Currency: gems
+    Capacity: 576
+  2:
+    Production: 20
+    Price: 30
+    Currency: gems
+    Capacity: 960
+  3:
+    Production: 43
+    Price: 80
+    Currency: gems
+    Capacity: 2064
+  4:
+    Production: 60
+    Price: 150
+    Currency: gems
+    Capacity: 2880
+  5:
+    Production: 100
+    Price: 235
+    Currency: gems
+    Capacity: 4800
+  6:
+    Production: 202
+    Price: 650
+    Currency: gems
+    Capacity: 9696
+  7:
+    Production: 300
+    Price: 1000
+    Currency: gems
+    Capacity: 14400
+  8:
+    Production: 470
+    Price: 2000
+    Currency: gems
+    Capacity: 22560
+  9:
+    Production: 750
+    Price: 2650
+    Currency: gems
+    Capacity: 36000
+  10:
+    Production: 1000
+    Price: 4000
+    Currency: gems
+    Capacity: 48000
+
+############################################################
+# +------------------------------------------------------+ #
+# |                     ARCHER TOWER                     | #
 # +------------------------------------------------------+ #
 ############################################################
 # Damage - is the damage (in hearts) of the archer tower.
 # Price - is the price to buy this archer tower.
 # Currency - is the currency of the price.
-ArcherTowers:
+Archer towers:
   1:
     Damage: 0.5
     Price: 20

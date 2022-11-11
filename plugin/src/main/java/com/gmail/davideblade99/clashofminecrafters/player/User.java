@@ -19,7 +19,7 @@ import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ScoreboardUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.util.number.IntegerUtil;
@@ -118,6 +118,16 @@ public final class User {
         this.base.set(player);
     }
 
+    /**
+     * Checks whether the player has sufficient balance to upgrade a building
+     *
+     * @param nextLevel Next level to purchase
+     * @param type      Type of building to upgrade
+     *
+     * @return True if the player can afford it, otherwise false
+     *
+     * @throws IllegalArgumentException If the specified level does not exist for the passed building type
+     */
     public boolean hasMoneyToUpgrade(final int nextLevel, @Nonnull final BuildingType type) {
         final Building nextBuilding;
 
@@ -139,9 +149,17 @@ public final class User {
                 throw new IllegalStateException("Unexpected value: " + type);
         }
 
+        if (nextBuilding == null)
+            throw new IllegalArgumentException("The \"" + nextLevel + "\" level of the building \"" + type + "\" does not exist");
+
         return getBalance(nextBuilding.currency) >= nextBuilding.price;
     }
 
+    /**
+     * @param type Currency in which to obtain the balance
+     *
+     * @return The player's balance for the specified currency
+     */
     public int getBalance(@Nonnull final Currency type) {
         switch (type) {
             case GEMS:
@@ -178,10 +196,10 @@ public final class User {
         }
 
         if (getBase() instanceof Player) {
-            ChatUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.ADDED_TO_BALANCE, String.valueOf(newBalance - currentBalance), Messages.getMessage(word)));
+            MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.ADDED_TO_BALANCE, String.valueOf(newBalance - currentBalance), Messages.getMessage(word)));
 
             if (newBalance == Integer.MAX_VALUE)
-                ChatUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.MAX_MONEY));
+                MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.MAX_MONEY));
         }
 
         return newBalance;
@@ -209,7 +227,7 @@ public final class User {
         }
 
         if (getBase() instanceof Player)
-            ChatUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.REMOVED_FROM_BALANCE, String.valueOf(currentBalance - newBalance), Messages.getMessage(word)));
+            MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.REMOVED_FROM_BALANCE, String.valueOf(currentBalance - newBalance), Messages.getMessage(word)));
 
         return newBalance;
     }
@@ -242,10 +260,10 @@ public final class User {
         setTrophies(IntegerUtil.saturatedAdd(trophies, amount)); // Avoid overflow
 
         if (getBase() instanceof Player) {
-            ChatUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.ADDED_TROPHIES, String.valueOf(newAmount - currentTrophies))); //TODO: plurale e singolare di "trofei"
+            MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.ADDED_TROPHIES, String.valueOf(newAmount - currentTrophies))); //TODO: plurale e singolare di "trofei"
 
             if (trophies == Integer.MAX_VALUE) // If trophies reach the upper limit
-                ChatUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.MAX_TROPHIES));
+                MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.MAX_TROPHIES));
         }
     }
 
@@ -256,7 +274,7 @@ public final class User {
         setTrophies(newAmount);
 
         if (getBase() instanceof Player)
-            ChatUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.REMOVED_TROPHIES, String.valueOf(currentTrophies - newAmount))); //TODO: plurale e singolare di "trofei"
+            MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.REMOVED_TROPHIES, String.valueOf(currentTrophies - newAmount))); //TODO: plurale e singolare di "trofei"
     }
 
     private void setTrophies(final int trophies) {
@@ -313,10 +331,22 @@ public final class User {
         }
     }
 
+    /**
+     * @param type Type of construction to obtain
+     *
+     * @return the {@link Building} corresponding to the level the player has unlocked or {@code null} if the
+     * player has not unlocked the building or if the level is not found among the configured ones (this can happen
+     * if, for example, there is a configuration error or if levels have been deleted)
+     */
     @Nullable
     public Building getBuilding(@Nonnull final BuildingType type) {
         final int currentLevel = getBuildingLevel(type);
-        if (currentLevel == 0) // If the level is 0 it means that it does not have the building
+
+        // If the level is 1, it means that the player has the basic level of the town hall (never upgraded it)
+        if (type == BuildingType.TOWN_HALL && currentLevel == 1)
+            return null;
+        // If the level is 0 it means that the player does not have the building (never unlocked)
+        if (type != BuildingType.TOWN_HALL && currentLevel == 0)
             return null;
 
         return plugin.getConfig().getBuilding(type, currentLevel);
@@ -347,7 +377,7 @@ public final class User {
         // Max level reached
         if (nextLevel > plugin.getConfig().getMaxLevel(type)) {
             if (getBase() instanceof Player)
-                ChatUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.MAX_LEVEL_REACHED, replacement));
+                MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.MAX_LEVEL_REACHED, replacement));
             return;
         }
 
@@ -372,7 +402,7 @@ public final class User {
                         throw new IllegalStateException("Unexpected value: " + currency);
                 }
 
-                ChatUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.NOT_ENOUGH_MONEY, currencyTranslation));
+                MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.NOT_ENOUGH_MONEY, currencyTranslation));
             }
             return;
         }
@@ -381,7 +411,7 @@ public final class User {
         setBuildingLevel(nextLevel, type);
 
         if (getBase() instanceof Player)
-            ChatUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.UPGRADE_COMPLETED, replacement, String.valueOf(nextLevel)));
+            MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.UPGRADE_COMPLETED, replacement, String.valueOf(nextLevel)));
     }
 
     /**
@@ -445,16 +475,16 @@ public final class User {
             plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
 
             if (getBase() instanceof Player) {
-                ChatUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.TELEPORTATION));
+                MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.TELEPORTATION));
 
                 island.teleportToSpawn((Player) getBase());
             }
         } catch (final PastingException ignored) {
             if (getBase() instanceof Player)
-                ChatUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.ISLAND_CREATION_ERROR));
+                MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.ISLAND_CREATION_ERROR));
         } catch (final WorldBorderReachedException ignored) {
             if (getBase() instanceof Player)
-                ChatUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.ISLAND_WORLD_LIMIT_REACHED));
+                MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.ISLAND_WORLD_LIMIT_REACHED));
         }
     }
 

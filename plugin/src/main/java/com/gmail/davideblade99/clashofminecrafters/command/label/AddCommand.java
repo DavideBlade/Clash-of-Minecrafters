@@ -14,7 +14,7 @@ import com.gmail.davideblade99.clashofminecrafters.Permissions;
 import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
 import com.gmail.davideblade99.clashofminecrafters.exception.IntegerOutOfBoundary;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.number.IntegerUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -42,10 +42,10 @@ public final class AddCommand extends CommandFramework {
                 amount = Integer.MIN_VALUE;
             else
                 amount = Integer.MAX_VALUE;
-            ChatUtil.sendMessage(sender, Messages.getMessage(MessageKey.TOO_BIG_NUMBER, Integer.toString(amount)));
+            MessageUtil.sendMessage(sender, Messages.getMessage(MessageKey.TOO_BIG_NUMBER, Integer.toString(amount)));
         }
         catch (final NumberFormatException ignored) {
-            ChatUtil.sendMessage(sender, Messages.getMessage(MessageKey.INTEGER_REQUIRED));
+            MessageUtil.sendMessage(sender, Messages.getMessage(MessageKey.INTEGER_REQUIRED));
             return;
         }
 
@@ -77,7 +77,7 @@ public final class AddCommand extends CommandFramework {
                 default:
                     throw new IllegalStateException("Unexpected value: " + currency);
             }
-            ChatUtil.sendMessage(sender, Messages.getMessage(MessageKey.ADDED_TO_OTHERS_BALANCE, Integer.toString(amountAdded), currencyTranslation, target.getBase().getName()));
+            MessageUtil.sendMessage(sender, Messages.getMessage(MessageKey.ADDED_TO_OTHERS_BALANCE, Integer.toString(amountAdded), currencyTranslation, target.getBase().getName()));
         }
     }
 }

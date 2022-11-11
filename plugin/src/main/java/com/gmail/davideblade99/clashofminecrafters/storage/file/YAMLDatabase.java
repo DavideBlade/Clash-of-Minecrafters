@@ -8,7 +8,7 @@ package com.gmail.davideblade99.clashofminecrafters.storage.file;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Currency;
-import com.gmail.davideblade99.clashofminecrafters.configuration.PlayerConfiguration;
+import com.gmail.davideblade99.clashofminecrafters.yaml.PlayerConfiguration;
 import com.gmail.davideblade99.clashofminecrafters.island.Island;
 import com.gmail.davideblade99.clashofminecrafters.island.building.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.player.User;

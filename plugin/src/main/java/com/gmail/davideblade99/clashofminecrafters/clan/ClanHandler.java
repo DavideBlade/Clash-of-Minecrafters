@@ -7,11 +7,11 @@
 package com.gmail.davideblade99.clashofminecrafters.clan;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.configuration.ClanConfiguration;
+import com.gmail.davideblade99.clashofminecrafters.yaml.ClanConfiguration;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
@@ -37,21 +37,21 @@ public final class ClanHandler {
 
     public void createClan(@Nonnull final String clanName, @Nonnull final Player owner) {
         if (clanName.contains(".")) {
-            ChatUtil.sendMessage(owner, Messages.getMessage(MessageKey.CANNOT_CONTAINS_DOT));
+            MessageUtil.sendMessage(owner, Messages.getMessage(MessageKey.CANNOT_CONTAINS_DOT));
             return;
         }
         if (clanName.length() > 30) {
-            ChatUtil.sendMessage(owner, Messages.getMessage(MessageKey.MAX_LENGTH));
+            MessageUtil.sendMessage(owner, Messages.getMessage(MessageKey.MAX_LENGTH));
             return;
         }
         if (getClanByName(clanName) != null) {
-            ChatUtil.sendMessage(owner, Messages.getMessage(MessageKey.CLAN_ALREADY_EXISTS));
+            MessageUtil.sendMessage(owner, Messages.getMessage(MessageKey.CLAN_ALREADY_EXISTS));
             return;
         }
 
         final User user = plugin.getUser(owner);
         if (user.getClanName() != null) {
-            ChatUtil.sendMessage(owner, Messages.getMessage(MessageKey.ALREADY_HAVE_CLAN));
+            MessageUtil.sendMessage(owner, Messages.getMessage(MessageKey.ALREADY_HAVE_CLAN));
             return;
         }
 
@@ -61,23 +61,23 @@ public final class ClanHandler {
 
         user.setClanName(clanName);
 
-        ChatUtil.sendMessage(owner, Messages.getMessage(MessageKey.CREATED_CLAN, clanName));
+        MessageUtil.sendMessage(owner, Messages.getMessage(MessageKey.CREATED_CLAN, clanName));
     }
 
     public void joinClan(@Nonnull final Player player, @Nonnull final String clanName) {
         final Clan clan = getClanByName(clanName);
         if (clan == null) {
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.CLAN_NOT_FOUND));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.CLAN_NOT_FOUND));
             return;
         }
         if (clan.getMembers().size() >= plugin.getConfig().getMaxPlayerPerClan()) {
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.FULL_CLAN));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.FULL_CLAN));
             return;
         }
 
         final User user = plugin.getUser(player);
         if (user.getClanName() != null) {
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.ALREADY_HAVE_CLAN));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.ALREADY_HAVE_CLAN));
             return;
         }
 
@@ -85,7 +85,7 @@ public final class ClanHandler {
 
         user.setClanName(clanName);
 
-        ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.JOINED_CLAN, clanName));
+        MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.JOINED_CLAN, clanName));
     }
 
     public void leaveClan(@Nonnull final Player player) {
@@ -93,7 +93,7 @@ public final class ClanHandler {
 
         final Clan playerClan = getClanByName(user.getClanName());
         if (playerClan == null) {
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.CLAN_REQUIRED));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.CLAN_REQUIRED));
             return;
         }
 
@@ -105,7 +105,7 @@ public final class ClanHandler {
             user.removeClan();
         }
 
-        ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.LEFT_CLAN, playerClan.getName()));
+        MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.LEFT_CLAN, playerClan.getName()));
     }
 
     // Get clan from its name

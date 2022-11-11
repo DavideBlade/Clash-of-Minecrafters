@@ -11,15 +11,12 @@ import com.gmail.davideblade99.clashofminecrafters.island.Island;
 import com.gmail.davideblade99.clashofminecrafters.listener.IslandListener;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
-import org.antlr.v4.runtime.tree.xpath.XPathLexer;
-import org.bukkit.Bukkit;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.projectiles.ProjectileSource;
 
@@ -90,7 +87,7 @@ public final class EntityDamageByEntity extends IslandListener {
             final Island attackedIsland = plugin.getWarHandler().getAttackedIsland(attacker);
             if (attackedIsland == null || !attackedIsland.owner.equals(plugin.getGuardianHandler().getOwner(guardian))) {
                 event.setCancelled(true);
-                ChatUtil.sendMessage(attacker, Messages.getMessage(MessageKey.CANNOT_HIT_GUARDIAN));
+                MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.CANNOT_HIT_GUARDIAN));
             }
         } else if (target instanceof Skeleton) {
             final Skeleton archer = (Skeleton) target;
@@ -101,7 +98,7 @@ public final class EntityDamageByEntity extends IslandListener {
             final Island attackedIsland = plugin.getWarHandler().getAttackedIsland(attacker);
             if (attackedIsland == null || !attackedIsland.owner.equals(plugin.getArcherHandler().getOwner(archer))) {
                 event.setCancelled(true);
-                ChatUtil.sendMessage(attacker, Messages.getMessage(MessageKey.CANNOT_HIT_ARCHER));
+                MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.CANNOT_HIT_ARCHER));
             }
         }
     }

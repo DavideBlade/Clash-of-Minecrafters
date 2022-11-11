@@ -1,9 +1,11 @@
 package com.gmail.davideblade99.clashofminecrafters.storage.sql.mysql.query;
 
+import javax.annotation.Nonnull;
+
 /**
  * Enumerate the mathematical functions of MySQL
  */
-public enum Function {
+public enum MySQLFunction {
     RAND("RAND()"),
     ABS("ABS()"),
     CEIL("CEIL()"),
@@ -12,7 +14,7 @@ public enum Function {
 
     private final String function;
 
-    Function(final String function) {
+    MySQLFunction(@Nonnull final String function) {
         this.function = function;
     }
 

@@ -34,7 +34,7 @@ public final class Pair<K, V> implements Serializable {
      * @param key   The key for this pair
      * @param value The value to use for this pair
      */
-    public Pair(@Nullable final K key, @Nullable final V value) {
+    public Pair(final K key, final V value) {
         this.key = key;
         this.value = value;
     }
@@ -45,7 +45,6 @@ public final class Pair<K, V> implements Serializable {
      * @return key for this pair
      */
     @Contract(pure = true)
-    @Nullable
     public K getKey() {
         return key;
     }
@@ -56,7 +55,6 @@ public final class Pair<K, V> implements Serializable {
      * @return value for this pair
      */
     @Contract(pure = true)
-    @Nullable
     public V getValue() {
         return value;
     }

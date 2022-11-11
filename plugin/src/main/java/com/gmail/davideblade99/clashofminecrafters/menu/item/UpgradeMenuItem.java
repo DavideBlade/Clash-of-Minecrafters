@@ -8,13 +8,14 @@ package com.gmail.davideblade99.clashofminecrafters.menu.item;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Currency;
+import com.gmail.davideblade99.clashofminecrafters.configuration.Config;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.island.building.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -35,16 +36,25 @@ public final class UpgradeMenuItem extends BaseItem {
 
     @Override
     public void onClick(@Nonnull final CoM plugin, @Nonnull final Player clicker) {
+        final Config config = plugin.getConfig();
         final World islandWorld = Bukkit.getWorld("Islands");
         final Vector origin = new Vector(clicker.getLocation());
-
         final User user = plugin.getUser(clicker);
-        final int currentLevel = user.getBuildingLevel(type);
+
+        /*
+         * If any player has a level higher than the current maximum level
+         * (e.g., some levels have been removed from the config.yml),
+         * they are treated as if they have not purchased any upgrades
+         * and must therefore start over.
+         */
+        int currentLevel = user.getBuildingLevel(type);
+        if (currentLevel > config.getMaxLevel(type))
+            currentLevel = 0;
 
         // Check if player have money to upgrade
-        final int nextLevel = user.getBuildingLevel(type) + 1;
+        final int nextLevel = currentLevel + 1;
         if (!user.hasMoneyToUpgrade(nextLevel, type)) {
-            final Currency currency = plugin.getConfig().getBuilding(type, nextLevel).currency;
+            final Currency currency = config.getBuilding(type, nextLevel).currency;
             final String currencyTranslation;
             switch (currency) {
                 case GEMS:
@@ -60,7 +70,7 @@ public final class UpgradeMenuItem extends BaseItem {
                     throw new IllegalStateException("Unexpected value: " + currency);
             }
 
-            ChatUtil.sendMessage(clicker, Messages.getMessage(MessageKey.NOT_ENOUGH_MONEY, currencyTranslation));
+            MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.NOT_ENOUGH_MONEY, currencyTranslation));
             return;
         }
 
@@ -73,7 +83,7 @@ public final class UpgradeMenuItem extends BaseItem {
         switch (type) {
             case ARCHER_TOWER: {
                 errorMessage = Messages.getMessage(MessageKey.TOWER_NOT_PLACED);
-                useWESchematic = plugin.getConfig().useArcherSchematic();
+                useWESchematic = config.useArcherSchematic();
                 successMessage = Messages.getMessage(MessageKey.TOWER_PLACED);
                 schematicName = Schematic.Schematics.ARCHER.getName();
 
@@ -100,10 +110,10 @@ public final class UpgradeMenuItem extends BaseItem {
                  * (if he is buying the first one, there is nothing to collect)
                  */
                 if (user.getBuilding(BuildingType.GOLD_EXTRACTOR) != null || user.getBuilding(BuildingType.ELIXIR_EXTRACTOR) != null)
-                    ChatUtil.sendMessage(clicker, Messages.getMessage(MessageKey.COLLECTED_RESOURCES));
+                    MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.COLLECTED_RESOURCES));
 
                 errorMessage = Messages.getMessage(MessageKey.EXTRACTOR_NOT_PLACED);
-                useWESchematic = plugin.getConfig().useGoldExtractorSchematic();
+                useWESchematic = config.useGoldExtractorSchematic();
                 successMessage = Messages.getMessage(MessageKey.EXTRACTOR_PLACED);
                 schematicName = Schematic.Schematics.GOLD_EXTRACTOR.getName();
 
@@ -131,10 +141,10 @@ public final class UpgradeMenuItem extends BaseItem {
                  * (if he is buying the first one, there is nothing to collect)
                  */
                 if (user.getBuilding(BuildingType.GOLD_EXTRACTOR) != null || user.getBuilding(BuildingType.ELIXIR_EXTRACTOR) != null)
-                    ChatUtil.sendMessage(clicker, Messages.getMessage(MessageKey.COLLECTED_RESOURCES));
+                    MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.COLLECTED_RESOURCES));
 
                 errorMessage = Messages.getMessage(MessageKey.EXTRACTOR_NOT_PLACED);
-                useWESchematic = plugin.getConfig().useElixirExtractorSchematic();
+                useWESchematic = config.useElixirExtractorSchematic();
                 successMessage = Messages.getMessage(MessageKey.EXTRACTOR_PLACED);
                 schematicName = Schematic.Schematics.ELIXIR_EXTRACTOR.getName();
 
@@ -162,7 +172,7 @@ public final class UpgradeMenuItem extends BaseItem {
         if (currentLevel <= 0) {
             // Check if player is into own island
             if (!user.getIsland().canBuildOnLocation(clicker.getLocation())) {
-                ChatUtil.sendMessage(clicker, errorMessage);
+                MessageUtil.sendMessage(clicker, errorMessage);
                 return;
             }
 
@@ -170,7 +180,7 @@ public final class UpgradeMenuItem extends BaseItem {
             try {
                 schematic.paste(islandWorld, origin);
             } catch (final PastingException ignored) {
-                ChatUtil.sendMessage(clicker, Messages.getMessage(MessageKey.LOAD_ERROR, schematicName));
+                MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.LOAD_ERROR, schematicName));
                 return;
             }
 
@@ -178,7 +188,7 @@ public final class UpgradeMenuItem extends BaseItem {
             if (type == BuildingType.ARCHER_TOWER)
                 user.setArcherPos(new Vector(origin.getX(), (origin.getY() + schematic.getSize().getHeight()), origin.getZ()));
 
-            ChatUtil.sendMessage(clicker, successMessage);
+            MessageUtil.sendMessage(clicker, successMessage);
         }
 
         user.upgradeBuilding(type);

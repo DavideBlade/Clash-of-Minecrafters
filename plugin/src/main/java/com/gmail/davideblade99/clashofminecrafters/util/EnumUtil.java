@@ -22,6 +22,7 @@ public final class EnumUtil {
      * @param value       the enum name
      * @param enumClass   the class of the enum to query
      * @param defaultEnum the default enum
+     *
      * @return the enum, {@code defaultEnum} if not found
      */
     @Nullable
@@ -40,6 +41,7 @@ public final class EnumUtil {
      * @param value       the enum name
      * @param enumClass   the class of the enum to query
      * @param defaultEnum the default enum
+     *
      * @return the enum, {@code defaultEnum} if not found
      */
     @Nullable

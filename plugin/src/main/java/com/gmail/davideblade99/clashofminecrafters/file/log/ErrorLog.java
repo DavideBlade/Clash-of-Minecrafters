@@ -9,7 +9,7 @@ package com.gmail.davideblade99.clashofminecrafters.file.log;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.file.AsyncFileWriter;
 import com.gmail.davideblade99.clashofminecrafters.util.ExceptionUtil;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.plugin.Plugin;
 
 import javax.annotation.Nonnull;
@@ -138,18 +138,18 @@ public final class ErrorLog {
 
             fileWriter.write((Exception result) -> {
                 if (result == null) // Operation successfully completed
-                    ChatUtil.sendMessage("&6Created the file \"" + filePath + "\" containing the SQL error information.");
+                    MessageUtil.sendWarning("Created the file \"" + filePath + "\" containing the SQL error information.");
                 else // Operation failed
                 {
                     result.printStackTrace();
 
-                    ChatUtil.sendMessage("&cFailed to create SQL error log file: " + result.getMessage());
+                    MessageUtil.sendError("Failed to create SQL error log file: " + result.getMessage());
                 }
             });
         } catch (final InterruptedException e) {
             e.printStackTrace();
 
-            ChatUtil.sendMessage("&cFailed to create SQL error log file: " + e.getMessage());
+            MessageUtil.sendError("Failed to create SQL error log file: " + e.getMessage());
         }
     }
 }

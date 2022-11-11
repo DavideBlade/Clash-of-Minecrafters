@@ -12,7 +12,7 @@ import com.gmail.davideblade99.clashofminecrafters.island.Island;
 import com.gmail.davideblade99.clashofminecrafters.listener.IslandListener;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
@@ -53,7 +53,7 @@ public final class AntiGrief extends IslandListener {
         final Island island = plugin.getUser(player).getIsland();
         if (island == null || !island.canBuildOnLocation(block.getLocation())) {
             event.setCancelled(true);
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 
@@ -70,7 +70,7 @@ public final class AntiGrief extends IslandListener {
         final Island island = plugin.getUser(player).getIsland();
         if (island == null || !island.canBuildOnLocation(block.getLocation())) {
             event.setCancelled(true);
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 
@@ -108,7 +108,7 @@ public final class AntiGrief extends IslandListener {
         final Island island = plugin.getUser(player).getIsland();
         if (island == null || !island.canBuildOnLocation(hanging.getLocation())) {
             event.setCancelled(true);
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 
@@ -129,7 +129,7 @@ public final class AntiGrief extends IslandListener {
         final Island island = plugin.getUser(player).getIsland();
         if (island == null || !island.canBuildOnLocation(hanging.getLocation())) {
             event.setCancelled(true);
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 
@@ -172,7 +172,7 @@ public final class AntiGrief extends IslandListener {
         final Island island = plugin.getUser(player).getIsland();
         if (island == null || !island.canBuildOnLocation(((Horse) invHolder).getLocation())) {
             event.setCancelled(true);
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 
@@ -189,7 +189,7 @@ public final class AntiGrief extends IslandListener {
         final Island island = plugin.getUser(player).getIsland();
         if (island == null || !island.canBuildOnLocation(block.getLocation())) {
             event.setCancelled(true);
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 
@@ -206,7 +206,7 @@ public final class AntiGrief extends IslandListener {
         final Island island = plugin.getUser(player).getIsland();
         if (island == null || !island.canBuildOnLocation(block.getLocation())) {
             event.setCancelled(true);
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 
@@ -223,7 +223,7 @@ public final class AntiGrief extends IslandListener {
         final Island island = plugin.getUser(player).getIsland();
         if (island == null || !island.canBuildOnLocation(item.getLocation())) {
             event.setCancelled(true);
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 
@@ -243,7 +243,7 @@ public final class AntiGrief extends IslandListener {
         final Island island = plugin.getUser(player).getIsland();
         if (island == null) {
             event.setCancelled(true);
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
             return;
         }
 
@@ -262,7 +262,7 @@ public final class AntiGrief extends IslandListener {
                     || itemMat == Material.ARMOR_STAND) {
                 if (!island.canBuildOnLocation(block.getLocation())) {
                     event.setCancelled(true);
-                    ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+                    MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
                     return;
                 }
             }
@@ -291,7 +291,7 @@ public final class AntiGrief extends IslandListener {
                 || blockMat == Material.BEACON) {
             if (!island.canBuildOnLocation(block.getLocation())) {
                 event.setCancelled(true);
-                ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+                MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
             }
         }
     }
@@ -311,7 +311,7 @@ public final class AntiGrief extends IslandListener {
         final Island island = plugin.getUser(player).getIsland();
         if (island == null || !island.canBuildOnLocation(entity.getLocation())) {
             event.setCancelled(true);
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 
@@ -330,7 +330,7 @@ public final class AntiGrief extends IslandListener {
         final Island island = plugin.getUser(player).getIsland();
         if (island == null || !island.canBuildOnLocation(clicked.getLocation())) {
             event.setCancelled(true);
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 
@@ -359,7 +359,7 @@ public final class AntiGrief extends IslandListener {
         final Island island = plugin.getUser(attacker).getIsland();
         if (island == null || !island.canBuildOnLocation(target.getLocation())) {
             event.setCancelled(true);
-            ChatUtil.sendMessage(attacker, Messages.getMessage(MessageKey.NO_PERMISSION));
+            MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 
@@ -380,7 +380,7 @@ public final class AntiGrief extends IslandListener {
         if (island == null || !island.canBuildOnLocation(item.getLocation())) {
             event.setCancelled(true);
             item.setPickupDelay(50);
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 
@@ -397,7 +397,7 @@ public final class AntiGrief extends IslandListener {
         final Island island = plugin.getUser(player).getIsland();
         if (island == null || !island.canBuildOnLocation(entity.getLocation())) {
             event.setCancelled(true);
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 
@@ -416,7 +416,7 @@ public final class AntiGrief extends IslandListener {
         final Island island = plugin.getUser(player).getIsland();
         if (island == null || !island.canBuildOnLocation(event.getVehicle().getLocation())) {
             event.setCancelled(true);
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 
@@ -435,7 +435,7 @@ public final class AntiGrief extends IslandListener {
         final Island island = plugin.getUser(player).getIsland();
         if (island == null || !island.canBuildOnLocation(event.getVehicle().getLocation())) {
             event.setCancelled(true);
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 
@@ -454,7 +454,7 @@ public final class AntiGrief extends IslandListener {
         final Island island = plugin.getUser(player).getIsland();
         if (island == null || !island.canBuildOnLocation(event.getVehicle().getLocation())) {
             event.setCancelled(true);
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 }

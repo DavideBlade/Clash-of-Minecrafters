@@ -6,7 +6,7 @@
 
 package com.gmail.davideblade99.clashofminecrafters.util.bukkit;
 
-import javafx.util.Pair;
+import com.gmail.davideblade99.clashofminecrafters.util.Pair;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;

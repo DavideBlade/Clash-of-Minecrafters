@@ -10,7 +10,7 @@ import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size2D;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -38,8 +38,8 @@ public final class Island {
         if (BukkitLocationUtil.isSafeLocation(spawn))
             player.teleport(spawn);
         else {
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.ISLAND_SPAWN_NOT_SAFE));
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.TELEPORTATION_CANCELLED));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.ISLAND_SPAWN_NOT_SAFE));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.TELEPORTATION_CANCELLED));
         }
     }
 

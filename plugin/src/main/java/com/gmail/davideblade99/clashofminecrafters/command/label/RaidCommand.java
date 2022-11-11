@@ -12,7 +12,7 @@ import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -39,7 +39,7 @@ public final class RaidCommand extends CommandFramework {
         CommandValidator.isFalse(plugin.getWarHandler().isAttacking(player), Messages.getMessage(MessageKey.ALREADY_ATTACKING));
 
 
-        ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.SEARCHING));
+        MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.SEARCHING));
         plugin.getWarHandler().startRaid(player);
     }
 }

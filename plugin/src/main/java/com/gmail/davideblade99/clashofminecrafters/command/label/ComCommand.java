@@ -8,7 +8,7 @@ package com.gmail.davideblade99.clashofminecrafters.command.label;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.command.CommandSender;
 
 import javax.annotation.Nonnull;
@@ -75,7 +75,7 @@ public final class ComCommand extends CommandFramework {
                 return;
             }
 
-            ChatUtil.sendMessage(sender, "&cUnknow sub-command \"" + args[0] + "\". Use /com help.");
+            MessageUtil.sendError(sender, "Unknown sub-command \"" + args[0] + "\". Use /com help.");
         }
     }
 }

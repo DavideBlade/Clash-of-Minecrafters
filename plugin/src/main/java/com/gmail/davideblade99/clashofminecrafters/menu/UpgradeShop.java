@@ -40,27 +40,44 @@ public final class UpgradeShop extends Menu {
      */
     @Nonnull
     private static List<BaseItem> buildMenuItems(@Nonnull final CoM plugin, @Nonnull final User user) {
+        final Config config = plugin.getConfig();
         final List<BaseItem> items = new ArrayList<>(4);
 
-        byte slot = 10;
-        BuildingType currentBuilding = BuildingType.ARCHER_TOWER;
-        int currentLevel = user.getBuildingLevel(currentBuilding);
-        items.add(createBuildingItem(plugin, currentBuilding, currentLevel, slot));
+        // Show item only if building is not disabled
+        if (config.isBuildingEnabled(BuildingType.ARCHER_TOWER)) {
+            final byte slot = 10;
+            final BuildingType currentBuilding = BuildingType.ARCHER_TOWER;
+            final int currentLevel = user.getBuildingLevel(currentBuilding);
 
-        slot = 13;
-        currentBuilding = BuildingType.ELIXIR_EXTRACTOR;
-        currentLevel = user.getBuildingLevel(currentBuilding);
-        items.add(createBuildingItem(plugin, currentBuilding, currentLevel, slot));
+            items.add(createBuildingItem(plugin, currentBuilding, currentLevel, slot));
+        }
 
-        slot = 16;
-        currentBuilding = BuildingType.GOLD_EXTRACTOR;
-        currentLevel = user.getBuildingLevel(currentBuilding);
-        items.add(createBuildingItem(plugin, currentBuilding, currentLevel, slot));
+        // Show item only if building is not disabled
+        if (config.isBuildingEnabled(BuildingType.ELIXIR_EXTRACTOR)) {
+            final byte slot = 13;
+            final BuildingType currentBuilding = BuildingType.ELIXIR_EXTRACTOR;
+            final int currentLevel = user.getBuildingLevel(currentBuilding);
 
-        slot = 22;
-        currentBuilding = BuildingType.TOWN_HALL;
-        currentLevel = user.getBuildingLevel(currentBuilding);
-        items.add(createBuildingItem(plugin, currentBuilding, currentLevel, slot));
+            items.add(createBuildingItem(plugin, currentBuilding, currentLevel, slot));
+        }
+
+        // Show item only if building is not disabled
+        if (config.isBuildingEnabled(BuildingType.GOLD_EXTRACTOR)) {
+            final byte slot = 16;
+            final BuildingType currentBuilding = BuildingType.GOLD_EXTRACTOR;
+            final int currentLevel = user.getBuildingLevel(currentBuilding);
+
+            items.add(createBuildingItem(plugin, currentBuilding, currentLevel, slot));
+        }
+
+        // Show item only if building is not disabled
+        if (config.isBuildingEnabled(BuildingType.TOWN_HALL)) {
+            final byte slot = 22;
+            final BuildingType currentBuilding = BuildingType.TOWN_HALL;
+            final int currentLevel = user.getBuildingLevel(currentBuilding);
+
+            items.add(createBuildingItem(plugin, currentBuilding, currentLevel, slot));
+        }
 
         return items;
     }
@@ -77,10 +94,21 @@ public final class UpgradeShop extends Menu {
      *
      * @since v3.0.3
      */
-    private static BaseItem createBuildingItem(@Nonnull final CoM plugin, @Nonnull final BuildingType building, final int level, final byte slot) {
+    private static BaseItem createBuildingItem(@Nonnull final CoM plugin, @Nonnull final BuildingType building, int level, final byte slot) {
         final Config config = plugin.getConfig();
 
-        if (level < config.getMaxLevel(building))
+        /*
+         * If any player has a level higher than the current maximum level
+         * (e.g., some levels have been removed from the config.yml),
+         * they are treated as if they have not purchased any upgrades
+         * and must therefore start over.
+         */
+        final int maxLevel = config.getMaxLevel(building);
+        if (level > maxLevel)
+            level = 0;
+
+
+        if (level < maxLevel)
             return new UpgradeMenuItem(config.getBuilding(building, level + 1).getItem(plugin), slot, building);
         else // Max level
         {

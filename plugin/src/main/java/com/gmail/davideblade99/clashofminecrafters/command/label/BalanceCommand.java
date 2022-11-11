@@ -13,7 +13,7 @@ import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ChatUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -49,7 +49,7 @@ public final class BalanceCommand extends CommandFramework {
                     throw new IllegalStateException("Unexpected value: " + currency);
             }
 
-            ChatUtil.sendMessage(player, Messages.getMessage(MessageKey.SHOW_BALANCE, String.valueOf(balance), currencyTranslation));
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.SHOW_BALANCE, String.valueOf(balance), currencyTranslation));
         }
     }
 }

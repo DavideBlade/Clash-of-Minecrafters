@@ -28,6 +28,7 @@ public final class UpgradeCommand extends CommandFramework {
     protected void execute(@Nonnull final CommandSender sender, @Nonnull final String[] args) {
         CommandValidator.isTrue(sender instanceof Player, Messages.getMessage(MessageKey.COMMAND_FOR_PLAYER));
         CommandValidator.isTrue(sender.hasPermission(Permissions.COMMAND_BASE + "upgrade"), Messages.getMessage(MessageKey.NO_PERMISSION));
+        CommandValidator.isTrue(plugin.getConfig().anyBuildingEnabled(), Messages.getMessage(MessageKey.NO_BUILDINGS));
 
         final Player player = (Player) sender;
         final User user = plugin.getUser(player);

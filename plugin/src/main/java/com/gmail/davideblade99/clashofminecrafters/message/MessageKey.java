@@ -34,6 +34,7 @@ public enum MessageKey {
     MAX_TROPHIES("Max trophies"),
     UNKNOWN_PLAYER("Player never joined", "%player"),
     TOO_BIG_NUMBER("Too big number", "%amount"),
+    NO_BUILDINGS("No buildings"),
 
     /* Usage of commands */
     ADD_COMMAND_USAGE("Add command usage"),
@@ -66,6 +67,7 @@ public enum MessageKey {
     NO_EXTRACTOR("No extractor"),
     COLLECTED_RESOURCES("Collected resources"),
     EXTRACTORS_INFO("Extractors info", "%building", "%level", "%amount", "%resources", "%capacity"),
+    DISABLED_EXTRACTORS("Disabled extractors"),
 
     /* War section */
     WAR_STARTED("War started"),
