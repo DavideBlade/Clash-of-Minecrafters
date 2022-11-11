@@ -126,37 +126,11 @@ public final class CoM extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Added: Controllo sulle colonne sul MySQL (adesso verranno aggiunte in automatico le nuove colonne delle future versioni dopo che un database è già stato creato)
-        // Added: Statistiche (configurabili) del guardiano che difende i villaggi in base al livello del municipio
-        // Added: Adesso è possibile rimuovere la sezione dei town hall, degli estrattori, delle torri dell'arciere e dei clan dal config.yml per rimuovere la funzionalità (nei primi 3 casi, non verranno più mostrate nel menù /upgrade) //TODO: scriverlo sulla wiki
-        // Added: Separate le configurazioni dell'estrattore di elisir e d'oro //TODO: aggiornare wiki
-
-        // Removed: Rimossi i valori di default in caso di dati mancanti dal config (dalle sezioni town hall, estrattori e torri dell'arciere) per una migliore manutenibilità del codice: adesso se mancheranno i valori obbligatori la funzionalità verrà disattivata (non verrà più mostrata nel menù /upgrade) con un alert //TODO: scrivere sulla wiki (tra cui sulle FAQ: se si disattiva la funzionalità del town hall/estrattori/... significa che c'è un errore nella configurazione. Controlla i log per risolverlo. Nessun dato andrà perso, solo verrà disattivata la funzionalità di incremento livello tramite il menù /upgrade così come (fino alla risoluzione del problema) gli estrattori non produrranno più, i guardiani non avranno più le statistiche ecc.)
-
-        // Fixed: Adesso se vengono eliminati dei livelli dal config.yml dopo che qualche giocatore ne ha già acquistato qualcosa non viene più lanciato errore in console.
-        // Fixed: Corretto il messaggio di errore in caso di comando sconosciuto.
-
-        // Other: Pubblicato codice sorgente
-        // Other: Aggiunto messaggio di warning in caso manchi una delle seguenti sezioni: town hall, estrattori e torri dell'arciere
-        // Other: Modificato il metodo di salvataggio su file o MySQL dei dati dei giocatori
-        // Other: Migliorato il codice
-        // Other: Modificata la comunicazione con il MySQL
-        // Other: Modificato esteticamente il file di log degli errori sul database MySQL
-        // Other: Divisa l'etichetta "Extractors" con "Gold extractors" e "Elixir extractors" nel confg.yml
-        // Other: Modificata l'etichetta "TownHall" con "Town halls" nel config.yml
-        // Other: Modificata l'etichetta "ArcherTowers" con "Archer towers" nel config.yml
-        // Other: Modificata colorazione dei messaggi in console: gli errori saranno in rosso, i warning in giallo //TODO: scrivere sulla wiki
-        // Other: Aggiunti messaggi "No buildings" e "Disabled extractors" tra i messaggi traducibili
-        //TODO: scrivere nei commenti sul config.yml che se una sezione delle costruzioni viene rimossa, questo significa disabilitare la funzionalità
-        //TODO: aggiornare wiki con il nuovo config.yml
-
-
-        //TODO: Aggiungere statistiche diverse al guardiano in base al livello del municipio (es. effetti di pozioni, diverse velocità, teletrasporto casuale dietro il giocatore (purché possa sempre raggiungerlo) ecc.) + aggiornare wiki
+        //TODO: Aggiungere al guardiano teletrasporto casuale dietro il giocatore (cosicché possa sempre raggiungerlo nel caso sia bloccato da dei blocchi)
 
         //TODO: Creare video dimostrativo
         //TODO: Consigliare di utilizzare HealthBar (configurarlo in modo che funzioni solo nel mondo delle isole)
-        //TODO: Aggiungere che alcuni livelli sono sbloccabili solo con determinati livelli del municipio
-        //TODO: aggiornare wiki con il nuovo config.yml
+        //TODO: Aggiungere che alcuni livelli sono sbloccabili solo con determinati livelli del municipio (aggiornare wiki con il nuovo config.yml)
 
         //TODO: aggiungere boost risorse (temporaneo, es. di 1 ora): ogni volta che un giocatore boostato riceve delle risorse, queste vengono moltiplicate (es. anziché ricevere 10 trofei a seguito della vincita di un raid ne riceve 20)
 
