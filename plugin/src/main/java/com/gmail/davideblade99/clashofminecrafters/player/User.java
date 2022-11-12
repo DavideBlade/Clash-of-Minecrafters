@@ -202,7 +202,7 @@ public final class User {
                 MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.MAX_MONEY));
         }
 
-        return newBalance;
+        return newBalance - currentBalance;
     }
 
     public int removeBalance(final int amount, @Nonnull final Currency type) {
@@ -229,7 +229,7 @@ public final class User {
         if (getBase() instanceof Player)
             MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.REMOVED_FROM_BALANCE, String.valueOf(currentBalance - newBalance), Messages.getMessage(word)));
 
-        return newBalance;
+        return currentBalance - newBalance;
     }
 
     private void setBalance(final int amount, @Nonnull final Currency currency) {
