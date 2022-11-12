@@ -7,7 +7,6 @@
 package com.gmail.davideblade99.clashofminecrafters.island.creature;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import javafx.scene.shape.Arc;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,13 +16,10 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataType;
-import org.checkerframework.checker.units.qual.C;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.xml.stream.events.Namespace;
 import java.util.HashMap;
 import java.util.Map;
 
