@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.menu;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.configuration.Config;
+import com.gmail.davideblade99.clashofminecrafters.setting.Config;
 import com.gmail.davideblade99.clashofminecrafters.island.building.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.menu.item.BaseItem;
 import com.gmail.davideblade99.clashofminecrafters.menu.item.UnclickableItem;

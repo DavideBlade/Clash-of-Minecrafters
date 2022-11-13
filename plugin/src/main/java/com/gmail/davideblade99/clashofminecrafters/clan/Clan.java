@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.clan;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.configuration.Config;
+import com.gmail.davideblade99.clashofminecrafters.setting.Config;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;

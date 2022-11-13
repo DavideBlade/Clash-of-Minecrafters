@@ -1,4 +1,4 @@
-package com.gmail.davideblade99.clashofminecrafters.configuration.section;
+package com.gmail.davideblade99.clashofminecrafters.setting.section;
 
 import com.gmail.davideblade99.clashofminecrafters.Currency;
 import com.gmail.davideblade99.clashofminecrafters.menu.Menu;

@@ -4,11 +4,11 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.configuration;
+package com.gmail.davideblade99.clashofminecrafters.setting;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Currency;
-import com.gmail.davideblade99.clashofminecrafters.configuration.section.MenuConfiguration;
+import com.gmail.davideblade99.clashofminecrafters.setting.section.MenuConfiguration;
 import com.gmail.davideblade99.clashofminecrafters.island.building.*;
 import com.gmail.davideblade99.clashofminecrafters.menu.Menu;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages.Language;

@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.storage;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.configuration.Config;
+import com.gmail.davideblade99.clashofminecrafters.setting.Config;
 import com.gmail.davideblade99.clashofminecrafters.storage.file.YAMLDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.sql.mysql.MySQLDatabase;
 

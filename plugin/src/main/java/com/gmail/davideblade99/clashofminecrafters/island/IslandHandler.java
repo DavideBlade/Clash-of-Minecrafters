@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.island;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.configuration.Config;
+import com.gmail.davideblade99.clashofminecrafters.setting.Config;
 import com.gmail.davideblade99.clashofminecrafters.yaml.IslandConfiguration;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.exception.WorldBorderReachedException;

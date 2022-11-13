@@ -11,7 +11,7 @@ import com.gmail.davideblade99.clashofminecrafters.clan.ClanHandler;
 import com.gmail.davideblade99.clashofminecrafters.clan.WarHandler;
 import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
 import com.gmail.davideblade99.clashofminecrafters.command.label.*;
-import com.gmail.davideblade99.clashofminecrafters.configuration.Config;
+import com.gmail.davideblade99.clashofminecrafters.setting.Config;
 import com.gmail.davideblade99.clashofminecrafters.island.IslandHandler;
 import com.gmail.davideblade99.clashofminecrafters.island.creature.ArcherHandler;
 import com.gmail.davideblade99.clashofminecrafters.island.creature.GuardianHandler;
@@ -50,14 +50,14 @@ import java.util.UUID;
 
 /* TODO list:
  *  Aggiungere supporto ad AsyncWorldEdit e FastAsyncWorldEdit + rimuovere il mio formato interno (beta da questo punto in poi) -> aggiornare wiki
- *  Supporto per PaperSpigot
+ *  Aggiungere comando /com upgrade <NomeStruttura> (permesso: clashofminecrafters.command.?) così che possano essere utilizzati in GUI custom create con altri plugin come ChestCommands -> Grazie a https://www.spigotmc.org/members/fede1132.118978/
  *  Tab completer -> vedi FullCloak
  *  Splittare in 2 estrattori di elisir e di oro
  *  Aggiungere tempo massimo al raid
  *  Rank in base ai trofei (come le leghe)
  *  Anche il difensore in un raid vince o perde i trofei
  *  API
- *  Supporto per SQLite
+ *  Supporto per SQLite e MongoDB
  */
 
 //TODO: https://github.com/Staartvin/Autorank-2/tree/master/src/me/armar/plugins/autorank
@@ -126,6 +126,9 @@ public final class CoM extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // Fixed: Quando si aggiunge o si rimuove una valuta da un giocatore (comandi /take o /add) viene adesso visualizzata la giusta quantità di valuta rimossa
+        // Other: Testato su PaperSpigot (1.19) //TODO: aggiungere sulle Features su Spigot
+
         //TODO: Aggiungere al guardiano teletrasporto casuale dietro il giocatore (cosicché possa sempre raggiungerlo nel caso sia bloccato da dei blocchi)
 
         //TODO: Creare video dimostrativo
