@@ -7,12 +7,12 @@
 package com.gmail.davideblade99.clashofminecrafters.menu;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.setting.Config;
 import com.gmail.davideblade99.clashofminecrafters.island.building.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.menu.item.BaseItem;
 import com.gmail.davideblade99.clashofminecrafters.menu.item.UnclickableItem;
 import com.gmail.davideblade99.clashofminecrafters.menu.item.UpgradeMenuItem;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
+import com.gmail.davideblade99.clashofminecrafters.setting.Config;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -105,7 +105,7 @@ public final class UpgradeShop extends Menu {
          */
         final int maxLevel = config.getMaxLevel(building);
         if (level > maxLevel)
-            level = 0;
+            level = building == BuildingType.TOWN_HALL ? 1 : 0; // The base level of the town hall is 1 while for other buildings is 0
 
 
         if (level < maxLevel)
