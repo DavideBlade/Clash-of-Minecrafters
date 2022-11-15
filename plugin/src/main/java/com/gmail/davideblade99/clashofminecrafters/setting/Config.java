@@ -132,7 +132,7 @@ public final class Config extends CoMYamlConfiguration {
 
         // Check if the spawn location is valid
         Location spawn;
-        final String[] defaultSpawn = super.getString("Default spawn", "").split(",");
+        final String[] defaultSpawn = super.getString("Default spawn.Location", "").split(",");
         if (defaultSpawn.length != 4) {
             spawn = Bukkit.getWorlds().get(0).getSpawnLocation();
 
@@ -310,6 +310,15 @@ public final class Config extends CoMYamlConfiguration {
 
     public byte getMaxExpansions() {
         return maxExpansions;
+    }
+
+    /**
+     * @return True if the player must be teleported to the spawn when joining the server, otherwise false
+     *
+     * @since v3.1.1
+     */
+    public boolean teleportOnJoin() {
+        return super.getBoolean("Default spawn.On join", false);
     }
 
     @Nonnull

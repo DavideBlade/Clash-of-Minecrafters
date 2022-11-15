@@ -11,8 +11,11 @@
 Locale: en
 # Number of expansions (in all directions) for villages.
 Max expansions: 8
-# Set the default spawn for all players.
-Default spawn: world, 0.5, 72, 0.5
+# Set the spawn point. It will be used on player join and for other events (for example, at the end of a raid).
+# Set "On join" to false to disable teleportation (only) when the player joins the server.
+Default spawn:
+  On join: true
+  Location: world, 0.5, 72, 0.5
 # Set the reward for killing the guardian of a village during a raid.
 # Currency can only be "gems", "gold" or "elixir".
 Raid rewards:
@@ -132,7 +135,7 @@ Menus:
           - '&cShop where you can sell tools with in-game currency'
         Slot: 8
         Command: 'player: open Tools'
-  
+
   Food:
     Settings:
       Row: 1
