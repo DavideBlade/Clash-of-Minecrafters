@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) DavideBlade.
+ *
+ * All Rights Reserved.
+ */
+
 package com.gmail.davideblade99.clashofminecrafters.setting.section;
 
 import com.gmail.davideblade99.clashofminecrafters.Currency;
@@ -26,16 +32,14 @@ import java.util.*;
 /**
  * Class representing the menu section in the config.yml
  *
+ * @author DavideBlade
  * @since v3.1
  */
-public final class MenuConfiguration {
+public final class MenuConfiguration extends SectionConfiguration {
 
     /** Name of the section in the YAML file */
     private final static String SECTION = "Menus";
 
-
-    /** Section containing the configuration of menus */
-    private final ConfigurationSection menuSection;
 
     /** Map that associates the name of the menu with its settings */
     private final Map<String, Menu> menus;
@@ -46,24 +50,26 @@ public final class MenuConfiguration {
      * @param configuration Configuration containing the menu section
      */
     public MenuConfiguration(@Nonnull final CoMYamlConfiguration configuration) {
-        this.menuSection = configuration.getConfigurationSection(SECTION);
-        this.menus = menuSection == null ? Collections.emptyMap() : new HashMap<>();
+        super(configuration, SECTION);
+
+        this.menus = super.section == null ? Collections.emptyMap() : new HashMap<>();
 
         loadMenus();
     }
 
     /**
-     * @return The map containing all the loaded menus and associating the menu name with its settings
+     * @return The map containing all the (valid and) loaded menus and associating the menu name with its settings
      */
     public Map<String, Menu> getMenus() {
         return this.menus;
     }
 
     /**
-     * Reads the menu section in the {@link #menuSection} and builds {@link Menu}s. Menus containing invalid or
-     * missing settings will be ignored.
+     * Reads the menus section in the {@link SectionConfiguration#section} and builds {@link Menu}s. Menus
+     * containing invalid or missing settings will be ignored.
      */
     private void loadMenus() {
+        final ConfigurationSection menuSection = super.section;
         final Set<String> keys;
 
         // Check if menu list is empty

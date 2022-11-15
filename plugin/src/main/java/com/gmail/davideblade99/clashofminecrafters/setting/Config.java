@@ -8,10 +8,10 @@ package com.gmail.davideblade99.clashofminecrafters.setting;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Currency;
-import com.gmail.davideblade99.clashofminecrafters.setting.section.MenuConfiguration;
 import com.gmail.davideblade99.clashofminecrafters.island.building.*;
 import com.gmail.davideblade99.clashofminecrafters.menu.Menu;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages.Language;
+import com.gmail.davideblade99.clashofminecrafters.setting.section.*;
 import com.gmail.davideblade99.clashofminecrafters.storage.DatabaseType;
 import com.gmail.davideblade99.clashofminecrafters.util.FileUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.Pair;
@@ -21,18 +21,16 @@ import com.gmail.davideblade99.clashofminecrafters.yaml.CoMYamlConfiguration;
 import com.google.common.base.Charsets;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.potion.PotionEffectType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 //TODO: mi serve avere tutto in memoria? Le cose (pesanti, quindi non di certo un int o un boolean) che leggo 1 volta ogni mai posso andare a leggerle direttamente
 // la YamlConfiguration è già di per sè un posto dove memorizzare la roba; non c'è bisogno di rimemorizzarla con singoli campi
@@ -290,19 +288,19 @@ public final class Config extends CoMYamlConfiguration {
         /*
          * Town hall settings
          */
-        this.townHalls = loadTownHallSettings();
+        this.townHalls = new TownHallConfiguration(this).getTownHalls();
 
         /*
          * Structure settings
          */
-        this.goldExtractors = loadGoldExtractorSettings();
-        this.elixirExtractors = loadElixirExtractorSettings();
-        this.archerTowers = loadArcherTowerSettings();
+        this.goldExtractors = new GoldExtractorConfiguration(this).getGoldExtractors();
+        this.elixirExtractors = new ElixirExtractorConfiguration(this).getElixirExtractors();
+        this.archerTowers = new ArcherTowerConfiguration(this).getArcherTowers();
 
         /*
          * Clan settings
          */
-        this.clans = loadClanSettings();
+        this.clans = new ClanConfiguration(this).getClans();
     }
 
     @Nonnull
@@ -596,273 +594,6 @@ public final class Config extends CoMYamlConfiguration {
      */
     public int getClanLevels() {
         return clans.size();
-    }
-
-    /**
-     * Load from the configuration file the settings for the different levels of town halls
-     *
-     * @return A list containing all loaded levels. It will be empty if any problems have occurred or if no level
-     * has been configured.
-     *
-     * @since v3.1
-     */
-    @Nonnull
-    private List<TownHall> loadTownHallSettings() {
-        final ConfigurationSection townHallSection = super.getConfigurationSection("Town halls");
-        final Set<String> keys;
-
-        // Check if town hall list is empty
-        if (townHallSection == null || (keys = townHallSection.getKeys(false)).isEmpty()) {
-            MessageUtil.sendWarning("Warning! The town hall configuration is missing in the config.");
-            return Collections.emptyList();
-        }
-
-
-        final List<TownHall> result = new ArrayList<>(keys.size());
-        int level = 1;
-        for (String townHall : keys) {
-            level++;
-
-            final int price = townHallSection.getInt(townHall + ".Price", -1);
-            final Currency currency = Currency.matchCurrency(townHallSection.getString(townHall + ".Currency", null));
-            final String command = townHallSection.getString(townHall + ".Command", null);
-            final byte hearts = (byte) townHallSection.getInt(townHall + ".Guardian.Health", -1); //TODO: differenziare il caso in cui è -1 perché non lo ha configurato (ammesso) o perché ha settato lui -1
-            final Material helmet = Material.matchMaterial(townHallSection.getString(townHall + ".Guardian.Equipment.Helmet", ""));
-            final Material chestplate = Material.matchMaterial(townHallSection.getString(townHall + ".Guardian.Equipment.Chestplate", ""));
-            final Material leggings = Material.matchMaterial(townHallSection.getString(townHall + ".Guardian.Equipment.Leggings", ""));
-            final Material boots = Material.matchMaterial(townHallSection.getString(townHall + ".Guardian.Equipment.Boots", ""));
-
-            final List<?> effectString = townHallSection.getList(townHall + ".Guardian.Equipment.Potions", null);
-            final List<PotionEffectType> potions;
-            if (effectString == null)
-                potions = null;
-            else {
-                potions = new ArrayList<>(effectString.size());
-                for (Object obj : effectString) {
-                    if (!(obj instanceof String))
-                        continue;
-
-                    final PotionEffectType potion = PotionEffectType.getByName((String) obj);
-                    if (potion != null)
-                        potions.add(potion);
-                    else
-                        MessageUtil.sendWarning("Warning! The potion effect \"" + obj + "\" of level \"" + townHall + "\" town hall (in the config) will be ignored, because it does not exist.");
-                }
-            }
-
-
-            if (price < 0) {
-                MessageUtil.sendError("The price of level \"" + townHall + "\" town hall (in the config) cannot be negative!");
-                MessageUtil.sendError("Town hall levels will be disabled.");
-                return Collections.emptyList();
-            }
-            if (currency == null) {
-                MessageUtil.sendError("The currency set for town hall \"" + townHall + "\" (in the config) does not exist.");
-                MessageUtil.sendError("Town hall levels will be disabled.");
-                return Collections.emptyList();
-            }
-
-            result.add(new TownHall(level, price, currency, command, hearts, helmet, chestplate, leggings, boots, potions));
-        }
-
-        return result;
-    }
-
-    /**
-     * Load from the configuration file the settings for the different levels of gold extractors
-     *
-     * @return A list containing all loaded levels. It will be empty if any problems have occurred or if no level
-     * has been configured.
-     *
-     * @since v3.1
-     */
-    private List<GoldExtractor> loadGoldExtractorSettings() {
-        final ConfigurationSection extractorConfig = super.getConfigurationSection("Gold extractors");
-        final Set<String> keys;
-
-        // Check if extractor list is empty
-        if (extractorConfig == null || (keys = extractorConfig.getKeys(false)).isEmpty()) {
-            MessageUtil.sendWarning("Warning! The gold extractor configuration is missing in the config.");
-            return Collections.emptyList();
-        }
-
-
-        final List<GoldExtractor> result = new ArrayList<>(keys.size());
-        int level = 0;
-        for (String extractor : keys) {
-            level++;
-
-            final int production = extractorConfig.getInt(extractor + ".Production", -1);
-            final int capacity = extractorConfig.getInt(extractor + ".Capacity", 0);
-            final int price = extractorConfig.getInt(extractor + ".Price", -1);
-            final Currency currency = Currency.matchCurrency(extractorConfig.getString(extractor + ".Currency", null));
-
-            if (production < 0) {
-                MessageUtil.sendError("The production of level \"" + extractor + "\" gold extractor (in the config) cannot be negative!");
-                MessageUtil.sendError("Gold extractor will be disabled.");
-                return Collections.emptyList();
-            }
-            if (capacity < 1) {
-                MessageUtil.sendError("The capacity of level \"" + extractor + "\" gold extractor (in the config) must be positive!");
-                MessageUtil.sendError("Gold extractor will be disabled.");
-                return Collections.emptyList();
-            }
-            if (price < 0) {
-                MessageUtil.sendError("The price of level \"" + extractor + "\" gold extractor (in the config) cannot be negative!");
-                MessageUtil.sendError("Gold extractor will be disabled.");
-                return Collections.emptyList();
-            }
-            if (currency == null) {
-                MessageUtil.sendError("The currency set for gold extractor \"" + extractor + "\" (in the config) does not exist.");
-                MessageUtil.sendError("Gold extractor will be disabled.");
-                return Collections.emptyList();
-            }
-
-            result.add(new GoldExtractor(level, production, capacity, price, currency));
-        }
-
-        return result;
-    }
-
-    /**
-     * Load from the configuration file the settings for the different levels of elixir extractors
-     *
-     * @return A list containing all loaded levels. It will be empty if any problems have occurred or if no level
-     * has been configured.
-     *
-     * @since v3.1
-     */
-    private List<ElixirExtractor> loadElixirExtractorSettings() {
-        final ConfigurationSection extractorConfig = super.getConfigurationSection("Elixir extractors");
-        final Set<String> keys;
-
-        // Check if extractor list is empty
-        if (extractorConfig == null || (keys = extractorConfig.getKeys(false)).isEmpty()) {
-            MessageUtil.sendWarning("Warning! The elixir extractor configuration is missing in the config.");
-            return Collections.emptyList();
-        }
-
-
-        final List<ElixirExtractor> result = new ArrayList<>(keys.size());
-        int level = 0;
-        for (String extractor : keys) {
-            level++;
-
-            final int production = extractorConfig.getInt(extractor + ".Production", -1);
-            final int capacity = extractorConfig.getInt(extractor + ".Capacity", 0);
-            final int price = extractorConfig.getInt(extractor + ".Price", -1);
-            final Currency currency = Currency.matchCurrency(extractorConfig.getString(extractor + ".Currency", null));
-
-            if (production < 0) {
-                MessageUtil.sendError("The production of level \"" + extractor + "\" elixir extractor (in the config) cannot be negative!");
-                MessageUtil.sendError("Elixir extractor will be disabled.");
-                return Collections.emptyList();
-            }
-            if (capacity < 1) {
-                MessageUtil.sendError("The capacity of level \"" + extractor + "\" elixir extractor (in the config) must be positive!");
-                MessageUtil.sendError("Elixir extractor will be disabled.");
-                return Collections.emptyList();
-            }
-            if (price < 0) {
-                MessageUtil.sendError("The price of level \"" + extractor + "\" elixir extractor (in the config) cannot be negative!");
-                MessageUtil.sendError("Elixir extractor will be disabled.");
-                return Collections.emptyList();
-            }
-            if (currency == null) {
-                MessageUtil.sendError("The currency set for elixir extractor \"" + extractor + "\" (in the config) does not exist.");
-                MessageUtil.sendError("Elixir extractor will be disabled.");
-                return Collections.emptyList();
-            }
-
-            result.add(new ElixirExtractor(level, production, capacity, price, currency));
-        }
-
-        return result;
-    }
-
-    /**
-     * Load from the configuration file the settings for the different levels of archer towers
-     *
-     * @return A list containing all loaded levels. It will be empty if any problems have occurred or if no level
-     * has been configured.
-     *
-     * @since v3.1
-     */
-    private List<ArcherTower> loadArcherTowerSettings() {
-        final ConfigurationSection archerConfig = super.getConfigurationSection("Archer towers");
-        final Set<String> keys;
-
-        // Check if archer tower list is empty
-        if (archerConfig == null || (keys = archerConfig.getKeys(false)).isEmpty()) {
-            MessageUtil.sendWarning("Warning! The configuration of the archer towers is missing in the config.");
-            return Collections.emptyList();
-        }
-
-
-        final List<ArcherTower> result = new ArrayList<>(keys.size());
-        int level = 0;
-        for (String archerTower : keys) {
-            level++;
-
-            final double damage = archerConfig.getDouble(archerTower + ".Damage", -1);
-            final int price = archerConfig.getInt(archerTower + ".Price", -1);
-            final Currency currency = Currency.matchCurrency(archerConfig.getString(archerTower + ".Currency", null));
-
-            if (damage < 0) {
-                MessageUtil.sendError("The damage of the archer tower \"" + archerTower + "\" (in the config) cannot be negative!");
-                MessageUtil.sendError("Archer towers will be disabled.");
-                return Collections.emptyList();
-            }
-            if (price < 0) {
-                MessageUtil.sendError("The price for the archer tower \"" + archerTower + "\" (in the config) cannot be negative!");
-                MessageUtil.sendError("Archer towers will be disabled.");
-                return Collections.emptyList();
-            }
-            if (currency == null) {
-                MessageUtil.sendError("The currency set for the archer tower \"" + archerTower + "\" (in the config) does not exist.");
-                MessageUtil.sendError("Archer towers will be disabled.");
-                return Collections.emptyList();
-            }
-
-            result.add(new ArcherTower(level, damage, price, currency));
-        }
-
-        return result;
-    }
-
-    /**
-     * Load from the configuration file the settings for the different levels of clans
-     *
-     * @return A list containing all loaded levels. It will be empty if any problems have occurred or if no level
-     * has been configured.
-     *
-     * @since v3.1
-     */
-    private List<Pair<Integer, String>> loadClanSettings() {
-        final ConfigurationSection clanConfig = super.getConfigurationSection("Clans");
-        final Set<String> keys;
-
-        // Check if clans list is empty
-        if (clanConfig == null || (keys = clanConfig.getKeys(false)).isEmpty()) {
-            MessageUtil.sendWarning("Warning! The configuration of the clans is missing in the config.");
-            return Collections.emptyList();
-        }
-
-        final List<Pair<Integer, String>> result = new ArrayList<>(keys.size());
-        for (String clan : keys) {
-            final int expRequired = clanConfig.getInt(clan + ".Exp required", -1);
-            final String command = clanConfig.getString(clan + ".Command", null);
-
-            if (expRequired < 0) {
-                MessageUtil.sendError("\"Exp required\" of the clan \"" + clan + "\" (in the config) cannot be negative!");
-                MessageUtil.sendError("Clan levels will be disabled.");
-                return Collections.emptyList();
-            }
-
-            result.add(new Pair<>(expRequired, command));
-        }
-
-        return result;
     }
 
     /**

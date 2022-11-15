@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * Class representing the town hall
+ * Class representing a town hall level
  *
  * @author DavideBlade
  * @since v3.0.3
