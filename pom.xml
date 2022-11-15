@@ -7,7 +7,7 @@
     <groupId>com.gmail.davideblade99.clashofminecrafters</groupId>
     <artifactId>com-parent</artifactId>
     <name>CoM Parent</name>
-    <version>3.1 alpha</version>
+    <version>3.1.1 alpha</version>
     <packaging>pom</packaging>
 
     <url>https://davideblade.github.io</url>
@@ -30,16 +30,19 @@
     </modules>
 
     <repositories>
+        <!-- SpigotMC -->
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
 
+        <!-- NMS -->
         <repository>
             <id>nms-repo</id>
             <url>https://repo.codemc.io/repository/nms/</url>
         </repository>
 
+        <!-- WorldEdit -->
         <repository>
             <id>enginehub-maven</id>
             <url>https://maven.enginehub.org/repo/</url>
