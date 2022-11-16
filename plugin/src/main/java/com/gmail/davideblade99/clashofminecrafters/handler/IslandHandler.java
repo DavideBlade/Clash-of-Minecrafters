@@ -4,10 +4,11 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.island;
+package com.gmail.davideblade99.clashofminecrafters.handler;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.setting.Config;
+import com.gmail.davideblade99.clashofminecrafters.Island;
+import com.gmail.davideblade99.clashofminecrafters.setting.Configuration;
 import com.gmail.davideblade99.clashofminecrafters.yaml.IslandConfiguration;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.exception.WorldBorderReachedException;
@@ -35,7 +36,7 @@ public final class IslandHandler {
     private final static int MAX_Z = -MIN_Z;
 
 
-    private final Config config;
+    private final Configuration config;
     private final int expansions;
 
     public final File islandDataFile;

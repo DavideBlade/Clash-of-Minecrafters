@@ -34,7 +34,6 @@ import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-//TODO: testare
 public final class Schematic {
 
     private final Object schematic;

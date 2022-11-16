@@ -8,9 +8,9 @@ package com.gmail.davideblade99.clashofminecrafters.menu.item;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Currency;
-import com.gmail.davideblade99.clashofminecrafters.setting.Config;
+import com.gmail.davideblade99.clashofminecrafters.setting.Configuration;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
-import com.gmail.davideblade99.clashofminecrafters.island.building.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
@@ -36,7 +36,7 @@ public final class UpgradeMenuItem extends BaseItem {
 
     @Override
     public void onClick(@Nonnull final CoM plugin, @Nonnull final Player clicker) {
-        final Config config = plugin.getConfig();
+        final Configuration config = plugin.getConfig();
         final World islandWorld = Bukkit.getWorld("Islands");
         final Vector origin = new Vector(clicker.getLocation());
         final User user = plugin.getUser(clicker);

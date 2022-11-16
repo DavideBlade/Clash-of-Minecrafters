@@ -4,10 +4,16 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.island.building;
+package com.gmail.davideblade99.clashofminecrafters;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Enumerates all types of buildings.
+ *
+ * @author DavideBlade
+ * @since v3.1.2
+ */
 public enum BuildingType {
     TOWN_HALL, ARCHER_TOWER, GOLD_EXTRACTOR, ELIXIR_EXTRACTOR;
 

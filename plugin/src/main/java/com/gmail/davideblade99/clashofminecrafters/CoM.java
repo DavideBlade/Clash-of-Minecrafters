@@ -7,13 +7,13 @@
 package com.gmail.davideblade99.clashofminecrafters;
 
 import com.gmail.davideblade99.clashofminecrafters.Updater.ResponseHandler;
-import com.gmail.davideblade99.clashofminecrafters.clan.ClanHandler;
-import com.gmail.davideblade99.clashofminecrafters.clan.WarHandler;
+import com.gmail.davideblade99.clashofminecrafters.handler.ClanHandler;
+import com.gmail.davideblade99.clashofminecrafters.handler.WarHandler;
 import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
 import com.gmail.davideblade99.clashofminecrafters.command.label.*;
-import com.gmail.davideblade99.clashofminecrafters.island.IslandHandler;
-import com.gmail.davideblade99.clashofminecrafters.island.creature.ArcherHandler;
-import com.gmail.davideblade99.clashofminecrafters.island.creature.GuardianHandler;
+import com.gmail.davideblade99.clashofminecrafters.handler.IslandHandler;
+import com.gmail.davideblade99.clashofminecrafters.handler.ArcherHandler;
+import com.gmail.davideblade99.clashofminecrafters.handler.GuardianHandler;
 import com.gmail.davideblade99.clashofminecrafters.listener.inventory.ShopClick;
 import com.gmail.davideblade99.clashofminecrafters.listener.island.AntiGrief;
 import com.gmail.davideblade99.clashofminecrafters.listener.player.*;
@@ -23,8 +23,8 @@ import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.PlayerHandler;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
-import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicHandler;
-import com.gmail.davideblade99.clashofminecrafters.setting.Config;
+import com.gmail.davideblade99.clashofminecrafters.handler.SchematicHandler;
+import com.gmail.davideblade99.clashofminecrafters.setting.Configuration;
 import com.gmail.davideblade99.clashofminecrafters.storage.DatabaseFactory;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.sql.AbstractSQLDatabase;
@@ -51,26 +51,26 @@ import java.util.UUID;
 /* TODO list:
  *  Aggiungere supporto ad AsyncWorldEdit e FastAsyncWorldEdit + rimuovere il mio formato interno (beta da questo punto in poi) -> aggiornare wiki
  *  Aggiungere comando /com upgrade <NomeStruttura> (permesso: clashofminecrafters.command.?) così che possano essere utilizzati in GUI custom create con altri plugin come ChestCommands -> Grazie a https://www.spigotmc.org/members/fede1132.118978/
+ *  Supporto per PlaceholderAPI + rendere disabilitabile scoreboard dal config
  *  Tab completer -> vedi FullCloak
  *  Aggiungere tempo massimo al raid
  *  Rank in base ai trofei (come le leghe)
  *  Anche il difensore in un raid vince o perde i trofei
  *  API
+ *  Scudo che permette di non ricevere attacchi (viene dato in automatico a chi perde un raid; in più è acquistabile)
+ *  Creare video dimostrativo
+ *  Aggiungere boost risorse (temporaneo, es. di 1 ora): ogni volta che un giocatore boostato riceve delle risorse, queste vengono moltiplicate (es. anziché ricevere 10 trofei a seguito della vincita di un raid ne riceve 20)
+ *  Aggiungere che alcuni livelli sono sbloccabili solo con determinati livelli del municipio (aggiornare wiki con il nuovo config.yml)
  *  Supporto per SQLite e MongoDB
  */
 
 //TODO: leggere: https://dev.mysql.com/doc/refman/8.0/en/innodb-transaction-model.html + https://www.spigotmc.org/threads/best-practices-for-async-sql-i-o.578716/page-2#post-4504656
 
 //TODO: https://github.com/Staartvin/Autorank-2/tree/master/src/me/armar/plugins/autorank
-
 //TODO: dare un'occhio a: https://www.google.com/search?q=java+configchecker+builder&rlz=1C1JZAP_itIT969IT971&oq=java+configchecker+builder&aqs=chrome..69i57j33i10i160.4092j1j1&sourceid=chrome&ie=UTF-8
-
 //TODO: dare un'occhiata a: https://helpch.at/
-
 //TODO: dare un'occhiata a: https://docs.eliteminecraftplugins.com/elitepets/ e https://www.gitbook.com/?utm_source=content&utm_medium=trademark&utm_campaign=-MgzZltL9-2FnEMsC3sM
-
 //TODO: dare un'occhio (per gli item, cosa poter settare ecc.) a: https://www.spigotmc.org/wiki/mmoitems-item-stats-options/
-
 //TODO: test SQLite com JUnit: https://www.spigotmc.org/threads/tutorial-plugin-sqlite-junit-testing.293352/
 
 //TODO: info sulla skin delle teste
@@ -97,7 +97,7 @@ public final class CoM extends JavaPlugin {
 
     private static CoM instance;
 
-    private Config settings;
+    private Configuration settings;
     private PlayerDatabase database;
     private PlayerHandler playerHandler;
     private ClanHandler clanHandler;
@@ -121,11 +121,7 @@ public final class CoM extends JavaPlugin {
 
         //TODO: Aggiungere al guardiano teletrasporto casuale dietro il giocatore (cosicché possa sempre raggiungerlo nel caso sia bloccato da dei blocchi)
 
-        //TODO: Creare video dimostrativo
         //TODO: Consigliare di utilizzare HealthBar (configurarlo in modo che funzioni solo nel mondo delle isole)
-        //TODO: Aggiungere che alcuni livelli sono sbloccabili solo con determinati livelli del municipio (aggiornare wiki con il nuovo config.yml)
-
-        //TODO: aggiungere boost risorse (temporaneo, es. di 1 ora): ogni volta che un giocatore boostato riceve delle risorse, queste vengono moltiplicate (es. anziché ricevere 10 trofei a seguito della vincita di un raid ne riceve 20)
 
         try {
             if (!checkVersion()) {
@@ -135,7 +131,7 @@ public final class CoM extends JavaPlugin {
             }
 
             instance = this;
-            settings = new Config(this);
+            settings = new Configuration(this);
             try {
                 database = DatabaseFactory.getInstance(this);
             } catch (final Exception ignored) {
@@ -230,7 +226,7 @@ public final class CoM extends JavaPlugin {
 
     @Override
     @Nonnull
-    public Config getConfig() {
+    public Configuration getConfig() {
         return settings;
     }
 

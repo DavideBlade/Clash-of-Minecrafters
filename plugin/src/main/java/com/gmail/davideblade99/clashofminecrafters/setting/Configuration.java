@@ -6,11 +6,12 @@
 
 package com.gmail.davideblade99.clashofminecrafters.setting;
 
+import com.gmail.davideblade99.clashofminecrafters.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Currency;
-import com.gmail.davideblade99.clashofminecrafters.island.building.*;
 import com.gmail.davideblade99.clashofminecrafters.menu.Menu;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages.Language;
+import com.gmail.davideblade99.clashofminecrafters.setting.bean.*;
 import com.gmail.davideblade99.clashofminecrafters.setting.section.*;
 import com.gmail.davideblade99.clashofminecrafters.storage.DatabaseType;
 import com.gmail.davideblade99.clashofminecrafters.util.FileUtil;
@@ -35,7 +36,7 @@ import java.util.Map;
 //TODO: mi serve avere tutto in memoria? Le cose (pesanti, quindi non di certo un int o un boolean) che leggo 1 volta ogni mai posso andare a leggerle direttamente
 // la YamlConfiguration è già di per sè un posto dove memorizzare la roba; non c'è bisogno di rimemorizzarla con singoli campi
 //TODO: forse conviene che questa diventi la classe di Parsing, e poi ci sia una classe Settings o ConfigCache in cui ci sono tutti i campi (field) -> almeno la mappa in YamlConfiguration la svuoto
-public final class Config extends CoMYamlConfiguration {
+public final class Configuration extends CoMYamlConfiguration {
 
     private final CoM plugin;
 
@@ -64,21 +65,21 @@ public final class Config extends CoMYamlConfiguration {
     /*
      * Town hall settings
      */
-    private final List<TownHall> townHalls; // List containing various levels of town halls
+    private final List<TownHallSettings> townHalls; // List containing various levels of town halls
 
     /*
      * Structure settings
      */
-    private final List<GoldExtractor> goldExtractors; // List containing various levels of gold extractors
-    private final List<ElixirExtractor> elixirExtractors; // List containing various levels of elixir extractors
-    private final List<ArcherTower> archerTowers; // List containing various levels of archer towers
+    private final List<GoldExtractorSettings> goldExtractors; // List containing various levels of gold extractors
+    private final List<ElixirExtractorSettings> elixirExtractors; // List containing various levels of elixir extractors
+    private final List<ArcherTowerSettings> archerTowers; // List containing various levels of archer towers
 
     /*
      * Clan settings
      */
-    private final List<Pair<Integer, String>> clans; // <Exp required, Command>
+    private final List<ClanSettings> clans; // // List containing various levels of clans
 
-    public Config(@Nonnull final CoM plugin) {
+    public Configuration(@Nonnull final CoM plugin) {
         super(new File(plugin.getDataFolder(), "config.yml"));
 
         this.plugin = plugin;
@@ -433,13 +434,13 @@ public final class Config extends CoMYamlConfiguration {
     /**
      * @param level Town hall level
      *
-     * @return {@link TownHall} corresponding to the specified level or {@code null} if the specified level does
-     * not exist
+     * @return {@link TownHallSettings} corresponding to the specified level or {@code null} if the specified level
+     * does not exist
      *
      * @since v3.1
      */
     @Nullable
-    public TownHall getTownHall(final int level) {
+    public TownHallSettings getTownHall(final int level) {
         final int index = level - 2;
 
         return index >= townHalls.size() ? null : townHalls.get(index);
@@ -448,13 +449,13 @@ public final class Config extends CoMYamlConfiguration {
     /**
      * @param level Gold extractor level
      *
-     * @return {@link GoldExtractor} corresponding to the specified level or {@code null} if the specified level
-     * does not exist
+     * @return {@link GoldExtractorSettings} corresponding to the specified level or {@code null} if the specified
+     * level does not exist
      *
      * @since v3.1
      */
     @Nullable
-    public GoldExtractor getGoldExtractor(final int level) {
+    public GoldExtractorSettings getGoldExtractor(final int level) {
         final int index = level - 1;
 
         return index >= goldExtractors.size() ? null : goldExtractors.get(index);
@@ -463,13 +464,13 @@ public final class Config extends CoMYamlConfiguration {
     /**
      * @param level Elixir extractor level
      *
-     * @return {@link ElixirExtractor} corresponding to the specified level or {@code null} if the specified level
-     * does not exist
+     * @return {@link ElixirExtractorSettings} corresponding to the specified level or {@code null} if the
+     * specified level does not exist
      *
      * @since v3.1
      */
     @Nullable
-    public ElixirExtractor getElixirExtractor(final int level) {
+    public ElixirExtractorSettings getElixirExtractor(final int level) {
         final int index = level - 1;
 
         return index >= elixirExtractors.size() ? null : elixirExtractors.get(index);
@@ -478,13 +479,13 @@ public final class Config extends CoMYamlConfiguration {
     /**
      * @param level Archer tower level
      *
-     * @return {@link ArcherTower} corresponding to the specified level or {@code null} if the specified level does
-     * not exist
+     * @return {@link ArcherTowerSettings} corresponding to the specified level or {@code null} if the specified
+     * level does not exist
      *
      * @since v3.1
      */
     @Nullable
-    public ArcherTower getArcherTower(final int level) {
+    public ArcherTowerSettings getArcherTower(final int level) {
         final int index = level - 1;
 
         return index >= archerTowers.size() ? null : archerTowers.get(index);
@@ -553,8 +554,8 @@ public final class Config extends CoMYamlConfiguration {
      * @param type  Type of building to obtain
      * @param level Building level in which you are interested
      *
-     * @return {@link Building} corresponding to the specified level or {@code null} if the specified level does
-     * not exist
+     * @return {@link BuildingSettings} corresponding to the specified level or {@code null} if the specified level
+     * does not exist
      *
      * @see #getArcherTower(int)
      * @see #getGoldExtractor(int)
@@ -562,7 +563,7 @@ public final class Config extends CoMYamlConfiguration {
      * @see #getTownHall(int)
      */
     @Nullable
-    public Building getBuilding(@Nonnull final BuildingType type, final int level) {
+    public BuildingSettings getBuilding(@Nonnull final BuildingType type, final int level) {
         switch (type) {
             case ARCHER_TOWER:
                 return getArcherTower(level);
@@ -584,7 +585,7 @@ public final class Config extends CoMYamlConfiguration {
      * @return The exp that a clan must have to gain the specified level
      */
     public int getRequiredClanExp(final int level) {
-        return clans.get(level - 1).getKey();
+        return clans.get(level - 1).expRequired;
     }
 
     /**
@@ -595,7 +596,7 @@ public final class Config extends CoMYamlConfiguration {
      */
     @Nullable
     public String getClanCommand(final int level) {
-        return clans.get(level - 1).getValue();
+        return clans.get(level - 1).command;
     }
 
     /**

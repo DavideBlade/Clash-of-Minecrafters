@@ -10,7 +10,7 @@ import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.Permissions;
-import com.gmail.davideblade99.clashofminecrafters.clan.WarHandler;
+import com.gmail.davideblade99.clashofminecrafters.handler.WarHandler;
 import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.command.CommandSender;

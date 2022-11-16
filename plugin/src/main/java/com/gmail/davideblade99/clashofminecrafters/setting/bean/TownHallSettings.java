@@ -4,7 +4,7 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.island.building;
+package com.gmail.davideblade99.clashofminecrafters.setting.bean;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Currency;
@@ -19,12 +19,12 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * Class representing a town hall level
+ * JavaBean that contains town hall settings retrieved from config.yml.
  *
  * @author DavideBlade
- * @since v3.0.3
+ * @since v3.1.2
  */
-public final class TownHall extends Building {
+public final class TownHallSettings extends BuildingSettings {
 
     private final String command; //TODO: questo comando privato come fa ad essere eseguito?
 
@@ -79,7 +79,7 @@ public final class TownHall extends Building {
      *
      * @throws IllegalArgumentException If the level is less than 2 or if the number of hearts is not positive.
      */
-    public TownHall(final int level, final int price, @Nonnull final Currency currency, @Nullable final String command) {
+    public TownHallSettings(final int level, final int price, @Nonnull final Currency currency, @Nullable final String command) {
         this(level, price, currency, command, (byte) 10, null, null, null, null, null);
     }
 
@@ -97,7 +97,7 @@ public final class TownHall extends Building {
      * @throws IllegalArgumentException If the level is less than 2 or if the number of hearts is not positive.
      * @since v3.1
      */
-    public TownHall(final int level, final int price, @Nonnull final Currency currency, @Nullable final String command, final byte hearts, @Nullable final Material helmet, @Nullable final Material chestplate, @Nullable final Material leggings, @Nullable final Material boots, @Nullable final List<PotionEffectType> potions) {
+    public TownHallSettings(final int level, final int price, @Nonnull final Currency currency, @Nullable final String command, final byte hearts, @Nullable final Material helmet, @Nullable final Material chestplate, @Nullable final Material leggings, @Nullable final Material boots, @Nullable final List<PotionEffectType> potions) {
         super(level, price, currency);
 
         if (level < 2)

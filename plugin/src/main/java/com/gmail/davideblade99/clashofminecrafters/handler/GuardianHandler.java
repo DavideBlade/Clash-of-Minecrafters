@@ -4,10 +4,10 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.island.creature;
+package com.gmail.davideblade99.clashofminecrafters.handler;
 
-import com.gmail.davideblade99.clashofminecrafters.island.building.BuildingType;
-import com.gmail.davideblade99.clashofminecrafters.island.building.TownHall;
+import com.gmail.davideblade99.clashofminecrafters.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.setting.bean.TownHallSettings;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -40,7 +40,7 @@ public final class GuardianHandler {
     public void spawn(@Nonnull final User owner, @Nonnull final String playerName, @Nonnull final Location loc) {
         final Zombie zombie = (Zombie) Bukkit.getWorld("Islands").spawnEntity(loc, EntityType.ZOMBIE);
 
-        final TownHall townHall = (TownHall) owner.getBuilding(BuildingType.TOWN_HALL);
+        final TownHallSettings townHall = (TownHallSettings) owner.getBuilding(BuildingType.TOWN_HALL);
         if (townHall != null) // The town hall level may not exist
         {
             // Set equipment

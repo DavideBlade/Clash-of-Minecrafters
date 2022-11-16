@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.listener.player;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.island.Island;
+import com.gmail.davideblade99.clashofminecrafters.Island;
 import com.gmail.davideblade99.clashofminecrafters.listener.IslandListener;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;

@@ -4,9 +4,10 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.schematic;
+package com.gmail.davideblade99.clashofminecrafters.handler;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
+import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

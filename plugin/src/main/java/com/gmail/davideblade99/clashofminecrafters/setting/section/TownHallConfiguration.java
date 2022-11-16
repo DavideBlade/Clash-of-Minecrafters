@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.setting.section;
 
 import com.gmail.davideblade99.clashofminecrafters.Currency;
-import com.gmail.davideblade99.clashofminecrafters.island.building.TownHall;
+import com.gmail.davideblade99.clashofminecrafters.setting.bean.TownHallSettings;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.yaml.CoMYamlConfiguration;
 import org.bukkit.Material;
@@ -32,8 +32,8 @@ public final class TownHallConfiguration extends SectionConfiguration {
     private final static String SECTION = "Town halls";
 
 
-    /** List of {@link TownHall}s extracted from the configuration */
-    private final List<TownHall> townHalls;
+    /** List of {@link TownHallSettings}s extracted from the configuration */
+    private final List<TownHallSettings> townHalls;
 
     /**
      * Create a new instance of {@link TownHallConfiguration} and load all the town halls with {@link
@@ -52,12 +52,12 @@ public final class TownHallConfiguration extends SectionConfiguration {
     /**
      * @return The list containing the settings of the town halls loaded
      */
-    public List<TownHall> getTownHalls() {
+    public List<TownHallSettings> getTownHalls() {
         return this.townHalls;
     }
 
     /**
-     * Reads the town halls section in the {@link SectionConfiguration#section} and builds {@link TownHall}s. If a
+     * Reads the town halls section in the {@link SectionConfiguration#section} and builds {@link TownHallSettings}s. If a
      * misconfigured level (with invalid or missing settings) is encountered, loading will be stopped. Town halls
      * loaded to that point, however, will remain valid.
      */
@@ -115,7 +115,7 @@ public final class TownHallConfiguration extends SectionConfiguration {
                 return;
             }
 
-            this.townHalls.add(new TownHall(level, price, currency, command, hearts, helmet, chestplate, leggings, boots, potions));
+            this.townHalls.add(new TownHallSettings(level, price, currency, command, hearts, helmet, chestplate, leggings, boots, potions));
         }
     }
 }

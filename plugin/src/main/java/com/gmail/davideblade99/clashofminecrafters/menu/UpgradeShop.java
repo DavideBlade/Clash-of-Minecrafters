@@ -7,12 +7,12 @@
 package com.gmail.davideblade99.clashofminecrafters.menu;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.island.building.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.menu.item.BaseItem;
 import com.gmail.davideblade99.clashofminecrafters.menu.item.UnclickableItem;
 import com.gmail.davideblade99.clashofminecrafters.menu.item.UpgradeMenuItem;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
-import com.gmail.davideblade99.clashofminecrafters.setting.Config;
+import com.gmail.davideblade99.clashofminecrafters.setting.Configuration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -40,7 +40,7 @@ public final class UpgradeShop extends Menu {
      */
     @Nonnull
     private static List<BaseItem> buildMenuItems(@Nonnull final CoM plugin, @Nonnull final User user) {
-        final Config config = plugin.getConfig();
+        final Configuration config = plugin.getConfig();
         final List<BaseItem> items = new ArrayList<>(4);
 
         // Show item only if building is not disabled
@@ -95,7 +95,7 @@ public final class UpgradeShop extends Menu {
      * @since v3.0.3
      */
     private static BaseItem createBuildingItem(@Nonnull final CoM plugin, @Nonnull final BuildingType building, int level, final byte slot) {
-        final Config config = plugin.getConfig();
+        final Configuration config = plugin.getConfig();
 
         /*
          * If any player has a level higher than the current maximum level

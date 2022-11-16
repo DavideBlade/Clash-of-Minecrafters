@@ -4,14 +4,15 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.clan;
+package com.gmail.davideblade99.clashofminecrafters.handler;
 
+import com.gmail.davideblade99.clashofminecrafters.Clan;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.yaml.ClanConfiguration;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
+import com.gmail.davideblade99.clashofminecrafters.yaml.ClanConfiguration;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
@@ -119,7 +120,7 @@ public final class ClanHandler {
 
     // clanName is case-sensitive! If the clan name is "HI" and clanName is "Hi", the file will not exists
     @Nonnull
-    File getClanFile(@Nonnull final String clanName) {
+    public File getClanFile(@Nonnull final String clanName) {
         return new File(clanFolder, clanName + ".yml");
     }
 

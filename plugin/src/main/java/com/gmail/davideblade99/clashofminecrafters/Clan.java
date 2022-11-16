@@ -4,12 +4,11 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.clan;
+package com.gmail.davideblade99.clashofminecrafters;
 
-import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.setting.Config;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
+import com.gmail.davideblade99.clashofminecrafters.setting.Configuration;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.collection.Sets;
 import com.gmail.davideblade99.clashofminecrafters.yaml.ClanConfiguration;
@@ -31,11 +30,11 @@ public final class Clan {
     private int level;
     private int exp;
 
-    Clan(@Nonnull final CoM plugin, @Nonnull final String clanName, @Nonnull final ClanConfiguration config) {
+    public Clan(@Nonnull final CoM plugin, @Nonnull final String clanName, @Nonnull final ClanConfiguration config) {
         this(plugin, clanName, config.getOwner(), config.getMembers(), config.getLevel(), config.getExp());
     }
 
-    Clan(@Nonnull final CoM plugin, @Nonnull final String clanName, @Nonnull final UUID owner) {
+    public Clan(@Nonnull final CoM plugin, @Nonnull final String clanName, @Nonnull final UUID owner) {
         this(plugin, clanName, owner, 1, 0);
     }
 
@@ -54,7 +53,7 @@ public final class Clan {
     }
 
     public void giveRaidExp() {
-        final Config config = plugin.getConfig();
+        final Configuration config = plugin.getConfig();
         if (level >= config.getClanLevels()) // If the clan already has the highest level
             return;
 

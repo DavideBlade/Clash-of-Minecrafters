@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.setting.section;
 
 import com.gmail.davideblade99.clashofminecrafters.Currency;
-import com.gmail.davideblade99.clashofminecrafters.island.building.ElixirExtractor;
+import com.gmail.davideblade99.clashofminecrafters.setting.bean.ElixirExtractorSettings;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.yaml.CoMYamlConfiguration;
 import org.bukkit.configuration.ConfigurationSection;
@@ -29,8 +29,8 @@ public final class ElixirExtractorConfiguration extends SectionConfiguration {
     private final static String SECTION = "Elixir extractors";
 
 
-    /** List of {@link ElixirExtractor}s obtained from the configuration */
-    private final List<ElixirExtractor> elixirExtractors;
+    /** List of {@link ElixirExtractorSettings}s obtained from the configuration */
+    private final List<ElixirExtractorSettings> elixirExtractors;
 
     /**
      * Create a new instance of {@link ElixirExtractorConfiguration} and load all the elixir extractors with {@link
@@ -49,13 +49,13 @@ public final class ElixirExtractorConfiguration extends SectionConfiguration {
     /**
      * @return The list containing the settings of the elixir extractors loaded
      */
-    public List<ElixirExtractor> getElixirExtractors() {
+    public List<ElixirExtractorSettings> getElixirExtractors() {
         return this.elixirExtractors;
     }
 
     /**
      * Reads the elixir extractors section in the {@link SectionConfiguration#section} and builds {@link
-     * ElixirExtractor}s. If a misconfigured level (with invalid or missing settings) is encountered, loading will
+     * ElixirExtractorSettings}s. If a misconfigured level (with invalid or missing settings) is encountered, loading will
      * be stopped. Elixir extractors loaded to that point, however, will remain valid.
      */
     private void loadElixirExtractors() {
@@ -99,7 +99,7 @@ public final class ElixirExtractorConfiguration extends SectionConfiguration {
                 return;
             }
 
-            this.elixirExtractors.add(new ElixirExtractor(level, production, capacity, price, currency));
+            this.elixirExtractors.add(new ElixirExtractorSettings(level, production, capacity, price, currency));
         }
     }
 }

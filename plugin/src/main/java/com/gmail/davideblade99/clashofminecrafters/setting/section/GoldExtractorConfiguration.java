@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.setting.section;
 
 import com.gmail.davideblade99.clashofminecrafters.Currency;
-import com.gmail.davideblade99.clashofminecrafters.island.building.GoldExtractor;
+import com.gmail.davideblade99.clashofminecrafters.setting.bean.GoldExtractorSettings;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.yaml.CoMYamlConfiguration;
 import org.bukkit.configuration.ConfigurationSection;
@@ -29,8 +29,8 @@ public final class GoldExtractorConfiguration extends SectionConfiguration {
     private final static String SECTION = "Gold extractors";
 
 
-    /** List of {@link GoldExtractor}s obtained from the configuration */
-    private final List<GoldExtractor> goldExtractors;
+    /** List of {@link GoldExtractorSettings}s obtained from the configuration */
+    private final List<GoldExtractorSettings> goldExtractors;
 
     /**
      * Create a new instance of {@link GoldExtractorConfiguration} and load all the gold extractors with {@link
@@ -49,13 +49,13 @@ public final class GoldExtractorConfiguration extends SectionConfiguration {
     /**
      * @return The list containing the settings of the gold extractors loaded
      */
-    public List<GoldExtractor> getGoldExtractors() {
+    public List<GoldExtractorSettings> getGoldExtractors() {
         return this.goldExtractors;
     }
 
     /**
      * Reads the gold extractors section in the {@link SectionConfiguration#section} and builds {@link
-     * GoldExtractor}s. If a misconfigured level (with invalid or missing settings) is encountered, loading will be
+     * GoldExtractorSettings}s. If a misconfigured level (with invalid or missing settings) is encountered, loading will be
      * stopped. Gold extractors loaded to that point, however, will remain valid.
      */
     private void loadGoldExtractors() {
@@ -99,7 +99,7 @@ public final class GoldExtractorConfiguration extends SectionConfiguration {
                 return;
             }
 
-            this.goldExtractors.add(new GoldExtractor(level, production, capacity, price, currency));
+            this.goldExtractors.add(new GoldExtractorSettings(level, production, capacity, price, currency));
         }
     }
 }

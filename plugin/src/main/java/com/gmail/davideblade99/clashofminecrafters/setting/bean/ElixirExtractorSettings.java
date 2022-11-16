@@ -4,7 +4,7 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.island.building;
+package com.gmail.davideblade99.clashofminecrafters.setting.bean;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Currency;
@@ -14,9 +14,15 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public final class ElixirExtractor extends Extractor {
+/**
+ * JavaBean that contains elixir extractor settings retrieved from config.yml.
+ *
+ * @author DavideBlade
+ * @since v3.1.2
+ */
+public final class ElixirExtractorSettings extends ExtractorSettings {
 
-    public ElixirExtractor(final int level, final int production, final int capacity, final int price, @Nonnull final Currency currency) {
+    public ElixirExtractorSettings(final int level, final int production, final int capacity, final int price, @Nonnull final Currency currency) {
         super(level, production, capacity, price, currency);
     }
 

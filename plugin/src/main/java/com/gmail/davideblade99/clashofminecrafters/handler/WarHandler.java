@@ -4,14 +4,14 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.clan;
+package com.gmail.davideblade99.clashofminecrafters.handler;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.event.raid.RaidLostEvent;
-import com.gmail.davideblade99.clashofminecrafters.island.Island;
-import com.gmail.davideblade99.clashofminecrafters.island.building.ArcherTower;
-import com.gmail.davideblade99.clashofminecrafters.island.building.Building;
-import com.gmail.davideblade99.clashofminecrafters.island.building.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.Island;
+import com.gmail.davideblade99.clashofminecrafters.setting.bean.ArcherTowerSettings;
+import com.gmail.davideblade99.clashofminecrafters.setting.bean.BuildingSettings;
+import com.gmail.davideblade99.clashofminecrafters.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
@@ -98,9 +98,9 @@ public final class WarHandler {
             // Spawn creature
             plugin.getGuardianHandler().spawn(targetUser, targetIsland.owner, targetIsland.spawn);
 
-            final Building archerTower = targetUser.getBuilding(BuildingType.ARCHER_TOWER);
+            final BuildingSettings archerTower = targetUser.getBuilding(BuildingType.ARCHER_TOWER);
             if (archerTower != null) // If the player has archer tower
-                plugin.getArcherHandler().spawn(targetIsland.owner, ((ArcherTower) archerTower).damage, targetUser.getTowerLoc());
+                plugin.getArcherHandler().spawn(targetIsland.owner, ((ArcherTowerSettings) archerTower).damage, targetUser.getTowerLoc());
 
             // Teleport player
             MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.TELEPORTATION));

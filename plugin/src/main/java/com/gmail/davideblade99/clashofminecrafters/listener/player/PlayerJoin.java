@@ -9,7 +9,7 @@ package com.gmail.davideblade99.clashofminecrafters.listener.player;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.listener.CoMListener;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
-import com.gmail.davideblade99.clashofminecrafters.setting.Config;
+import com.gmail.davideblade99.clashofminecrafters.setting.Configuration;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ScoreboardUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,7 +34,7 @@ public final class PlayerJoin extends CoMListener {
         // Update map between player name <-> UUID
         plugin.getPlayerHandler().updatePlayerMapping(player);
 
-        final Config config = plugin.getConfig();
+        final Configuration config = plugin.getConfig();
         if (config.teleportOnJoin())
             player.teleport(config.getSpawn());
 

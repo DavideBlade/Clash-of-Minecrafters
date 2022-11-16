@@ -4,7 +4,7 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.island.creature;
+package com.gmail.davideblade99.clashofminecrafters.handler;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import org.bukkit.Bukkit;

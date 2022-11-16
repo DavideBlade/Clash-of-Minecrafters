@@ -4,7 +4,7 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.island.building;
+package com.gmail.davideblade99.clashofminecrafters.setting.bean;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Currency;
@@ -14,11 +14,17 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public final class ArcherTower extends Building {
+/**
+ * JavaBean that contains archer tower settings retrieved from config.yml.
+ *
+ * @author DavideBlade
+ * @since v3.1.2
+ */
+public final class ArcherTowerSettings extends BuildingSettings {
 
     public final double damage;
 
-    public ArcherTower(final int level, final double damage, final int price, @Nonnull final Currency currency) {
+    public ArcherTowerSettings(final int level, final double damage, final int price, @Nonnull final Currency currency) {
         super(level, price, currency);
 
         this.damage = damage;

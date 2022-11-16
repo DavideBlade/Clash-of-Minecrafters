@@ -4,14 +4,20 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.island.building;
+package com.gmail.davideblade99.clashofminecrafters.setting.bean;
 
 import com.gmail.davideblade99.clashofminecrafters.Currency;
 import com.gmail.davideblade99.clashofminecrafters.menu.Icon;
 
 import javax.annotation.Nonnull;
 
-public abstract class Building implements Icon {
+/**
+ * JavaBean that contains general building settings retrieved from config.yml.
+ *
+ * @author DavideBlade
+ * @since v3.1.2
+ */
+public abstract class BuildingSettings implements Icon {
 
     public final int level;
     public final int price;
@@ -27,7 +33,7 @@ public abstract class Building implements Icon {
      *
      * @throws IllegalArgumentException If the passed level is invalid
      */
-    Building(final int level, final int price, @Nonnull final Currency currency) {
+    BuildingSettings(final int level, final int price, @Nonnull final Currency currency) {
         if (level < 1)
             throw new IllegalArgumentException("Invalid level: must be greater than or equal to 1");
 

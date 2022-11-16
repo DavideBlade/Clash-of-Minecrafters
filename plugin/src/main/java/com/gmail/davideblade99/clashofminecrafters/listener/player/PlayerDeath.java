@@ -8,7 +8,7 @@ package com.gmail.davideblade99.clashofminecrafters.listener.player;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.event.raid.RaidLostEvent;
-import com.gmail.davideblade99.clashofminecrafters.island.Island;
+import com.gmail.davideblade99.clashofminecrafters.Island;
 import com.gmail.davideblade99.clashofminecrafters.listener.IslandListener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -24,6 +24,7 @@ public final class PlayerDeath extends IslandListener {
         super(plugin);
     }
 
+    //TODO: quando un giocatore muore va portato al default spawn?
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerDeath(final PlayerDeathEvent event) {
         final Player player = event.getEntity();

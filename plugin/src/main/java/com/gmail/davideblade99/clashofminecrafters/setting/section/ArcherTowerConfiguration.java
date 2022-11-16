@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.setting.section;
 
 import com.gmail.davideblade99.clashofminecrafters.Currency;
-import com.gmail.davideblade99.clashofminecrafters.island.building.ArcherTower;
+import com.gmail.davideblade99.clashofminecrafters.setting.bean.ArcherTowerSettings;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.yaml.CoMYamlConfiguration;
 import org.bukkit.configuration.ConfigurationSection;
@@ -29,8 +29,8 @@ public final class ArcherTowerConfiguration extends SectionConfiguration {
     private final static String SECTION = "Archer towers";
 
 
-    /** List of {@link ArcherTower}s extracted from the configuration */
-    private final List<ArcherTower> archerTowers;
+    /** List of {@link ArcherTowerSettings}s extracted from the configuration */
+    private final List<ArcherTowerSettings> archerTowers;
 
     /**
      * Create a new instance of {@link ArcherTowerConfiguration} and load all the archer towers with {@link
@@ -49,12 +49,12 @@ public final class ArcherTowerConfiguration extends SectionConfiguration {
     /**
      * @return The list containing the settings of the archer towers loaded
      */
-    public List<ArcherTower> getArcherTowers() {
+    public List<ArcherTowerSettings> getArcherTowers() {
         return this.archerTowers;
     }
 
     /**
-     * Reads the archer towers section in the {@link SectionConfiguration#section} and builds {@link ArcherTower}s.
+     * Reads the archer towers section in the {@link SectionConfiguration#section} and builds {@link ArcherTowerSettings}s.
      * If a misconfigured level (with invalid or missing settings) is encountered, loading will be stopped. Archer
      * towers loaded to that point, however, will remain valid.
      */
@@ -93,7 +93,7 @@ public final class ArcherTowerConfiguration extends SectionConfiguration {
                 return;
             }
 
-            this.archerTowers.add(new ArcherTower(level, damage, price, currency));
+            this.archerTowers.add(new ArcherTowerSettings(level, damage, price, currency));
         }
     }
 }

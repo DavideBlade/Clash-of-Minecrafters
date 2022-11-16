@@ -8,13 +8,13 @@ package com.gmail.davideblade99.clashofminecrafters.player;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Currency;
-import com.gmail.davideblade99.clashofminecrafters.setting.Config;
+import com.gmail.davideblade99.clashofminecrafters.setting.Configuration;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.exception.WorldBorderReachedException;
-import com.gmail.davideblade99.clashofminecrafters.island.Island;
-import com.gmail.davideblade99.clashofminecrafters.island.building.Building;
-import com.gmail.davideblade99.clashofminecrafters.island.building.BuildingType;
-import com.gmail.davideblade99.clashofminecrafters.island.building.Extractor;
+import com.gmail.davideblade99.clashofminecrafters.Island;
+import com.gmail.davideblade99.clashofminecrafters.setting.bean.BuildingSettings;
+import com.gmail.davideblade99.clashofminecrafters.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.setting.bean.ExtractorSettings;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
@@ -77,7 +77,7 @@ public final class User {
             if (!(base instanceof Player))
                 throw new IllegalStateException("Unable to create data for player who has never been on the server!");
 
-            final Config config = plugin.getConfig();
+            final Configuration config = plugin.getConfig();
             this.gold = config.getStartingGold();
             this.elixir = config.getStartingElixir();
             this.gems = config.getStartingGems();
@@ -129,7 +129,7 @@ public final class User {
      * @throws IllegalArgumentException If the specified level does not exist for the passed building type
      */
     public boolean hasMoneyToUpgrade(final int nextLevel, @Nonnull final BuildingType type) {
-        final Building nextBuilding;
+        final BuildingSettings nextBuilding;
 
         switch (type) {
             case ELIXIR_EXTRACTOR:
@@ -334,12 +334,12 @@ public final class User {
     /**
      * @param type Type of construction to obtain
      *
-     * @return the {@link Building} corresponding to the level the player has unlocked or {@code null} if the
+     * @return the {@link BuildingSettings} corresponding to the level the player has unlocked or {@code null} if the
      * player has not unlocked the building or if the level is not found among the configured ones (this can happen
      * if, for example, there is a configuration error or if levels have been deleted)
      */
     @Nullable
-    public Building getBuilding(@Nonnull final BuildingType type) {
+    public BuildingSettings getBuilding(@Nonnull final BuildingType type) {
         final int currentLevel = getBuildingLevel(type);
 
         // If the level is 1, it means that the player has the basic level of the town hall (never upgraded it)
@@ -381,7 +381,7 @@ public final class User {
             return;
         }
 
-        final Building nextBuilding = plugin.getConfig().getBuilding(type, nextLevel);
+        final BuildingSettings nextBuilding = plugin.getConfig().getBuilding(type, nextLevel);
         final int price = nextBuilding.price;
         final Currency currency = nextBuilding.currency;
 
@@ -504,8 +504,8 @@ public final class User {
      * Collects all resources in the extractors unlocked by the player
      */
     public void collectExtractors() {
-        final Extractor goldExtractor = (Extractor) this.getBuilding(BuildingType.GOLD_EXTRACTOR);
-        final Extractor elixirExtractor = (Extractor) this.getBuilding(BuildingType.ELIXIR_EXTRACTOR);
+        final ExtractorSettings goldExtractor = (ExtractorSettings) this.getBuilding(BuildingType.GOLD_EXTRACTOR);
+        final ExtractorSettings elixirExtractor = (ExtractorSettings) this.getBuilding(BuildingType.ELIXIR_EXTRACTOR);
 
         if (goldExtractor != null) // If the player bought the gold extractor
             this.addBalance(getResourcesProduced(goldExtractor, this.collectionTime), Currency.GOLD);
@@ -528,7 +528,7 @@ public final class User {
      *
      * @return the amount of resources produced (accumulated in the extractor)
      */
-    public int getResourcesProduced(@Nonnull final Extractor extractor, @Nonnull final LocalDateTime collectionTime) {
+    public int getResourcesProduced(@Nonnull final ExtractorSettings extractor, @Nonnull final LocalDateTime collectionTime) {
         /*
          * Calculate the hours that have passed since the last time the player collected.
          * For the minutes that are left (less than 60), I calculate the approximate production.
