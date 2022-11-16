@@ -59,9 +59,9 @@ import java.util.UUID;
  *  Supporto per SQLite e MongoDB
  */
 
-//TODO: https://github.com/Staartvin/Autorank-2/tree/master/src/me/armar/plugins/autorank
+//TODO: leggere: https://dev.mysql.com/doc/refman/8.0/en/innodb-transaction-model.html + https://www.spigotmc.org/threads/best-practices-for-async-sql-i-o.578716/page-2#post-4504656
 
-//TODO: dare un'occhio a: https://www.google.com/search?q=spigot+entity+nbttag+tutorial&rlz=1C1JZAP_itIT969IT971&sxsrf=APq-WBsJNMU_6XwGq7Bo1M2-1ln43D9ThQ%3A1645052927738&ei=_4MNYrzLLJGAkwWolLeYAg&ved=0ahUKEwj8xpPbq4X2AhURwKQKHSjKDSMQ4dUDCA8&uact=5&oq=spigot+entity+nbttag+tutorial&gs_lcp=Cgdnd3Mtd2l6EAM6BwgAEEcQsANKBAhBGABKBAhGGABQyARYxwhg0wloAXABeACAAbQBiAHDBpIBAzIuNZgBAKABAcgBCMABAQ&sclient=gws-wiz
+//TODO: https://github.com/Staartvin/Autorank-2/tree/master/src/me/armar/plugins/autorank
 
 //TODO: dare un'occhio a: https://www.google.com/search?q=java+configchecker+builder&rlz=1C1JZAP_itIT969IT971&oq=java+configchecker+builder&aqs=chrome..69i57j33i10i160.4092j1j1&sourceid=chrome&ie=UTF-8
 
@@ -69,13 +69,9 @@ import java.util.UUID;
 
 //TODO: dare un'occhiata a: https://docs.eliteminecraftplugins.com/elitepets/ e https://www.gitbook.com/?utm_source=content&utm_medium=trademark&utm_campaign=-MgzZltL9-2FnEMsC3sM
 
-//TODO: dare un'occhiata a: https://www.google.com/search?q=cache+inventory+spigot&rlz=1C1JZAP_itIT969IT971&oq=cache+inventory+spigot&aqs=chrome..69i57j35i19i39j35i39j0i131i433j0i512j69i60l3.1835j0j1&sourceid=chrome&ie=UTF-8
-
 //TODO: dare un'occhio (per gli item, cosa poter settare ecc.) a: https://www.spigotmc.org/wiki/mmoitems-item-stats-options/
 
-//TODO: dare un'occhio a: https://github.com/lorddusk/Bagginses/tree/master/src/main/java/nl/lang2619/bagginses
-
-//TODO: to test SQLite with JUnit: https://www.spigotmc.org/threads/tutorial-plugin-sqlite-junit-testing.293352/
+//TODO: test SQLite com JUnit: https://www.spigotmc.org/threads/tutorial-plugin-sqlite-junit-testing.293352/
 
 //TODO: info sulla skin delle teste
 // https://www.spigotmc.org/threads/dynamic-player-head-textures.482194/#post-4047576
@@ -85,11 +81,7 @@ import java.util.UUID;
 
 //TODO: 1.18 Clash of Clans buildings: https://www.planetminecraft.com/project/clash-of-clans-every-building-with-every-upgrade-th-1-to-th12/
 
-//TODO: altre idee da https://www.spigotmc.org/resources/1-13-1-18-craftofclans.22966/
-
-//TODO: per le valute anziché usare gli int perché non uso un BigInt?
-
-//TODO: ottimizzare codice e migliorarlo (aggiungere alle features No lag)
+//TODO: https://www.spigotmc.org/resources/1-13-1-18-craftofclans.22966/
 
 //TODO: catch errori non gestiti da nessuno: https://stackoverflow.com/a/13507137 + https://docs.oracle.com/javase/6/docs/api/java/lang/Thread.html#setDefaultUncaughtExceptionHandler%28java.lang.Thread.UncaughtExceptionHandler%29 + https://www.javatpoint.com/java-thread-setdefaultuncaughtexceptionhandler-method + https://stackoverflow.com/a/46591885
 public final class CoM extends JavaPlugin {
@@ -354,7 +346,7 @@ public final class CoM extends JavaPlugin {
             final String internalsName = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
             chunkGenerator = (ChunkGenerator) Class.forName(packageName + ".world." + internalsName + ".EmptyWorldGenerator").getDeclaredConstructor().newInstance();
         } catch (final Exception unknownVersion) {
-            throw new RuntimeException("Unknown server version: " + Bukkit.getServer().getClass().getPackage().getName()); //TODO: quando viene lanciata questa eccezione cosa succede? il plugin si disabilita? il mondo non viene più generato?
+            throw new RuntimeException("Unknown server version: " + Bukkit.getServer().getClass().getPackage().getName());
         }
 
         final World world = getServer().createWorld(new WorldCreator("Islands").generator(chunkGenerator)); // Load or create world
@@ -436,7 +428,7 @@ public final class CoM extends JavaPlugin {
 
 
     //TODO: fare sito per le traduzioni come quello di essentials
-    //TODO aggiungere ai costruttori che non posso essere aggiunti valori nulli + mettere final ovunque (dove si pu�)
+    //TODO aggiungere ai costruttori che non posso essere aggiunti valori nulli
 
 
     /*TODO fare sistema di upgrade (/upgrade) con varie schematic per livello (es. livello 1 c'� la schematic ArcherTower1, livello 2 c'� ArcherTower2 e cos� via)
@@ -460,7 +452,6 @@ public final class CoM extends JavaPlugin {
 
     //TODO alle SQLException fare aggiungere throws SQLException al metodo in modo che possa gestirlo il chiamante in maniera migliore (es. hasArcher(UUID playerUUID) throws SQLException)
 
-    //TODO aggiungere controllo al config che controlla tutti i numberi che non possano essere negativi
     //TODO mettere le rule dei vari mondi impostabili dal config
     //TODO aggiungere vari livelli delle costruzioni (es. livello 1 dell'estrattore hai una cosa. livello 2 ne hai un'altra ecc.)---> abilitabile del config. se disabilitato usa la schematic del livello 1
     //TODO clan chat
@@ -469,11 +460,11 @@ public final class CoM extends JavaPlugin {
 
     //TODO: https://www.spigotmc.org/resources/essentials-mysql-storage-extension.25673/ -> Estensione di Essentials per salvare su MySQL
 
-    //TODO: guardare codice di https://www.spigotmc.org/resources/aoneblock.96861/
-
     //TODO: i proprietari del clan possono impostare un minimo di trofei necessario affinché i giocatori possano unirsi al clan
 
     //TODO: rimpire per il 50% la cache con gli ultimi giocatori che sono entrati nel server (o meno, se non ne sono mai entrati così tanti)
+
+
 
     //TODO: quando possibile non usare questo metodo statico ma passare l'istanza col costruttore
     public static CoM getInstance() {
