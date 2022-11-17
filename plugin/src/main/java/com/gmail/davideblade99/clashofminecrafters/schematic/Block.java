@@ -9,7 +9,6 @@ package com.gmail.davideblade99.clashofminecrafters.schematic;
 import javax.annotation.Nonnull;
 import java.io.Serializable;
 
-//TODO: test
 public final class Block implements Serializable {
 
     private static final long serialVersionUID = -8890912475002417906L;
