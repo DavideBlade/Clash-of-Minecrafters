@@ -8,13 +8,13 @@ package com.gmail.davideblade99.clashofminecrafters.handler;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.event.raid.RaidLostEvent;
-import com.gmail.davideblade99.clashofminecrafters.Island;
+import com.gmail.davideblade99.clashofminecrafters.Village;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.ArcherTowerSettings;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.BuildingSettings;
 import com.gmail.davideblade99.clashofminecrafters.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.player.User;
+import com.gmail.davideblade99.clashofminecrafters.User;
 import com.gmail.davideblade99.clashofminecrafters.util.Pair;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.thread.NullableCallback;
@@ -51,7 +51,7 @@ public final class WarHandler {
     private final AtomicInteger timer;
 
     /** Map associating the islands under attack with its attacker and the task id that counts the time of the raid */
-    private final Map<Player, Pair<Island, Integer>> attacks;
+    private final Map<Player, Pair<Village, Integer>> attacks;
 
     public WarHandler(@Nonnull final CoM plugin) {
         this.plugin = plugin;
@@ -108,7 +108,7 @@ public final class WarHandler {
         });
     }
 
-    public boolean isUnderAttack(@Nonnull final Island i) {
+    public boolean isUnderAttack(@Nonnull final Village i) {
         return getAttacker(i) != null;
     }
 
@@ -118,19 +118,19 @@ public final class WarHandler {
      * @param attacker Player who is attacking the island
      */
     public void removeUnderAttack(@Nonnull final Player attacker) {
-        final Pair<Island, Integer> removed = attacks.remove(attacker);
+        final Pair<Village, Integer> removed = attacks.remove(attacker);
 
         if (removed != null)
             Bukkit.getScheduler().cancelTask(removed.getValue());
     }
 
-    private void setUnderAttack(@Nonnull final Player attacker, @Nonnull final Island i, final int taskID) {
+    private void setUnderAttack(@Nonnull final Player attacker, @Nonnull final Village i, final int taskID) {
         attacks.put(attacker, new Pair<>(i, taskID));
     }
 
     @Nullable
-    public Player getAttacker(@Nonnull final Island i) {
-        for (Map.Entry<Player, Pair<Island, Integer>> entry : attacks.entrySet()) {
+    public Player getAttacker(@Nonnull final Village i) {
+        for (Map.Entry<Player, Pair<Village, Integer>> entry : attacks.entrySet()) {
             if (entry.getValue().getKey().equals(i))
                 return entry.getKey();
         }
@@ -145,8 +145,8 @@ public final class WarHandler {
      * Get island attacked by specified player
      */
     @Nullable
-    public Island getAttackedIsland(@Nonnull final Player attacker) {
-        final Pair<Island, Integer> pair = attacks.get(attacker);
+    public Village getAttackedIsland(@Nonnull final Player attacker) {
+        final Pair<Village, Integer> pair = attacks.get(attacker);
         return pair == null ? null : pair.getKey();
     }
 
@@ -160,9 +160,9 @@ public final class WarHandler {
         if (attacks.isEmpty())
             return;
 
-        for (Map.Entry<Player, Pair<Island, Integer>> entry : attacks.entrySet()) {
+        for (Map.Entry<Player, Pair<Village, Integer>> entry : attacks.entrySet()) {
             final Player attacker = entry.getKey();
-            final Island island = entry.getValue().getKey();
+            final Village island = entry.getValue().getKey();
             final int taskID = entry.getValue().getValue();
 
             Bukkit.getScheduler().cancelTask(taskID);
@@ -234,7 +234,7 @@ public final class WarHandler {
     /**
      * Task that deals with finding an enemy island to attack. Sends the result of the lookup to the callback
      * passed to the constructor {@link #IslandFinder(Player, NullableCallback)}. If no island is found in a
-     * reasonable time {@code null} is returned, otherwise the {@link Island} found.
+     * reasonable time {@code null} is returned, otherwise the {@link Village} found.
      *
      * The result is passed synchronously, that is, {@link NullableCallback#call(Object)} is called from the main
      * thread.
@@ -242,9 +242,9 @@ public final class WarHandler {
     private class IslandFinder extends BukkitRunnable {
 
         private final Player attacker;
-        private final NullableCallback<Island> callback;
+        private final NullableCallback<Village> callback;
 
-        public IslandFinder(@Nonnull final Player attacker, @Nonnull final NullableCallback<Island> callback) {
+        public IslandFinder(@Nonnull final Player attacker, @Nonnull final NullableCallback<Village> callback) {
             this.attacker = attacker;
             this.callback = callback;
 
@@ -257,7 +257,7 @@ public final class WarHandler {
             while (System.currentTimeMillis() <= end) // After 10 seconds break the loop
             {
                 // Database and getUser() are not thread-safe
-                final Island targetIsland = supplySync(() -> {
+                final Village targetIsland = supplySync(() -> {
                     // Choose a target island (of a player in a different clan)
                     return plugin.getDatabase().getRandomEnemyIsland(plugin.getUser(attacker).getClanName());
                 });

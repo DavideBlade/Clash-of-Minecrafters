@@ -6,8 +6,8 @@
 
 package com.gmail.davideblade99.clashofminecrafters.storage.type.bean;
 
-import com.gmail.davideblade99.clashofminecrafters.Island;
-import com.gmail.davideblade99.clashofminecrafters.player.User;
+import com.gmail.davideblade99.clashofminecrafters.Village;
+import com.gmail.davideblade99.clashofminecrafters.User;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
 
@@ -30,11 +30,11 @@ public final class UserDatabaseType {
     public final int goldExtractorLevel;
     public final int archerTowerLevel;
     public final Vector archerTowerLoc;
-    public final Island island;
+    public final Village island;
     public final LocalDateTime collectionTime;
     public final int townHallLevel;
 
-    public UserDatabaseType(final int gold, final int elixir, final int gems, final int trophies, @Nullable final String clanName, final int elixirExtractorLevel, final int goldExtractorLevel, final int archerTowerLevel, @Nullable final Vector archerTowerPos, @Nullable final Island island, @Nullable final LocalDateTime collectionTime, final int townHallLevel) {
+    public UserDatabaseType(final int gold, final int elixir, final int gems, final int trophies, @Nullable final String clanName, final int elixirExtractorLevel, final int goldExtractorLevel, final int archerTowerLevel, @Nullable final Vector archerTowerPos, @Nullable final Village island, @Nullable final LocalDateTime collectionTime, final int townHallLevel) {
         this.gold = gold;
         this.elixir = elixir;
         this.gems = gems;

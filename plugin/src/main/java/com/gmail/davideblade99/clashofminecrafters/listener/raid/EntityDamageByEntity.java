@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.listener.raid;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Island;
+import com.gmail.davideblade99.clashofminecrafters.Village;
 import com.gmail.davideblade99.clashofminecrafters.listener.IslandListener;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
@@ -84,7 +84,7 @@ public final class EntityDamageByEntity extends IslandListener {
                 return;
 
             // If the player hits the guardian of an island that is attacked by another player
-            final Island attackedIsland = plugin.getWarHandler().getAttackedIsland(attacker);
+            final Village attackedIsland = plugin.getWarHandler().getAttackedIsland(attacker);
             if (attackedIsland == null || !attackedIsland.owner.equals(plugin.getGuardianHandler().getOwner(guardian))) {
                 event.setCancelled(true);
                 MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.CANNOT_HIT_GUARDIAN));
@@ -95,7 +95,7 @@ public final class EntityDamageByEntity extends IslandListener {
                 return;
 
             // If the player hits the archer of an island that is attacked by another player
-            final Island attackedIsland = plugin.getWarHandler().getAttackedIsland(attacker);
+            final Village attackedIsland = plugin.getWarHandler().getAttackedIsland(attacker);
             if (attackedIsland == null || !attackedIsland.owner.equals(plugin.getArcherHandler().getOwner(archer))) {
                 event.setCancelled(true);
                 MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.CANNOT_HIT_ARCHER));

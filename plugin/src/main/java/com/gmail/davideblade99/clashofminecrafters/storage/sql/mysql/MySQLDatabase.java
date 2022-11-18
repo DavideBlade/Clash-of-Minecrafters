@@ -9,9 +9,9 @@ package com.gmail.davideblade99.clashofminecrafters.storage.sql.mysql;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Currency;
 import com.gmail.davideblade99.clashofminecrafters.file.log.ErrorLog;
-import com.gmail.davideblade99.clashofminecrafters.Island;
+import com.gmail.davideblade99.clashofminecrafters.Village;
 import com.gmail.davideblade99.clashofminecrafters.BuildingType;
-import com.gmail.davideblade99.clashofminecrafters.player.User;
+import com.gmail.davideblade99.clashofminecrafters.User;
 import com.gmail.davideblade99.clashofminecrafters.storage.Columns;
 import com.gmail.davideblade99.clashofminecrafters.storage.sql.AbstractSQLDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.sql.mysql.query.*;
@@ -91,7 +91,7 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
      */
     @Nullable
     @Override
-    public Island getRandomIsland() {
+    public Village getRandomIsland() {
         final QueryBuilderSelect queryBuilder = QueryBuilder
                 .select(Columns.UUID, Columns.ISLAND_SPAWN, Columns.ISLAND_ORIGIN, Columns.ISLAND_SIZE, Columns.ISLAND_EXPANSIONS)
                 .from(TABLE_NAME)
@@ -120,7 +120,7 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
                     throw new IllegalStateException("Island of \"" + playerUUID[0] + "\" existing with some missing data");
                 //TODO: notificare al giocatore target
 
-                return new Island(playerName, spawn, origin, size, expansions);
+                return new Village(playerName, spawn, origin, size, expansions);
             });
         } catch (final SQLException ex) {
             //TODO: notificare al giocatore che la sta cercando
@@ -138,7 +138,7 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
      */
     @Nullable
     @Override
-    public Island getRandomEnemyIsland(@Nonnull final String clanName) {
+    public Village getRandomEnemyIsland(@Nonnull final String clanName) {
         final QueryBuilderSelect queryBuilder = QueryBuilder
                 .select(Columns.UUID, Columns.ISLAND_SPAWN, Columns.ISLAND_ORIGIN, Columns.ISLAND_SIZE, Columns.ISLAND_EXPANSIONS)
                 .from(TABLE_NAME)
@@ -171,7 +171,7 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
                     throw new IllegalStateException("Island of \"" + playerUUID[0] + "\" existing with some missing data");
                 //TODO: notificare al giocatore
 
-                return new Island(playerName, spawn, origin, size, expansions);
+                return new Village(playerName, spawn, origin, size, expansions);
             });
         } catch (final SQLException ex) {
             //TODO: notificare al giocatore che la sta cercando
@@ -209,7 +209,7 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
                 final int archerLevel = resultSet.getInt(Columns.ARCHER_TOWER_LEVEL);
                 final Vector archerPos = Vector.fromString(resultSet.getString(Columns.ARCHER_TOWER_LOCATION));
 
-                final Island island;
+                final Village island;
                 final Location islandSpawn = BukkitLocationUtil.fromString(resultSet.getString(Columns.ISLAND_SPAWN));
                 final Vector islandOrigin = Vector.fromString(resultSet.getString(Columns.ISLAND_ORIGIN));
                 final Size2D islandSize = Size2D.fromString(resultSet.getString(Columns.ISLAND_SIZE));
@@ -221,7 +221,7 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
                     if (islandSpawn == null || islandOrigin == null || islandSize == null || islandExpansions == null)
                         throw new IllegalStateException("Island of \"" + playerUUID + "\" existing with some missing data");
 
-                    island = new Island(playerName, islandSpawn, islandOrigin, islandSize, islandExpansions);
+                    island = new Village(playerName, islandSpawn, islandOrigin, islandSize, islandExpansions);
                 } else
                     island = null;
 
@@ -255,7 +255,7 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
         final int archerLevel = user.getBuildingLevel(BuildingType.ARCHER_TOWER);
         final int townHallLevel = user.getBuildingLevel(BuildingType.TOWN_HALL);
         final String archerPos = user.getTowerPos() == null ? null : user.getTowerPos().toString();
-        final Island island = user.getIsland();
+        final Village island = user.getIsland();
         final String islandSpawn = island == null ? null : BukkitLocationUtil.toString(island.spawn);
         final String islandOrigin = island == null ? null : island.origin.toString();
         final String islandSize = island == null ? null : island.size.toString();

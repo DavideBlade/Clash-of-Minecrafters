@@ -13,8 +13,8 @@ import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.player.User;
-import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
+import com.gmail.davideblade99.clashofminecrafters.User;
+import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicHandler;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
 import org.bukkit.Bukkit;
@@ -76,7 +76,7 @@ public final class UpgradeMenuItem extends BaseItem {
 
         final String errorMessage;
         final boolean useWESchematic;
-        final Schematic schematic;
+        final SchematicHandler schematic;
         final String successMessage;
         final String schematicName;
 
@@ -85,12 +85,12 @@ public final class UpgradeMenuItem extends BaseItem {
                 errorMessage = Messages.getMessage(MessageKey.TOWER_NOT_PLACED);
                 useWESchematic = config.useArcherSchematic();
                 successMessage = Messages.getMessage(MessageKey.TOWER_PLACED);
-                schematicName = Schematic.Schematics.ARCHER.getName();
+                schematicName = SchematicHandler.Schematics.ARCHER.getName();
 
                 if (useWESchematic)
-                    schematic = new Schematic(Schematic.WorldEdit.getClipboard(Schematic.Schematics.ARCHER));
+                    schematic = new SchematicHandler(SchematicHandler.WorldEdit.getClipboard(SchematicHandler.Schematics.ARCHER));
                 else
-                    schematic = new Schematic(Schematic.load(Schematic.Schematics.ARCHER));
+                    schematic = new SchematicHandler(SchematicHandler.load(SchematicHandler.Schematics.ARCHER));
                 break;
             }
 
@@ -115,12 +115,12 @@ public final class UpgradeMenuItem extends BaseItem {
                 errorMessage = Messages.getMessage(MessageKey.EXTRACTOR_NOT_PLACED);
                 useWESchematic = config.useGoldExtractorSchematic();
                 successMessage = Messages.getMessage(MessageKey.EXTRACTOR_PLACED);
-                schematicName = Schematic.Schematics.GOLD_EXTRACTOR.getName();
+                schematicName = SchematicHandler.Schematics.GOLD_EXTRACTOR.getName();
 
                 if (useWESchematic)
-                    schematic = new Schematic(Schematic.WorldEdit.getClipboard(Schematic.Schematics.GOLD_EXTRACTOR));
+                    schematic = new SchematicHandler(SchematicHandler.WorldEdit.getClipboard(SchematicHandler.Schematics.GOLD_EXTRACTOR));
                 else
-                    schematic = new Schematic(Schematic.load(Schematic.Schematics.GOLD_EXTRACTOR));
+                    schematic = new SchematicHandler(SchematicHandler.load(SchematicHandler.Schematics.GOLD_EXTRACTOR));
                 break;
             }
 
@@ -146,12 +146,12 @@ public final class UpgradeMenuItem extends BaseItem {
                 errorMessage = Messages.getMessage(MessageKey.EXTRACTOR_NOT_PLACED);
                 useWESchematic = config.useElixirExtractorSchematic();
                 successMessage = Messages.getMessage(MessageKey.EXTRACTOR_PLACED);
-                schematicName = Schematic.Schematics.ELIXIR_EXTRACTOR.getName();
+                schematicName = SchematicHandler.Schematics.ELIXIR_EXTRACTOR.getName();
 
                 if (useWESchematic)
-                    schematic = new Schematic(Schematic.WorldEdit.getClipboard(Schematic.Schematics.ELIXIR_EXTRACTOR));
+                    schematic = new SchematicHandler(SchematicHandler.WorldEdit.getClipboard(SchematicHandler.Schematics.ELIXIR_EXTRACTOR));
                 else
-                    schematic = new Schematic(Schematic.load(Schematic.Schematics.ELIXIR_EXTRACTOR));
+                    schematic = new SchematicHandler(SchematicHandler.load(SchematicHandler.Schematics.ELIXIR_EXTRACTOR));
                 break;
             }
 

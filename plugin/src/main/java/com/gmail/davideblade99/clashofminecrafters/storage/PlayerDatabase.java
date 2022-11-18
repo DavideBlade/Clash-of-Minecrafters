@@ -6,8 +6,8 @@
 
 package com.gmail.davideblade99.clashofminecrafters.storage;
 
-import com.gmail.davideblade99.clashofminecrafters.Island;
-import com.gmail.davideblade99.clashofminecrafters.player.User;
+import com.gmail.davideblade99.clashofminecrafters.Village;
+import com.gmail.davideblade99.clashofminecrafters.User;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
 
 import javax.annotation.Nonnull;
@@ -51,7 +51,7 @@ public interface PlayerDatabase {
      * @since v3.0
      */
     @Nullable
-    Island getRandomIsland();
+    Village getRandomIsland();
 
     /**
      * Search for a random island among all the islands of players with a clan and who are not part of the clan
@@ -64,7 +64,7 @@ public interface PlayerDatabase {
      * @since v3.0
      */
     @Nullable
-    Island getRandomEnemyIsland(@Nonnull final String clanName);
+    Village getRandomEnemyIsland(@Nonnull final String clanName);
 
     /**
      * Retrieves all user data from the database

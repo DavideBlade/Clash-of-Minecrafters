@@ -4,22 +4,42 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.handler;
+package com.gmail.davideblade99.clashofminecrafters.schematic;
 
-import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
+import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
+import com.gmail.davideblade99.clashofminecrafters.util.FileUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
+import org.bukkit.World;
+import org.bukkit.plugin.Plugin;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FilenameFilter;
 
+/**
+ * Class responsible for the management of schematic
+ *
+ * @since v3.1.2
+ */
+//TODO: rimuovere dal config.yml la possibilità di scegliere se usare WorldEdit o il formato interno
+//TODO: adesso WorldEdit è richiesto, non è più una softdepend (aggiornar eplugin.yml + metodo in CoM.class che controlla le dipendenze)
+//TODO: aggiornare wiki con nuovo sistema
 public final class SchematicHandler {
 
     private final File schematicFolder;
 
-    public SchematicHandler(@Nonnull final CoM plugin) {
+    public SchematicHandler(@Nonnull final Plugin plugin) {
         this.schematicFolder = new File(plugin.getDataFolder(), "Schematics");
+    }
+
+    public void paste(@Nonnull final Schematics schematic, @Nonnull final World world, @Nonnull final Vector origin) throws PastingException {
+        final File schematicFile = getSchematicFile(schematic, ".schematic");
+        if (!schematicFile.exists()) //TODO: gestire il caso null
+            FileUtil.copyFile(schematic.getName() + ".schematic", schematicFile);
+
+        //TODO: switch per vari plugin alternativi a WE
+        new WESchematic(schematicFile).paste(world, origin);
     }
 
     @Nullable
@@ -44,7 +64,7 @@ public final class SchematicHandler {
     }
 
     @Nullable
-    public File getSchematicFile(@Nullable final Schematic.Schematics schematic, @Nullable final String schematicExtension) {
+    public File getSchematicFile(@Nullable final Schematics schematic, @Nullable final String schematicExtension) {
         //TODO: restituire direttamente new File(...)
 
         if (schematic == null || schematicExtension == null)

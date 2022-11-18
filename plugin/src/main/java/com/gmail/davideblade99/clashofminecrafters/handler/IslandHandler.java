@@ -7,12 +7,12 @@
 package com.gmail.davideblade99.clashofminecrafters.handler;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Island;
+import com.gmail.davideblade99.clashofminecrafters.Village;
 import com.gmail.davideblade99.clashofminecrafters.setting.Configuration;
 import com.gmail.davideblade99.clashofminecrafters.yaml.IslandConfiguration;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.exception.WorldBorderReachedException;
-import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
+import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicHandler;
 import com.gmail.davideblade99.clashofminecrafters.util.FileUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.SchematicUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size2D;
@@ -58,12 +58,12 @@ public final class IslandHandler {
     }
 
     @Nonnull
-    public Island generateIsland(@Nonnull final OfflinePlayer player) throws PastingException, WorldBorderReachedException {
-        final Schematic schematic;
+    public Village generateIsland(@Nonnull final OfflinePlayer player) throws PastingException, WorldBorderReachedException {
+        final SchematicHandler schematic;
         if (config.useIslandSchematic())
-            schematic = new Schematic(Schematic.WorldEdit.getClipboard(Schematic.Schematics.ISLAND));
+            schematic = new SchematicHandler(SchematicHandler.WorldEdit.getClipboard(SchematicHandler.Schematics.ISLAND));
         else
-            schematic = new Schematic(Schematic.load(Schematic.Schematics.ISLAND));
+            schematic = new SchematicHandler(SchematicHandler.load(SchematicHandler.Schematics.ISLAND));
 
         final IslandConfiguration islandStorage = new IslandConfiguration(islandDataFile);
         int x = islandStorage.getX();
@@ -93,7 +93,7 @@ public final class IslandHandler {
             throw new PastingException();
 
         // Create island
-        final Island island = new Island(player.getName(), spawn, origin, new Size2D(schematic.getSize()), new Size2D(this.expansions));
+        final Village island = new Village(player.getName(), spawn, origin, new Size2D(schematic.getSize()), new Size2D(this.expansions));
 
         // Save on file
         islandStorage.setX(x);

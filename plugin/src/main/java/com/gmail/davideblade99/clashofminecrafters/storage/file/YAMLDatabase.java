@@ -9,9 +9,9 @@ package com.gmail.davideblade99.clashofminecrafters.storage.file;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Currency;
 import com.gmail.davideblade99.clashofminecrafters.yaml.PlayerConfiguration;
-import com.gmail.davideblade99.clashofminecrafters.Island;
+import com.gmail.davideblade99.clashofminecrafters.Village;
 import com.gmail.davideblade99.clashofminecrafters.BuildingType;
-import com.gmail.davideblade99.clashofminecrafters.player.User;
+import com.gmail.davideblade99.clashofminecrafters.User;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
@@ -63,7 +63,7 @@ public final class YAMLDatabase implements PlayerDatabase {
     //TODO: è pesante (scorre tutti file, che dopo anni diventano tanti) -> va fatto in async
     @Nullable
     @Override
-    public Island getRandomIsland() {
+    public Village getRandomIsland() {
         final File[] listOfFiles = getPlayerFiles();
         if (listOfFiles == null || listOfFiles.length == 0)
             return null;
@@ -92,7 +92,7 @@ public final class YAMLDatabase implements PlayerDatabase {
             //TODO: notificare al giocatore
 
             // Island found
-            return new Island(playerName, spawn, origin, size, expansions);
+            return new Village(playerName, spawn, origin, size, expansions);
         }
 
         return null; // No island available
@@ -106,7 +106,7 @@ public final class YAMLDatabase implements PlayerDatabase {
     //TODO: è pesante (potrebbe scorre tutti file, che dopo anni diventano tanti) -> va fatto in async
     @Nullable
     @Override
-    public Island getRandomEnemyIsland(@Nonnull final String clanName) {
+    public Village getRandomEnemyIsland(@Nonnull final String clanName) {
         final File[] listOfFiles = getPlayerFiles();
         if (listOfFiles == null || listOfFiles.length == 0)
             return null;
@@ -139,7 +139,7 @@ public final class YAMLDatabase implements PlayerDatabase {
             //TODO: notificare al giocatore
 
             // Island found
-            return new Island(playerName, spawn, origin, size, expansions);
+            return new Village(playerName, spawn, origin, size, expansions);
         }
         return null; // No island available
     }
@@ -169,7 +169,7 @@ public final class YAMLDatabase implements PlayerDatabase {
         final Vector islandOrigin = conf.getIslandOrigin();
         final Size2D islandSize = conf.getIslandSize();
         final Size2D islandExpansions = conf.getIslandExpansions();
-        final Island island = islandSpawn != null && islandOrigin != null && islandSize != null && islandExpansions != null ? new Island(playerName, islandSpawn, islandOrigin, islandSize, islandExpansions) : null;
+        final Village island = islandSpawn != null && islandOrigin != null && islandSize != null && islandExpansions != null ? new Village(playerName, islandSpawn, islandOrigin, islandSize, islandExpansions) : null;
 
         final String timestamp = conf.getCollectionTime();
         final LocalDateTime collectionTime = timestamp == null ? null : LocalDateTime.parse(timestamp, CoM.DATE_FORMAT);
@@ -192,7 +192,7 @@ public final class YAMLDatabase implements PlayerDatabase {
         final int goldExtractorLevel = user.getBuildingLevel(BuildingType.GOLD_EXTRACTOR);
         final int archerLevel = user.getBuildingLevel(BuildingType.ARCHER_TOWER);
         final Vector towerPos = user.getTowerPos();
-        final Island island = user.getIsland();
+        final Village island = user.getIsland();
         final LocalDateTime collectionTime = user.getCollectionTime();
 
 

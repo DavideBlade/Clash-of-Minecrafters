@@ -8,7 +8,7 @@ package com.gmail.davideblade99.clashofminecrafters.listener.player;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.event.raid.RaidLostEvent;
-import com.gmail.davideblade99.clashofminecrafters.Island;
+import com.gmail.davideblade99.clashofminecrafters.Village;
 import com.gmail.davideblade99.clashofminecrafters.listener.IslandListener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -31,7 +31,7 @@ public final class PlayerDeath extends IslandListener {
         if (!isIslandWorld(player.getWorld()))
             return;
 
-        final Island island = plugin.getUser(player).getIsland();
+        final Village island = plugin.getUser(player).getIsland();
         if (island != null && !island.canBuildOnLocation(player.getLocation())) // If player dies out of own island
         {
             // Prevent the loss of inventory and exp
@@ -40,7 +40,7 @@ public final class PlayerDeath extends IslandListener {
         }
 
         // If player dies during a raid
-        final Island attackedIsland = plugin.getWarHandler().getAttackedIsland(player);
+        final Village attackedIsland = plugin.getWarHandler().getAttackedIsland(player);
         if (attackedIsland != null)
             Bukkit.getPluginManager().callEvent(new RaidLostEvent(player, attackedIsland.owner));
     }

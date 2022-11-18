@@ -4,16 +4,12 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.player;
+package com.gmail.davideblade99.clashofminecrafters;
 
-import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Currency;
 import com.gmail.davideblade99.clashofminecrafters.setting.Configuration;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.exception.WorldBorderReachedException;
-import com.gmail.davideblade99.clashofminecrafters.Island;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.BuildingSettings;
-import com.gmail.davideblade99.clashofminecrafters.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.ExtractorSettings;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
@@ -49,7 +45,7 @@ public final class User {
     private int goldExtractorLevel;
     private int archerLevel;
     private Vector archerLoc;
-    private Island island;
+    private Village island;
     private LocalDateTime collectionTime;
     private int townHallLevel;
 
@@ -464,7 +460,7 @@ public final class User {
     }
 
     @Nullable
-    public Island getIsland() {
+    public Village getIsland() {
         return island;
     }
 

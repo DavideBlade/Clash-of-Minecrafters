@@ -11,7 +11,7 @@ import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.Permissions;
 import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
-import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
+import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicHandler;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -51,7 +51,7 @@ public final class SchemCommand extends CommandFramework {
                 return;
             }
 
-            if (Schematic.save(args[7], Schematic.getBlocks(new Location(player.getWorld(), x1, y1, z1), new Location(player.getWorld(), x2, y2, z2))))
+            if (SchematicHandler.save(args[7], SchematicHandler.getBlocks(new Location(player.getWorld(), x1, y1, z1), new Location(player.getWorld(), x2, y2, z2))))
                 MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.SCHEMATIC_SAVED, args[7]));
             else
                 MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.SAVE_ERROR, args[7]));

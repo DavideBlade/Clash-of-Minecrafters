@@ -9,8 +9,8 @@ package com.gmail.davideblade99.clashofminecrafters.listener.player;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.event.raid.RaidLostEvent;
 import com.gmail.davideblade99.clashofminecrafters.listener.CoMListener;
-import com.gmail.davideblade99.clashofminecrafters.Island;
-import com.gmail.davideblade99.clashofminecrafters.player.User;
+import com.gmail.davideblade99.clashofminecrafters.Village;
+import com.gmail.davideblade99.clashofminecrafters.User;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,7 +32,7 @@ public final class PlayerQuit extends CoMListener {
         if (user.getIsland() == null)
             return;
 
-        final Island attackedIsland = plugin.getWarHandler().getAttackedIsland(player);
+        final Village attackedIsland = plugin.getWarHandler().getAttackedIsland(player);
         if (attackedIsland == null)
             return;
 
