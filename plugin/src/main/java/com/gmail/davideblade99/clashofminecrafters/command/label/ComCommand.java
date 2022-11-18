@@ -50,8 +50,6 @@ public final class ComCommand extends CommandFramework {
                             "§6-----------[§cCoM commands§6]-----------",
                             "§6/war state - §cCheck the state of clan war.",
                             "§6/trophies - §cCheck how many trophies you have.",
-                            "§6/schem save <x1> <y1> <z1> <x2> <y2> <z2> <schematic name>\n§cSave a schematic between these blocks.",
-                            "§6/schem list - §cList all available schematics.",
                             "§6/extractors - §cShow your own extractors info.",
                             "§6/extractors collect - §cCollects the extractors' production."
                     };

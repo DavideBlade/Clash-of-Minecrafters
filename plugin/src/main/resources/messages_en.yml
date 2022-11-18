@@ -75,8 +75,6 @@ Clan join usage: '&cUse /clan join <clan name>.'
 Clan create usage: '&cUse /clan create <clan name>.'
 Open command usage: '&cUse /open <shop> [player].'
 War command usage: '&cUse /war state.'
-Possible schem command usage: '&cUse /schem save or /schem list.'
-Schem save usage: '&cUse /schem save <x1> <y1> <z1> <x2> <y2> <z2> <schematic name>.'
 
 
 ############################################################
@@ -249,11 +247,5 @@ Tower not placed: '&cThe archer tower can only be placed inside your island!'
 # |                    SCHEMATIC PART                    | #
 # +------------------------------------------------------+ #
 ############################################################
-# When a player saves a schematic.
-Schematic saved: '&6The schematic %schem has been saved with success.'
 # When an error occurs while loading a schematic.
 Load error: '&cThe schematic %schem could not be loaded correctly.'
-# When an error occurs while saving a schematic.
-Save error: '&cThe schematic %schem could not be saved correctly.'
-# When a player uses the command /schem list without any schematic available.
-No schematic found: '&cNo schematic has been found.'

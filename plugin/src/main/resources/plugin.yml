@@ -43,9 +43,6 @@ commands:
   trophies:
     usage: /<command>
     description: "Check how many trophies you have."
-  schem:
-    usage: /<command> <list|save> [<x1> <y1> <z1> <x2> <y2> <z2> <schematic name>]
-    description: "Save a schematic between specified blocks or list all available schematics."
   extractors:
     usage: /<command> [collect]
     description: "Check the details of own extractors or collect what they have produced."
@@ -62,7 +59,6 @@ permissions:
       com.commands.clan.*: true
       com.commands.island.*: true
       com.commands.war.*: true
-      com.commands.schem.*: true
       com.command.raid: true
       com.command.balance: true
       com.command.open: true
@@ -89,11 +85,6 @@ permissions:
     description: Gives access to use all /war commands.
     children:
       com.command.war.state: true
-  com.commands.schem.*:
-    description: Gives access to use all /schem commands.
-    children:
-      com.command.schem.save: true
-      com.command.schem.list: true
   com.island.*:
     description: Gives access to build, drop, pick-up and interact with items or blocks in all islands.
     children:
@@ -155,12 +146,6 @@ permissions:
     default: op
   com.command.trophies:
     description: Gives access to use /trophies command.
-    default: op
-  com.command.schem.save:
-    description: Gives access to use /schem save command.
-    default: op
-  com.command.schem.list:
-    description: Gives access to use /schem list command.
     default: op
   com.command.extractors:
     description: Gives access to use /extractors command.

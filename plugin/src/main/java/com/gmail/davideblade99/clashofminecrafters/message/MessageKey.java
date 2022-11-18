@@ -44,8 +44,6 @@ public enum MessageKey {
     CLAN_CREATE_USAGE("Clan create usage"),
     OPEN_COMMAND_USAGE("Open command usage"),
     WAR_COMMAND_USAGE("War command usage"),
-    POSSIBLE_SCHEM_COMMANDS("Possible schem command usage"),
-    SCHEM_SAVE_USAGE("Schem save usage"),
 
     /* Clan section */
     CLAN_NOT_FOUND("Clan not found"),
@@ -123,10 +121,7 @@ public enum MessageKey {
     TOWER_NOT_PLACED("Tower not placed"),
 
     /* Schematic messages */
-    SCHEMATIC_SAVED("Schematic saved", "%schem"),
-    LOAD_ERROR("Load error", "%schem"),
-    SAVE_ERROR("Save error", "%schem"),
-    NO_SCHEMATIC_FOUND("No schematic found");
+    LOAD_ERROR("Load error", "%schem");
 
     private final String path;
     private final String[] tags;

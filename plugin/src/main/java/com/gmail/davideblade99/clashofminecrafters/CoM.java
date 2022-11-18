@@ -60,6 +60,7 @@ import java.util.UUID;
  *  Creare video dimostrativo
  *  Aggiungere boost risorse (temporaneo, es. di 1 ora): ogni volta che un giocatore boostato riceve delle risorse, queste vengono moltiplicate (es. anziché ricevere 10 trofei a seguito della vincita di un raid ne riceve 20)
  *  Aggiungere che alcuni livelli sono sbloccabili solo con determinati livelli del municipio (aggiornare wiki con il nuovo config.yml)
+ *  Sistemare permessi di default nel plugin.yml (per es. /trophies potrebbe essere eseguito dai giocatori senza problemi)
  *  Supporto per SQLite e MongoDB
  */
 

@@ -75,8 +75,6 @@ Clan join usage: '&cUsa /clan join <nome>'
 Clan create usage: '&cUsa /clan create <nome>'
 Open command usage: '&cUsa /open <shop> [giocatore]'
 War command usage: '&cUsa /war state'
-Possible schem command usage: '&cUsa /schem save o /schem list'
-Schem save usage: '&cUsa /schem save <x1> <y1> <z1> <x2> <y2> <z2> <nome schematic>'
 
 
 ############################################################
@@ -249,11 +247,5 @@ Tower not placed: '&cLa torre degli arcieri può essere posizionata solo dentro 
 # |                 PARTE DELLE SCHEMATIC                | #
 # +------------------------------------------------------+ #
 ############################################################
-# Quando un giocatore salva una schematic.
-Schematic saved: '&6La schematic %schem è stata salvata con successo.'
 # Quando si verifica un errore durante il caricamento di una schematic.
 Load error: '&cNon è stato possibile caricare correttamente la schematic %schem.'
-# Quando si verifica un errore durante il salvataggio di una schematic.
-Save error: '&cNon è stato possibile salvare correttamente la schematic %schem.'
-# Quando un giocatore usa il comando /schem list senza però nessuna schematic disponibile.
-No schematic found: '&cNon è stata trovata nessuna schematic.'

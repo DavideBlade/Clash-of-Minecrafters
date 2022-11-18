@@ -25,6 +25,8 @@ import java.io.FilenameFilter;
 //TODO: rimuovere dal config.yml la possibilità di scegliere se usare WorldEdit o il formato interno
 //TODO: adesso WorldEdit è richiesto, non è più una softdepend (aggiornar eplugin.yml + metodo in CoM.class che controlla le dipendenze)
 //TODO: aggiornare wiki con nuovo sistema
+//TODO: rimosso comando /schem e relativo permesso (scriverlo nelle note dell'aggiornamento e aggiornare wiki)
+//TODO: rimossi tutti i messaggi relativi alle schematic interne <- scriverlo nelle note dell'aggiornamento
 public final class SchematicHandler {
 
     private final File schematicFolder;
