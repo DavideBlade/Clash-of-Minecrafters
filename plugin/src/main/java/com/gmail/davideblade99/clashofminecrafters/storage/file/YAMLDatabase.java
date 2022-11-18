@@ -16,8 +16,8 @@ import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.collection.RandomItemExtractor;
-import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size2D;
-import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
+import com.gmail.davideblade99.clashofminecrafters.geometric.Size2D;
+import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import org.bukkit.Location;
 
 import javax.annotation.Nonnull;

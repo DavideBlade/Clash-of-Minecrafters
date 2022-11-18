@@ -9,7 +9,7 @@ package com.gmail.davideblade99.clashofminecrafters.storage.type.bean;
 import com.gmail.davideblade99.clashofminecrafters.Village;
 import com.gmail.davideblade99.clashofminecrafters.User;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
-import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
+import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 
 import javax.annotation.Nullable;
 import java.time.LocalDateTime;

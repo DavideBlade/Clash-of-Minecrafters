@@ -6,10 +6,10 @@
 
 package com.gmail.davideblade99.clashofminecrafters.schematic;
 
+import com.gmail.davideblade99.clashofminecrafters.exception.InvalidSchematicFormatException;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
-import com.gmail.davideblade99.clashofminecrafters.util.FileUtil;
-import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size3D;
-import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
+import com.gmail.davideblade99.clashofminecrafters.geometric.Size3D;
+import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
@@ -21,12 +21,13 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
-import org.bukkit.World;
+import org.bukkit.Location;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -38,24 +39,39 @@ public final class WESchematic implements Schematic {
 
     private final Clipboard clipboard; // Clipboard of the schematic
     private final Size3D size;
-    private Vector origin;
+    private Location origin;
 
-    public WESchematic(@Nonnull final File schematicFile) {
+    /**
+     * Creates a new instance of the class and loads the schematic
+     *
+     * @param schematicFile File containing the schematic
+     *
+     * @throws FileNotFoundException           If the schematic file does not exist
+     * @throws InvalidSchematicFormatException If the file format is not recognized by WorldEdit
+     * @throws IOException                     If WorldEdit throws an I/O exception
+     */
+    public WESchematic(@Nonnull final File schematicFile) throws FileNotFoundException, InvalidSchematicFormatException, IOException {
         this.clipboard = getClipboard(schematicFile);
 
         final BlockVector3 dimensions = clipboard.getDimensions();
         this.size = new Size3D(dimensions.getBlockX(), dimensions.getBlockY(), dimensions.getBlockZ());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Nonnull
     public Size3D getSize() {
         return this.size;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    @Nonnull
-    public Vector getOrigin() {
+    @Nullable
+    public Location getOrigin() {
         return this.origin;
     }
 
@@ -65,21 +81,18 @@ public final class WESchematic implements Schematic {
     }
 
     /**
-     * Paste the schematic from the specified position, facing north-east
-     *
-     * @param world  - is the world in which to paste the schematic.
-     * @param origin - is the {@code Location} where schematic should be past.
+     * {@inheritDoc}
      */
     //TODO: prendere spunto dai builder di WE (EditSessionBuilder & PasteBuilder)
     //TODO: prendere spunto da Vector3 e Vector2 di WE
     //TODO: prendere spunto da BukkitAdapter di WE (per passare dalle mie implementazioni a quelle di WE o a quelle di Bukkit)
     @Override
-    public void paste(@Nonnull final World world, @Nonnull final Vector origin) throws PastingException {
+    public void paste(@Nonnull final Location origin) throws PastingException {
         this.origin = origin;
 
-        final Vector adjustedOrigin = getPasteLocation(clipboard, origin);
+        final Vector adjustedOrigin = getPasteLocation(origin);
 
-        try (EditSession editSession = com.sk89q.worldedit.WorldEdit.getInstance().newEditSession(new BukkitWorld(world))) {
+        try (EditSession editSession = com.sk89q.worldedit.WorldEdit.getInstance().newEditSession(new BukkitWorld(origin.getWorld()))) {
             final Operation operation = new ClipboardHolder(clipboard).createPaste(editSession).to(BlockVector3.at(adjustedOrigin.getX(), adjustedOrigin.getY(), adjustedOrigin.getZ())).copyEntities(true).ignoreAirBlocks(false).build();
             Operations.complete(operation);
         } catch (final Exception e) {
@@ -96,26 +109,27 @@ public final class WESchematic implements Schematic {
     }
 
     /**
+     * <p>
      * Returns the position where the schematic is to be pasted so that it faces north-east and upwards from the
      * origin. In other words, this method ensures that the schematic is always placed in the same direction. If
-     * the {@code Location} origin were used directly to paste the schematic, it would be positioned from the
-     * origin, but in an unpredictable direction that would depend only on the position the player had when he
-     * copied/saved the schematic.
+     * the {@code origin} were used directly to paste the schematic, it would be positioned from the origin, but in
+     * an unpredictable direction that would depend only on the position the player had when he copied/saved the
+     * schematic.
+     * </p>
      * <p>
      * Example: when the schematic was copied/saved, the player was north-east of the structure (the construction
      * was therefore south-west of the player). If you paste in the origin without using this adjusted position,
      * the schematic will be pasted in the south-west direction, instead of always in the usual direction. This may
      * cause problems with overlapping islands.
+     * </p>
      *
-     * @param clipboard is the {@code Clipboard} of schematic.
-     * @param origin    is the {@code Vector} where schematic should be past.
+     * @param origin is the position where the schematic is to be pasted
      *
-     * @return the new position where the schematic is to be pasted.
+     * @return the new position where the schematic is to be pasted
      */
     @Nonnull
-    private Vector getPasteLocation(@Nonnull final Clipboard clipboard, @Nonnull final Vector origin) {
+    private Vector getPasteLocation(@Nonnull final Location origin) {
         final Vector adjustedLocation = new Vector(origin);
-
         final Region region = clipboard.getRegion();
         final BlockVector3 minimumPoint = region.getMinimumPoint();
 
@@ -125,45 +139,34 @@ public final class WESchematic implements Schematic {
         adjustedLocation.subtract(offset.getBlockX(), offset.getBlockY(), offset.getBlockZ()); // North-west corner
         adjustedLocation.subtract(0, 0, region.getMaximumPoint().subtract(minimumPoint).getBlockZ()); // South-west corner
 
-            /*TODO: rimuovere se inutili
-            final com.sk89q.worldedit.Vector min = BukkitUtil.toVector(origin.toBukkitLoc()).add(offset);
-            final com.sk89q.worldedit.Vector max = min.add(clipboard.getRegion().getMaximumPoint().subtract(clipboard.getRegion().getMinimumPoint()));
-            final com.sk89q.worldedit.Vector northEast = min.add(0, 0, clipboard.getRegion().getMaximumPoint().subtract(clipboard.getRegion().getMinimumPoint()).getZ());*/
-
         return adjustedLocation;
     }
 
     /**
-     * Obtain {@code CuboidClipboard} from specified file
+     * Load {@link Clipboard} from the schematic file
      *
-     * TODO
-     * //@param schematic - is the schematic from which will be got {@code CuboidClipboard}
+     * @param schematicFile - is the file which contains the schematic
      *
-     * @return {@code CuboidClipboard} obtained from specified file {@code Null} if schematic is {@code null} or if
-     * an exception has occurred
+     * @return The {@link Clipboard} obtained from specified file or {@code null} if the format of the schematic is
+     * invalid or an error occurred when reading the file
      *
-     * @since v2.0
+     * @throws FileNotFoundException           If the schematic file does not exist
+     * @throws InvalidSchematicFormatException If the file format is not recognized by WorldEdit
+     * @throws IOException                     If WorldEdit throws an I/O exception
      */
-    //TODO: non ha senso che i parametri siano Nullable?
-    @Nullable
-    private Clipboard getClipboard(@Nullable final File schematicFile) {
-        if (schematicFile == null)
-            return null;
-
-        //if (!schematicFile.exists()) //TODO: gestire il caso null
-            //FileUtil.copyFile(schematic.getName() + ".schematic", schematicFile); //TODO: queesto viene già fatto nel chiamante
+    @Nonnull
+    private Clipboard getClipboard(@Nonnull final File schematicFile) throws FileNotFoundException, InvalidSchematicFormatException, IOException {
+        if (!schematicFile.exists())
+            throw new FileNotFoundException("Schematic file does not exist");
 
         final ClipboardFormat format = ClipboardFormats.findByFile(schematicFile);
         if (format == null) {
-            //TODO: se il formato non è corretto? Invio sicuramente un messaggio di errore in console ma poi? Anche all'utente? devo poi chiaramente anche annullar l'operazione
-            return null;
+            throw new InvalidSchematicFormatException("Unrecognized format by WorldEdit");
+            //TODO: Invio sicuramente un messaggio di errore in console ma poi? Anche all'utente? devo poi chiaramente anche annullar l'operazione
         }
 
         try (ClipboardReader reader = format.getReader(new FileInputStream(schematicFile))) {
             return reader.read();
-        } catch (final IOException ignored) {
-            //TODO: non faccio nulla? Non invio alert né annullo operazioni?
-            return null;
         }
     }
 }

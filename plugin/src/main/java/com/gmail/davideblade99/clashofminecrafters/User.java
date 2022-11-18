@@ -17,7 +17,7 @@ import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ScoreboardUtil;
-import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
+import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.util.number.IntegerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -466,7 +466,7 @@ public final class User {
 
     public void createIsland() {
         try {
-            this.island = plugin.getIslandHandler().generateIsland(getBase());
+            this.island = plugin.getVillageHandler().generateIsland(getBase());
 
             plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
 

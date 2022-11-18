@@ -4,9 +4,10 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.util.geometric;
+package com.gmail.davideblade99.clashofminecrafters.geometric;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
@@ -70,6 +71,20 @@ public final class Vector implements Serializable {
     @Nonnull
     public org.bukkit.util.Vector toBukkitVector() {
         return new org.bukkit.util.Vector(x, y, z);
+    }
+
+    /**
+     * Gets a {@link Location} of {@code this} vector with yaw and pitch equal to 0.
+     *
+     * @param world The {@link World} to which to link the {@link Location}.
+     *
+     * @return a new location
+     *
+     * @since v3.1.2
+     */
+    @Nonnull
+    public Location toBukkitLocation(@Nullable final World world) {
+        return new Location(world, x, y, z);
     }
 
     /**

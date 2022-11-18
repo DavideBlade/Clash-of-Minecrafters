@@ -7,11 +7,11 @@
 package com.gmail.davideblade99.clashofminecrafters.schematic;
 
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
-import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size3D;
-import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
-import org.bukkit.World;
+import com.gmail.davideblade99.clashofminecrafters.geometric.Size3D;
+import org.bukkit.Location;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * <p>Interface that generically represents a schematic.</p>
@@ -19,13 +19,27 @@ import javax.annotation.Nonnull;
  *
  * @since v3.1.2
  */
-//TODO: javadoc metodi
 public interface Schematic {
 
-    //TODO: forse è meglio una Location?
-    void paste(@Nonnull final World world, @Nonnull final Vector origin) throws PastingException;
+    /**
+     * Paste the schematic from the specified position, facing north-east
+     *
+     * @param location Origin point where the schematic should be pasted
+     *
+     * @throws PastingException In case of error during schematic pasting
+     */
+    void paste(@Nonnull final Location location) throws PastingException;
 
+    /**
+     * @return The size of the schematic
+     */
+    @Nonnull
     Size3D getSize();
 
-    Vector getOrigin();
+    /**
+     * @return The origin position where the schematic has been pasted or {@code null} if the schematic has not yet
+     * been placed
+     */
+    @Nullable
+    Location getOrigin();
 }

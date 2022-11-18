@@ -96,7 +96,7 @@ public final class CoM extends JavaPlugin {
     private PlayerDatabase database;
     private PlayerHandler playerHandler;
     private ClanHandler clanHandler;
-    private IslandHandler islandHandler;
+    private VillageHandler villageHandler;
     private SchematicHandler schematicHandler;
     private WarHandler warHandler;
     private ArcherHandler archerHandler;
@@ -135,7 +135,7 @@ public final class CoM extends JavaPlugin {
             }
             playerHandler = new PlayerHandler(this);
             clanHandler = new ClanHandler(this);
-            islandHandler = new IslandHandler(this);
+            villageHandler = new VillageHandler(this);
             schematicHandler = new SchematicHandler(this);
             warHandler = new WarHandler(this);
             archerHandler = new ArcherHandler(this);
@@ -167,8 +167,8 @@ public final class CoM extends JavaPlugin {
 
             new Messages(this); // Setup messages files
 
-            // Create and save island file
-            setupIslandWorld();
+            // Create and save village world
+            setupVillageWorld();
 
 
             // Saves in cache players already online (possible in case of reload)
@@ -209,7 +209,7 @@ public final class CoM extends JavaPlugin {
         database = null;
         playerHandler = null;
         clanHandler = null;
-        islandHandler = null;
+        villageHandler = null;
         schematicHandler = null;
         warHandler = null;
         archerHandler = null;
@@ -240,8 +240,8 @@ public final class CoM extends JavaPlugin {
     }
 
     @Nonnull
-    public IslandHandler getIslandHandler() {
-        return islandHandler;
+    public VillageHandler getVillageHandler() {
+        return villageHandler;
     }
 
     @Nonnull
@@ -317,7 +317,7 @@ public final class CoM extends JavaPlugin {
         }
     }
 
-    private void setupIslandWorld() {
+    private void setupVillageWorld() {
         /*
          * "v1_14_R1" -> Server runs from 1.14.x
          * "v1_15_R1" -> Server runs from 1.15.x
@@ -339,6 +339,7 @@ public final class CoM extends JavaPlugin {
             throw new RuntimeException("Unknown server version: " + Bukkit.getServer().getClass().getPackage().getName());
         }
 
+        //TODO: cambiare il nome in "Villages"
         final World world = getServer().createWorld(new WorldCreator("Islands").generator(chunkGenerator)); // Load or create world
 
         // Setup world

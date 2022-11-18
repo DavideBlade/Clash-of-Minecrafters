@@ -4,7 +4,7 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.util.geometric;
+package com.gmail.davideblade99.clashofminecrafters.geometric;
 
 import javax.annotation.Nullable;
 import java.io.Serializable;
