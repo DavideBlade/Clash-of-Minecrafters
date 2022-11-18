@@ -3,10 +3,10 @@ package com.gmail.davideblade99.clashofminecrafters.schematic;
 import javax.annotation.Nonnull;
 
 public enum Schematics {
-    ISLAND("Island"),
+    ISLAND("Island"), //TODO: rinominarla "village"
     GOLD_EXTRACTOR("GoldExtractor"),
     ELIXIR_EXTRACTOR("ElixirExtractor"),
-    ARCHER("ArcherTower");
+    ARCHER_TOWER("ArcherTower");
 
 
     private final String name;

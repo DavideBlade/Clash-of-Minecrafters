@@ -6,7 +6,7 @@
 
 package com.gmail.davideblade99.clashofminecrafters.util;
 
-import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicHandler;
+import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -19,7 +19,7 @@ public final class SchematicUtil {
         throw new IllegalAccessError();
     }
 
-    public static Location getSpawnLocation(final SchematicHandler schematic, final World world) {
+    public static Location getSpawnLocation(final Schematic schematic, final World world) {
         final Point center = new Point(schematic.getOrigin().getX() + schematic.getSize().getWidth() / 2, schematic.getOrigin().getZ() - schematic.getSize().getLength() / 2);
         final Point position = new Point(center.x, center.y);
 
@@ -55,7 +55,7 @@ public final class SchematicUtil {
         return null;
     }
 
-    private static Integer isYValid(final SchematicHandler schematic, final Location loc) {
+    private static Integer isYValid(final Schematic schematic, final Location loc) {
         for (int y = schematic.getOrigin().getY(); y <= schematic.getOrigin().getY() + schematic.getSize().getHeight(); y++) {
             loc.setY(y);
             if (BukkitLocationUtil.isSafeLocation(loc))
@@ -65,7 +65,7 @@ public final class SchematicUtil {
         return null;
     }
 
-    private static Location checkSpawnLocation(final SchematicHandler schematic, final Point position, final byte direction,
+    private static Location checkSpawnLocation(final Schematic schematic, final Point position, final byte direction,
                                                final World world) {
         final Integer spawnLocation = isYValid(schematic, new Location(world, position.x, schematic.getOrigin().getY(), position.y, -180, 0));
 

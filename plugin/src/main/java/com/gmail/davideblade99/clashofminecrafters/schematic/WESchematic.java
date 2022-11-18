@@ -47,11 +47,13 @@ public final class WESchematic implements Schematic {
         this.size = new Size3D(dimensions.getBlockX(), dimensions.getBlockY(), dimensions.getBlockZ());
     }
 
+    @Override
     @Nonnull
     public Size3D getSize() {
         return this.size;
     }
 
+    @Override
     @Nonnull
     public Vector getOrigin() {
         return this.origin;
@@ -71,6 +73,7 @@ public final class WESchematic implements Schematic {
     //TODO: prendere spunto dai builder di WE (EditSessionBuilder & PasteBuilder)
     //TODO: prendere spunto da Vector3 e Vector2 di WE
     //TODO: prendere spunto da BukkitAdapter di WE (per passare dalle mie implementazioni a quelle di WE o a quelle di Bukkit)
+    @Override
     public void paste(@Nonnull final World world, @Nonnull final Vector origin) throws PastingException {
         this.origin = origin;
 
@@ -133,7 +136,8 @@ public final class WESchematic implements Schematic {
     /**
      * Obtain {@code CuboidClipboard} from specified file
      *
-     * @param schematic - is the schematic from which will be got {@code CuboidClipboard}
+     * TODO
+     * //@param schematic - is the schematic from which will be got {@code CuboidClipboard}
      *
      * @return {@code CuboidClipboard} obtained from specified file {@code Null} if schematic is {@code null} or if
      * an exception has occurred
@@ -146,8 +150,8 @@ public final class WESchematic implements Schematic {
         if (schematicFile == null)
             return null;
 
-        if (!schematicFile.exists()) //TODO: gestire il caso null
-            FileUtil.copyFile(schematic.getName() + ".schematic", schematicFile); //TODO: queesto viene già fatto nel chiamante
+        //if (!schematicFile.exists()) //TODO: gestire il caso null
+            //FileUtil.copyFile(schematic.getName() + ".schematic", schematicFile); //TODO: queesto viene già fatto nel chiamante
 
         final ClipboardFormat format = ClipboardFormats.findByFile(schematicFile);
         if (format == null) {

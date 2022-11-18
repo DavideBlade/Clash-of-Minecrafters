@@ -7,13 +7,9 @@
 package com.gmail.davideblade99.clashofminecrafters;
 
 import com.gmail.davideblade99.clashofminecrafters.Updater.ResponseHandler;
-import com.gmail.davideblade99.clashofminecrafters.handler.ClanHandler;
-import com.gmail.davideblade99.clashofminecrafters.handler.WarHandler;
 import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
 import com.gmail.davideblade99.clashofminecrafters.command.label.*;
-import com.gmail.davideblade99.clashofminecrafters.handler.IslandHandler;
-import com.gmail.davideblade99.clashofminecrafters.handler.ArcherHandler;
-import com.gmail.davideblade99.clashofminecrafters.handler.GuardianHandler;
+import com.gmail.davideblade99.clashofminecrafters.handler.*;
 import com.gmail.davideblade99.clashofminecrafters.listener.inventory.ShopClick;
 import com.gmail.davideblade99.clashofminecrafters.listener.island.AntiGrief;
 import com.gmail.davideblade99.clashofminecrafters.listener.player.*;
@@ -21,9 +17,8 @@ import com.gmail.davideblade99.clashofminecrafters.listener.raid.*;
 import com.gmail.davideblade99.clashofminecrafters.menu.holder.MenuInventoryHolder;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.handler.PlayerHandler;
 import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicHandler;
-import com.gmail.davideblade99.clashofminecrafters.setting.Configuration;
+import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
 import com.gmail.davideblade99.clashofminecrafters.storage.DatabaseFactory;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.sql.AbstractSQLDatabase;
@@ -97,7 +92,7 @@ public final class CoM extends JavaPlugin {
 
     private static CoM instance;
 
-    private Configuration settings;
+    private Settings settings;
     private PlayerDatabase database;
     private PlayerHandler playerHandler;
     private ClanHandler clanHandler;
@@ -131,7 +126,7 @@ public final class CoM extends JavaPlugin {
             }
 
             instance = this;
-            settings = new Configuration(this);
+            settings = new Settings(this);
             try {
                 database = DatabaseFactory.getInstance(this);
             } catch (final Exception ignored) {
@@ -166,9 +161,8 @@ public final class CoM extends JavaPlugin {
 
             playerHandler.loadUUIDMap();
 
-            // Check if WorldEdit is necessary
-            if (settings.useIslandSchematic() || settings.useElixirExtractorSchematic() || settings.useGoldExtractorSchematic() || settings.useArcherSchematic())
-                checkDependencies();
+            // Check for all dependencies
+            checkDependencies();
 
 
             new Messages(this); // Setup messages files
@@ -226,7 +220,7 @@ public final class CoM extends JavaPlugin {
 
     @Override
     @Nonnull
-    public Configuration getConfig() {
+    public Settings getConfig() {
         return settings;
     }
 
@@ -458,7 +452,6 @@ public final class CoM extends JavaPlugin {
     //TODO: i proprietari del clan possono impostare un minimo di trofei necessario affinché i giocatori possano unirsi al clan
 
     //TODO: rimpire per il 50% la cache con gli ultimi giocatori che sono entrati nel server (o meno, se non ne sono mai entrati così tanti)
-
 
 
     //TODO: quando possibile non usare questo metodo statico ma passare l'istanza col costruttore

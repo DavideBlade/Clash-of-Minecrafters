@@ -8,15 +8,15 @@ package com.gmail.davideblade99.clashofminecrafters.handler;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Village;
-import com.gmail.davideblade99.clashofminecrafters.setting.Configuration;
-import com.gmail.davideblade99.clashofminecrafters.yaml.IslandConfiguration;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.exception.WorldBorderReachedException;
-import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicHandler;
+import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
+import com.gmail.davideblade99.clashofminecrafters.schematic.Schematics;
 import com.gmail.davideblade99.clashofminecrafters.util.FileUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.SchematicUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size2D;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
+import com.gmail.davideblade99.clashofminecrafters.yaml.IslandConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -36,14 +36,14 @@ public final class IslandHandler {
     private final static int MAX_Z = -MIN_Z;
 
 
-    private final Configuration config;
+    private final CoM plugin;
     private final int expansions;
 
     public final File islandDataFile;
 
     public IslandHandler(@Nonnull final CoM plugin) {
-        this.config = plugin.getConfig();
-        this.expansions = config.getMaxExpansions() * 16;
+        this.plugin = plugin;
+        this.expansions = plugin.getConfig().getMaxExpansions() * 16;
         this.islandDataFile = new File(plugin.getDataFolder(), "island data.yml");
 
         // Setup storage
@@ -59,11 +59,7 @@ public final class IslandHandler {
 
     @Nonnull
     public Village generateIsland(@Nonnull final OfflinePlayer player) throws PastingException, WorldBorderReachedException {
-        final SchematicHandler schematic;
-        if (config.useIslandSchematic())
-            schematic = new SchematicHandler(SchematicHandler.WorldEdit.getClipboard(SchematicHandler.Schematics.ISLAND));
-        else
-            schematic = new SchematicHandler(SchematicHandler.load(SchematicHandler.Schematics.ISLAND));
+        final Schematic schematic = plugin.getSchematicHandler().getSchematic(Schematics.ISLAND);
 
         final IslandConfiguration islandStorage = new IslandConfiguration(islandDataFile);
         int x = islandStorage.getX();

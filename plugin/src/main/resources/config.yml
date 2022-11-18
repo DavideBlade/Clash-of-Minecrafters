@@ -30,14 +30,6 @@ Raid failure:
   Trophies lost: 15
 # Seconds after which the raid ends
 Raid timeout: 180
-# Islands' schematic should use WorldEdit?
-Island schematic: false
-# Elixir extractor's schematic should use WorldEdit?
-Elixir extractor schematic: false
-# Gold extractor's schematic should use WorldEdit?
-Gold extractor schematic: false
-# Archers tower's schematic should use WorldEdit?
-Archer schematic: false
 # How many players can stay in a clan?
 Max players per clan: 15
 # How many exp must receive the attacker's clan if raid has been successful?

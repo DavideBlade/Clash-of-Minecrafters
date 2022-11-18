@@ -8,7 +8,7 @@ package com.gmail.davideblade99.clashofminecrafters;
 
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.setting.Configuration;
+import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.collection.Sets;
 import com.gmail.davideblade99.clashofminecrafters.yaml.ClanConfiguration;
@@ -53,7 +53,7 @@ public final class Clan {
     }
 
     public void giveRaidExp() {
-        final Configuration config = plugin.getConfig();
+        final Settings config = plugin.getConfig();
         if (level >= config.getClanLevels()) // If the clan already has the highest level
             return;
 

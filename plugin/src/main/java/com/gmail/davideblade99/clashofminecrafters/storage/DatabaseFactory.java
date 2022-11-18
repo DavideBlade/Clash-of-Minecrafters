@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.storage;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.setting.Configuration;
+import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
 import com.gmail.davideblade99.clashofminecrafters.storage.file.YAMLDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.sql.mysql.MySQLDatabase;
 
@@ -36,7 +36,7 @@ public final class DatabaseFactory {
      */
     @Nonnull
     public static PlayerDatabase getInstance(@Nonnull final CoM plugin) throws SQLException {
-        final Configuration settings = plugin.getConfig();
+        final Settings settings = plugin.getConfig();
         switch (settings.getDatabaseType()) {
             case YAML:
                 return new YAMLDatabase(plugin);

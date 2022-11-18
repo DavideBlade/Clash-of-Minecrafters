@@ -36,7 +36,7 @@ import java.util.Map;
 //TODO: mi serve avere tutto in memoria? Le cose (pesanti, quindi non di certo un int o un boolean) che leggo 1 volta ogni mai posso andare a leggerle direttamente
 // la YamlConfiguration è già di per sè un posto dove memorizzare la roba; non c'è bisogno di rimemorizzarla con singoli campi
 //TODO: forse conviene che questa diventi la classe di Parsing, e poi ci sia una classe Settings o ConfigCache in cui ci sono tutti i campi (field) -> almeno la mappa in YamlConfiguration la svuoto
-public final class Configuration extends CoMYamlConfiguration {
+public final class Settings extends CoMYamlConfiguration {
 
     private final CoM plugin;
 
@@ -79,7 +79,7 @@ public final class Configuration extends CoMYamlConfiguration {
      */
     private final List<ClanSettings> clans; // // List containing various levels of clans
 
-    public Configuration(@Nonnull final CoM plugin) {
+    public Settings(@Nonnull final CoM plugin) {
         super(new File(plugin.getDataFolder(), "config.yml"));
 
         this.plugin = plugin;
@@ -367,22 +367,6 @@ public final class Configuration extends CoMYamlConfiguration {
 
     public int getMaxPlayerCacheCount() {
         return maxPlayerCacheCount;
-    }
-
-    public boolean useIslandSchematic() {
-        return super.getBoolean("Island schematic", false);
-    }
-
-    public boolean useElixirExtractorSchematic() {
-        return super.getBoolean("Elixir extractor schematic", false);
-    }
-
-    public boolean useGoldExtractorSchematic() {
-        return super.getBoolean("Gold extractor schematic", false);
-    }
-
-    public boolean useArcherSchematic() {
-        return super.getBoolean("Archer schematic", false);
     }
 
     /**

@@ -27,12 +27,18 @@ import java.io.FilenameFilter;
 //TODO: aggiornare wiki con nuovo sistema
 //TODO: rimosso comando /schem e relativo permesso (scriverlo nelle note dell'aggiornamento e aggiornare wiki)
 //TODO: rimossi tutti i messaggi relativi alle schematic interne <- scriverlo nelle note dell'aggiornamento
+//TODO: rimossa dal config.yml la parte che permetteva di scegliere tra WE e le schematic interne <- scriverlo nelle note dell'aggiornamento e aggiornare la wiki
 public final class SchematicHandler {
 
     private final File schematicFolder;
 
     public SchematicHandler(@Nonnull final Plugin plugin) {
         this.schematicFolder = new File(plugin.getDataFolder(), "Schematics");
+    }
+
+    public Schematic getSchematic(@Nonnull final Schematics schematic) {
+        //TODO
+        return null;
     }
 
     public void paste(@Nonnull final Schematics schematic, @Nonnull final World world, @Nonnull final Vector origin) throws PastingException {

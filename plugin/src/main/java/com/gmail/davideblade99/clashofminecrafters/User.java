@@ -6,7 +6,7 @@
 
 package com.gmail.davideblade99.clashofminecrafters;
 
-import com.gmail.davideblade99.clashofminecrafters.setting.Configuration;
+import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.exception.WorldBorderReachedException;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.BuildingSettings;
@@ -73,7 +73,7 @@ public final class User {
             if (!(base instanceof Player))
                 throw new IllegalStateException("Unable to create data for player who has never been on the server!");
 
-            final Configuration config = plugin.getConfig();
+            final Settings config = plugin.getConfig();
             this.gold = config.getStartingGold();
             this.elixir = config.getStartingElixir();
             this.gems = config.getStartingGems();
