@@ -31,7 +31,7 @@ public final class EntityCombust extends IslandListener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onEntityCombustBySun(final EntityCombustEvent event) {
         final Entity entity = event.getEntity();
-        if (!isIslandWorld(entity.getWorld()))
+        if (!isVillageWorld(entity.getWorld()))
             return;
         if (event instanceof EntityCombustByEntityEvent || event instanceof EntityCombustByBlockEvent)
             return;

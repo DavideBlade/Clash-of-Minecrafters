@@ -6,20 +6,19 @@
 
 package com.gmail.davideblade99.clashofminecrafters;
 
-import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.exception.WorldBorderReachedException;
-import com.gmail.davideblade99.clashofminecrafters.setting.bean.BuildingSettings;
-import com.gmail.davideblade99.clashofminecrafters.setting.bean.ExtractorSettings;
+import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
+import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
+import com.gmail.davideblade99.clashofminecrafters.setting.bean.BuildingSettings;
+import com.gmail.davideblade99.clashofminecrafters.setting.bean.ExtractorSettings;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ScoreboardUtil;
-import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.util.number.IntegerUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -306,6 +305,17 @@ public final class User {
     }
 
     /**
+     * Checks whether the player has unlocked at least one type of extractor
+     *
+     * @return True if the player owns at least one extractor, otherwise false
+     *
+     * @since v3.1.2
+     */
+    public boolean hasExtractor() {
+        return getBuilding(BuildingType.GOLD_EXTRACTOR) != null || getBuilding(BuildingType.ELIXIR_EXTRACTOR) != null;
+    }
+
+    /**
      * Gets the level unlocked by the player for the specified building
      *
      * @param type Type of building of which to obtain the level
@@ -330,9 +340,9 @@ public final class User {
     /**
      * @param type Type of construction to obtain
      *
-     * @return the {@link BuildingSettings} corresponding to the level the player has unlocked or {@code null} if the
-     * player has not unlocked the building or if the level is not found among the configured ones (this can happen
-     * if, for example, there is a configuration error or if levels have been deleted)
+     * @return the {@link BuildingSettings} corresponding to the level the player has unlocked or {@code null} if
+     * the player has not unlocked the building or if the level is not found among the configured ones (this can
+     * happen if, for example, there is a configuration error or if levels have been deleted)
      */
     @Nullable
     public BuildingSettings getBuilding(@Nonnull final BuildingType type) {
@@ -445,7 +455,7 @@ public final class User {
 
     @Nullable
     public Location getTowerLoc() {
-        return archerLoc == null ? null : new Location(Bukkit.getWorld("Islands"), archerLoc.getX(), archerLoc.getY(), archerLoc.getZ());
+        return archerLoc == null ? null : new Location(plugin.getVillageHandler().getVillageWorld(), archerLoc.getX(), archerLoc.getY(), archerLoc.getZ());
     }
 
     @Nullable

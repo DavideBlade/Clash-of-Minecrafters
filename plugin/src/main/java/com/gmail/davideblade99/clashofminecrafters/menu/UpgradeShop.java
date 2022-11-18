@@ -6,12 +6,10 @@
 
 package com.gmail.davideblade99.clashofminecrafters.menu;
 
-import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.BuildingType;
-import com.gmail.davideblade99.clashofminecrafters.menu.item.BaseItem;
-import com.gmail.davideblade99.clashofminecrafters.menu.item.UnclickableItem;
-import com.gmail.davideblade99.clashofminecrafters.menu.item.UpgradeMenuItem;
+import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.User;
+import com.gmail.davideblade99.clashofminecrafters.menu.item.*;
 import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -108,9 +106,20 @@ public final class UpgradeShop extends Menu {
             level = building == BuildingType.TOWN_HALL ? 1 : 0; // The base level of the town hall is 1 while for other buildings is 0
 
 
-        if (level < maxLevel)
-            return new UpgradeMenuItem(config.getBuilding(building, level + 1).getItem(plugin), slot, building);
-        else // Max level
+        if (level < maxLevel) {
+            switch (building) {
+                case TOWN_HALL:
+                    return new TownHallUpgradeItem(plugin, config.getBuilding(building, level + 1), slot);
+                case ARCHER_TOWER:
+                    return new ArcherTowerUpgradeItem(plugin, config.getBuilding(building, level + 1), slot);
+                case GOLD_EXTRACTOR:
+                    return new GoldExtractorUpgradeItem(plugin, config.getBuilding(building, level + 1), slot);
+                case ELIXIR_EXTRACTOR:
+                    return new ElixirExtractorUpgradeItem(plugin, config.getBuilding(building, level + 1), slot);
+                default:
+                    throw new IllegalStateException("Unexpected building type: " + building);
+            }
+        } else // Max level
         {
             final ItemStack item = config.getBuilding(building, level).getItem(plugin);
             final ItemMeta meta = item.getItemMeta();

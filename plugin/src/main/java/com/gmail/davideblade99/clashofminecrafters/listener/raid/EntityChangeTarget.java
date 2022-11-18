@@ -32,7 +32,7 @@ public final class EntityChangeTarget extends IslandListener {
     public void onEntityChangeTarget(final EntityTargetLivingEntityEvent event) {
         final Entity newTarget = event.getTarget();
         final Entity attacker = event.getEntity();
-        if (!isIslandWorld(attacker.getWorld())) // If target isn't in worlds of island
+        if (!isVillageWorld(attacker.getWorld())) // If target isn't in worlds of island
             return;
 
         if (attacker instanceof Skeleton) {

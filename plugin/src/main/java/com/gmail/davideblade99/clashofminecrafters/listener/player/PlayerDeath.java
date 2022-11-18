@@ -28,7 +28,7 @@ public final class PlayerDeath extends IslandListener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerDeath(final PlayerDeathEvent event) {
         final Player player = event.getEntity();
-        if (!isIslandWorld(player.getWorld()))
+        if (!isVillageWorld(player.getWorld()))
             return;
 
         final Village island = plugin.getUser(player).getIsland();

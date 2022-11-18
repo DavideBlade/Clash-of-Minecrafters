@@ -11,7 +11,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
@@ -23,8 +22,8 @@ public final class BukkitLocationUtil {
         throw new IllegalAccessError();
     }
 
-    public static boolean isSafeLocation(final Location loc) {
-        final World world = Bukkit.getWorld("Islands");
+    public static boolean isSafeLocation(@Nonnull final Location loc) {
+        final World world = loc.getWorld();
         final Block b0 = world.getBlockAt(loc.getBlockX(), loc.getBlockY() + 1, loc.getBlockZ());
         final Block b1 = world.getBlockAt(loc);
         final Block b2 = world.getBlockAt(loc.getBlockX(), loc.getBlockY() - 1, loc.getBlockZ());

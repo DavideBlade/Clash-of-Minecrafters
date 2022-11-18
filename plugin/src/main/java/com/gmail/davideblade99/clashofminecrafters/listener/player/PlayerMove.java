@@ -36,7 +36,7 @@ public final class PlayerMove extends IslandListener {
 
         final Location from = event.getFrom();
         final Location to = event.getTo();
-        if (!isIslandWorld(player.getWorld()))
+        if (!isVillageWorld(player.getWorld()))
             return;
         if (from.getBlockX() == to.getBlockX() && from.getBlockY() == to.getBlockY() && from.getBlockZ() == to.getBlockZ())
             return;

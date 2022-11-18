@@ -139,7 +139,7 @@ public final class CoM extends JavaPlugin {
             schematicHandler = new SchematicHandler(this);
             warHandler = new WarHandler(this);
             archerHandler = new ArcherHandler(this);
-            guardianHandler = new GuardianHandler();
+            guardianHandler = new GuardianHandler(this);
 
             registerListeners();
             registerCommands();
@@ -339,8 +339,7 @@ public final class CoM extends JavaPlugin {
             throw new RuntimeException("Unknown server version: " + Bukkit.getServer().getClass().getPackage().getName());
         }
 
-        //TODO: cambiare il nome in "Villages"
-        final World world = getServer().createWorld(new WorldCreator("Islands").generator(chunkGenerator)); // Load or create world
+        final World world = getServer().createWorld(new WorldCreator(VillageHandler.VILLAGE_WORLD_NAME).generator(chunkGenerator)); // Load or create world
 
         // Setup world
         world.setDifficulty(Difficulty.EASY);

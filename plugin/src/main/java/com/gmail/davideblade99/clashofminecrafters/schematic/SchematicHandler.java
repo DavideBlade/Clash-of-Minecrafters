@@ -34,6 +34,8 @@ import java.io.IOException;
 //TODO: rimossa dal config.yml la parte che permetteva di scegliere tra WE e le schematic interne <- scriverlo nelle note dell'aggiornamento e aggiornare la wiki
 //TODO: ottimizzato la creazione dei villaggi (incollamento delle schematic) <- scriverlo nelle note dell'aggiornamento
 //TODO: adesso la schematic dei villaggi si chiama "Village.schematic" invece di "Island.schematic" <- scriverlo nelle note di aggiornamento (e aggiornare wiki?)
+//TODO: adesso il mondo dei villaggi si chiama "Villages" invece di "Islands" <- note di aggiornamento + aggiornare wiki
+//TODO: ottimizzato l'upgrade delle building <- note di aggiornamento
 
 //TODO: questo handler dovrebbe andare insieme agli altri nell'altro package (questa nuova struttura dei pacchetti si ritiene sempre la scelta giusta?)
 public final class SchematicHandler {

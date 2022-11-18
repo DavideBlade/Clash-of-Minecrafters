@@ -25,16 +25,15 @@ import java.util.Map;
 
 public final class ArcherHandler {
 
+    private final Map<String, Skeleton> archers = new HashMap<>(); // <Owner, Archer>
     private final CoM plugin;
 
     public ArcherHandler(@Nonnull final CoM plugin) {
         this.plugin = plugin;
     }
 
-    private final Map<String, Skeleton> archers = new HashMap<>(); // <Owner, Archer>
-
     public void spawn(@Nullable final String playerOwner, final double damage, @Nonnull final Location loc) {
-        final Skeleton skeleton = (Skeleton) Bukkit.getWorld("Islands").spawnEntity(loc, EntityType.SKELETON);
+        final Skeleton skeleton = (Skeleton) plugin.getVillageHandler().getVillageWorld().spawnEntity(loc, EntityType.SKELETON);
         final EntityEquipment equip = skeleton.getEquipment();
         equip.setChestplate(new ItemStack(Material.GOLDEN_CHESTPLATE, 1));
         equip.setChestplateDropChance(0); // Prevent dropping of the chestplate

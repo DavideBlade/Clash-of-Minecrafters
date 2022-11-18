@@ -17,7 +17,7 @@ public abstract class IslandListener extends CoMListener {
         super(plugin);
     }
 
-    public final boolean isIslandWorld(@Nonnull final World world) {
-        return world.getName().equals("Islands");
+    public final boolean isVillageWorld(@Nonnull final World world) {
+        return plugin.getVillageHandler().isVillageWorld(world);
     }
 }

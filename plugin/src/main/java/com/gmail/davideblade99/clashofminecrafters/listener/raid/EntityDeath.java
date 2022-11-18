@@ -34,7 +34,7 @@ public final class EntityDeath extends IslandListener {
         final LivingEntity entityDeath = event.getEntity();
         if (!(entityDeath instanceof Zombie))
             return;
-        if (!isIslandWorld(entityDeath.getWorld()))
+        if (!isVillageWorld(entityDeath.getWorld()))
             return;
 
         final Zombie zombie = (Zombie) entityDeath;
@@ -61,7 +61,7 @@ public final class EntityDeath extends IslandListener {
         final LivingEntity entityDeath = event.getEntity();
         if (!(entityDeath instanceof Skeleton))
             return;
-        if (!isIslandWorld(entityDeath.getWorld()))
+        if (!isVillageWorld(entityDeath.getWorld()))
             return;
         if (!plugin.getArcherHandler().isArcher((Skeleton) entityDeath))
             return;

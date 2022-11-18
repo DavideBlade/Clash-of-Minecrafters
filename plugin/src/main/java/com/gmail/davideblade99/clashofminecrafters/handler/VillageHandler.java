@@ -30,6 +30,7 @@ import java.io.IOException;
 
 public final class VillageHandler {
 
+    public final static String VILLAGE_WORLD_NAME = "Villages";
     private final static short DISTANCE_BETWEEN_ISLANDS = 256; // For both x and z
 
     // World borders
@@ -81,7 +82,7 @@ public final class VillageHandler {
 
         // I move left for the width of the schematic and forward for expansions along z
         final Vector origin = new Vector(x, 65, z).subtract((schematic.getSize().getWidth() - 1) + expansions, 0, expansions);
-        final World world = Bukkit.getWorld("Islands");
+        final World world = getVillageWorld();
 
         // If the island, with its left-hand expansions, exceeds the maximum x
         if (origin.getX() - expansions <= MAX_X) {
@@ -111,5 +112,25 @@ public final class VillageHandler {
         islandStorage.save();
 
         return village;
+    }
+
+    /**
+     * @return The world containing players' villages
+     *
+     * @since v3.1.2
+     */
+    public World getVillageWorld() {
+        return Bukkit.getWorld(VILLAGE_WORLD_NAME);
+    }
+
+    /**
+     * @param world World to check
+     *
+     * @return True if the world passed as the parameter is the village world, otherwise false
+     *
+     * @since v3.1.2
+     */
+    public boolean isVillageWorld(@Nonnull final World world) {
+        return world.getName().equals(VILLAGE_WORLD_NAME);
     }
 }

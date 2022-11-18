@@ -7,6 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.handler;
 
 import com.gmail.davideblade99.clashofminecrafters.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.TownHallSettings;
 import com.gmail.davideblade99.clashofminecrafters.User;
 import org.bukkit.Bukkit;
@@ -27,6 +28,11 @@ import java.util.Map;
 public final class GuardianHandler {
 
     private final Map<String, Zombie> guardians = new HashMap<>(); // <Owner, Guardian>
+    private final CoM plugin;
+
+    public GuardianHandler(@Nonnull final CoM plugin) {
+        this.plugin = plugin;
+    }
 
     /**
      * Spawns the guardian of the specified player's island.
@@ -38,7 +44,7 @@ public final class GuardianHandler {
      * @since v3.1
      */
     public void spawn(@Nonnull final User owner, @Nonnull final String playerName, @Nonnull final Location loc) {
-        final Zombie zombie = (Zombie) Bukkit.getWorld("Islands").spawnEntity(loc, EntityType.ZOMBIE);
+        final Zombie zombie = (Zombie) plugin.getVillageHandler().getVillageWorld().spawnEntity(loc, EntityType.ZOMBIE);
 
         final TownHallSettings townHall = (TownHallSettings) owner.getBuilding(BuildingType.TOWN_HALL);
         if (townHall != null) // The town hall level may not exist

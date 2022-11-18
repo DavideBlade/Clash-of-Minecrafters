@@ -45,7 +45,7 @@ public final class AntiGrief extends IslandListener {
         final Player player = event.getPlayer();
         final Block block = event.getBlock();
 
-        if (!isIslandWorld(block.getWorld()))
+        if (!isVillageWorld(block.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "build"))
             return;
@@ -62,7 +62,7 @@ public final class AntiGrief extends IslandListener {
         final Player player = event.getPlayer();
         final Block block = event.getBlock();
 
-        if (!isIslandWorld(block.getWorld()))
+        if (!isVillageWorld(block.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "build"))
             return;
@@ -76,7 +76,7 @@ public final class AntiGrief extends IslandListener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onBurnBlock(final BlockBurnEvent event) {
-        if (!isIslandWorld(event.getBlock().getWorld()))
+        if (!isVillageWorld(event.getBlock().getWorld()))
             return;
 
         event.setCancelled(true);
@@ -84,7 +84,7 @@ public final class AntiGrief extends IslandListener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onBlockSpread(final BlockSpreadEvent event) {
-        if (!isIslandWorld(event.getSource().getWorld()) && !isIslandWorld(event.getBlock().getWorld()))
+        if (!isVillageWorld(event.getSource().getWorld()) && !isVillageWorld(event.getBlock().getWorld()))
             return;
 
         event.setCancelled(true);
@@ -100,7 +100,7 @@ public final class AntiGrief extends IslandListener {
         final Hanging hanging = event.getEntity();
         if (hanging.getType() != EntityType.ITEM_FRAME && hanging.getType() != EntityType.PAINTING)
             return;
-        if (!isIslandWorld(player.getWorld()))
+        if (!isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "build"))
             return;
@@ -121,7 +121,7 @@ public final class AntiGrief extends IslandListener {
         final Hanging hanging = event.getEntity();
         if (hanging.getType() != EntityType.ITEM_FRAME && hanging.getType() != EntityType.PAINTING)
             return;
-        if (!isIslandWorld(player.getWorld()))
+        if (!isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "build"))
             return;
@@ -135,7 +135,7 @@ public final class AntiGrief extends IslandListener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockPistonExtend(final BlockPistonExtendEvent event) {
-        if (!isIslandWorld(event.getBlock().getWorld()))
+        if (!isVillageWorld(event.getBlock().getWorld()))
             return;
 
         // If the piston moves blocks
@@ -145,7 +145,7 @@ public final class AntiGrief extends IslandListener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockPistonRetract(final BlockPistonRetractEvent event) {
-        if (!isIslandWorld(event.getBlock().getWorld()))
+        if (!isVillageWorld(event.getBlock().getWorld()))
             return;
         if (!event.isSticky())
             return;
@@ -164,7 +164,7 @@ public final class AntiGrief extends IslandListener {
         final Player player = (Player) event.getPlayer();
         if (!(invHolder instanceof Horse))
             return;
-        if (!isIslandWorld(player.getWorld()))
+        if (!isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
@@ -181,7 +181,7 @@ public final class AntiGrief extends IslandListener {
         final Player player = event.getPlayer();
         final Block block = event.getBlockClicked();
 
-        if (!isIslandWorld(player.getWorld()))
+        if (!isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
@@ -198,7 +198,7 @@ public final class AntiGrief extends IslandListener {
         final Player player = event.getPlayer();
         final Block block = event.getBlockClicked();
 
-        if (!isIslandWorld(player.getWorld()))
+        if (!isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
@@ -215,7 +215,7 @@ public final class AntiGrief extends IslandListener {
         final Player player = event.getPlayer();
         final Item item = event.getItemDrop();
 
-        if (!isIslandWorld(player.getWorld()))
+        if (!isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "drop"))
             return;
@@ -235,7 +235,7 @@ public final class AntiGrief extends IslandListener {
 
         if (block == null)
             return;
-        if (!isIslandWorld(player.getWorld()))
+        if (!isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
@@ -301,7 +301,7 @@ public final class AntiGrief extends IslandListener {
         final Player player = event.getPlayer();
         final Entity entity = event.getRightClicked();
 
-        if (!isIslandWorld(player.getWorld()))
+        if (!isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
@@ -320,7 +320,7 @@ public final class AntiGrief extends IslandListener {
         final Player player = event.getPlayer();
         final Entity clicked = event.getRightClicked();
 
-        if (!isIslandWorld(player.getWorld()))
+        if (!isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
@@ -337,7 +337,7 @@ public final class AntiGrief extends IslandListener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerDamageEntity(final EntityDamageByEntityEvent event) {
         final Entity target = event.getEntity();
-        if (!isIslandWorld(target.getWorld()))
+        if (!isVillageWorld(target.getWorld()))
             return;
         if (target.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
@@ -371,7 +371,7 @@ public final class AntiGrief extends IslandListener {
 
         final Item item = event.getItem();
         final Player player = (Player) entity;
-        if (!isIslandWorld(player.getWorld()))
+        if (!isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "pickup"))
             return;
@@ -389,7 +389,7 @@ public final class AntiGrief extends IslandListener {
         final Player player = event.getPlayer();
         final Entity entity = event.getEntity();
 
-        if (!isIslandWorld(player.getWorld()))
+        if (!isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
@@ -406,7 +406,7 @@ public final class AntiGrief extends IslandListener {
         final Entity damager = event.getAttacker();
         if (!(damager instanceof Player))
             return;
-        if (!isIslandWorld(damager.getWorld()))
+        if (!isVillageWorld(damager.getWorld()))
             return;
 
         final Player player = (Player) damager;
@@ -425,7 +425,7 @@ public final class AntiGrief extends IslandListener {
         final Entity entered = event.getEntered();
         if (!(entered instanceof Player))
             return;
-        if (!isIslandWorld(entered.getWorld()))
+        if (!isVillageWorld(entered.getWorld()))
             return;
 
         final Player player = (Player) entered;
@@ -444,7 +444,7 @@ public final class AntiGrief extends IslandListener {
         final LivingEntity exited = event.getExited();
         if (!(exited instanceof Player))
             return;
-        if (!isIslandWorld(exited.getWorld()))
+        if (!isVillageWorld(exited.getWorld()))
             return;
 
         final Player player = (Player) exited;

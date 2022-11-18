@@ -37,7 +37,7 @@ public final class EntityDamageByEntity extends IslandListener {
         final Entity target = event.getEntity();
         final Entity damager = event.getDamager();
 
-        if (!isIslandWorld(target.getWorld())) // If target isn't in worlds of island
+        if (!isVillageWorld(target.getWorld())) // If target isn't in worlds of island
             return;
         if (!(target instanceof Player)) // If target isn't a player
             return;
@@ -64,7 +64,7 @@ public final class EntityDamageByEntity extends IslandListener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onIslandCreatureDamaged(final EntityDamageByEntityEvent event) {
         final Entity target = event.getEntity();
-        if (!isIslandWorld(target.getWorld())) // If target isn't in worlds of island
+        if (!isVillageWorld(target.getWorld())) // If target isn't in worlds of island
             return;
 
         // Define attacker
