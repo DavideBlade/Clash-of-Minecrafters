@@ -389,7 +389,6 @@ public final class CoM extends JavaPlugin {
         CommandFramework.register(this, new ComCommand(this));
         CommandFramework.register(this, new WarCommand(this));
         CommandFramework.register(this, new TrophiesCommand(this));
-        CommandFramework.register(this, new SchemCommand(this));
         CommandFramework.register(this, new ExtractorsCommand(this));
     }
 
