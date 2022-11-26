@@ -26,13 +26,12 @@ import java.io.IOException;
  *
  * @since v3.1.2
  */
-//TODO: aggiornare wiki con nuovo sistema
-//TODO: rimosso comando /schem e relativo permesso (scriverlo nelle note dell'aggiornamento e aggiornare wiki)
+//TODO: rimosso comando /schem e relativo permesso (scriverlo nelle note dell'aggiornamento)
 //TODO: rimossi tutti i messaggi relativi alle schematic interne <- scriverlo nelle note dell'aggiornamento
-//TODO: rimossa dal config.yml la parte che permetteva di scegliere tra WE e le schematic interne <- scriverlo nelle note dell'aggiornamento e aggiornare la wiki
+//TODO: rimossa dal config.yml la parte che permetteva di scegliere tra WE e le schematic interne <- scriverlo nelle note dell'aggiornamento
 //TODO: ottimizzato la creazione dei villaggi (incollamento delle schematic) <- scriverlo nelle note dell'aggiornamento
-//TODO: adesso la schematic dei villaggi si chiama "Village.schematic" invece di "Island.schematic" <- scriverlo nelle note di aggiornamento (e aggiornare wiki?)
-//TODO: adesso il mondo dei villaggi si chiama "Villages" invece di "Islands" <- note di aggiornamento + aggiornare wiki
+//TODO: adesso la schematic dei villaggi si chiama "Village.schematic" invece di "Island.schematic" <- scriverlo nelle note di aggiornamento
+//TODO: adesso il mondo dei villaggi si chiama "Villages" invece di "Islands" <- note di aggiornamento
 //TODO: ottimizzato l'upgrade delle building <- note di aggiornamento
 
 //TODO: tag Git: https://www.atlassian.com/git/tutorials/inspecting-a-repository/git-tag#:~:text=Tags%20are%20ref's%20that%20point,no%20further%20history%20of%20commits.
@@ -50,7 +49,11 @@ public final class SchematicHandler {
         this.schematicFolder = new File(plugin.getDataFolder(), "Schematics");
     }
 
-    //TODO: invocarlo
+    /**
+     * Set the plugin that handles the schematic
+     *
+     * @param paster Paster plugin
+     */
     public void setSchematicPaster(@Nullable final SchematicPaster paster) {
         this.paster = paster;
     }
@@ -136,13 +139,13 @@ public final class SchematicHandler {
     }
 
     /**
-     * TODO
-     * @param schematic
-     * @return
+     * Search for a safe location in which to set the village spawn
      *
-     * @since v3.1.2
+     * @param schematic Schematic within which to look for a safe position
+     *
+     * @return The first location found or {@code null} if none is available
      */
-    //TODO: riguardare il metodo
+    @Nullable
     public static Location getSpawnLocation(@Nonnull final Schematic schematic) {
         final Point center = new Point(schematic.getOrigin().getBlockX() + schematic.getSize().getWidth() / 2, schematic.getOrigin().getBlockZ() - schematic.getSize().getLength() / 2);
         final Point position = new Point(center.x, center.y);
@@ -179,39 +182,8 @@ public final class SchematicHandler {
         return null;
     }
 
-    /**
-     * TODO
-     * @param schematic
-     * @param loc
-     * @return
-     *
-     * @since v3.1.2
-     */
-    //TODO: riguardare il metodo
-    private static Integer isYValid(final Schematic schematic, final Location loc) {
-        for (int y = schematic.getOrigin().getBlockY(); y <= schematic.getOrigin().getY() + schematic.getSize().getHeight(); y++) {
-            loc.setY(y);
-            if (BukkitLocationUtil.isSafeLocation(loc))
-                return y;
-        }
-
-        return null;
-    }
-
-    /**
-     * TODO
-     *
-     * @param schematic
-     * @param position
-     * @param direction
-     * @param world
-     * @return
-     *
-     * @since v3.1.2
-     */
-    //TODO: riguardare il metodo
-    private static Location checkSpawnLocation(final Schematic schematic, final Point position, final byte direction,
-                                               final World world) {
+    @Nullable
+    private static Location checkSpawnLocation(@Nonnull final Schematic schematic, @Nonnull final Point position, final byte direction, @Nonnull final World world) {
         final Integer spawnLocation = isYValid(schematic, new Location(world, position.x, schematic.getOrigin().getY(), position.y, -180, 0));
 
         if (spawnLocation == null) {
@@ -230,10 +202,21 @@ public final class SchematicHandler {
                     break;
 
                 default:
-                    throw new IllegalStateException("Unexpected value: " + direction);
+                    throw new IllegalStateException("Unexpected direction: " + direction);
             }
         } else
             return new Location(world, position.x, spawnLocation, position.y);
+
+        return null;
+    }
+
+    @Nullable
+    private static Integer isYValid(@Nonnull final Schematic schematic, @Nonnull final Location loc) {
+        for (int y = schematic.getOrigin().getBlockY(); y <= schematic.getOrigin().getY() + schematic.getSize().getHeight(); y++) {
+            loc.setY(y);
+            if (BukkitLocationUtil.isSafeLocation(loc))
+                return y;
+        }
 
         return null;
     }
