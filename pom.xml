@@ -21,7 +21,7 @@
 
         <spigot-api.version>1.14</spigot-api.version>
         <spigot-api.maven-version>${spigot-api.version}-R0.1-SNAPSHOT</spigot-api.maven-version>
-        <worldedit.version>7.2.12-SNAPSHOT</worldedit.version>
+        <worldedit.version>7.2.5-SNAPSHOT</worldedit.version>
     </properties>
 
     <modules>

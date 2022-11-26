@@ -26,16 +26,6 @@ import java.io.IOException;
  *
  * @since v3.1.2
  */
-//TODO: rimosso comando /schem e relativo permesso (scriverlo nelle note dell'aggiornamento)
-//TODO: rimossi tutti i messaggi relativi alle schematic interne <- scriverlo nelle note dell'aggiornamento
-//TODO: rimossa dal config.yml la parte che permetteva di scegliere tra WE e le schematic interne <- scriverlo nelle note dell'aggiornamento
-//TODO: ottimizzato la creazione dei villaggi (incollamento delle schematic) <- scriverlo nelle note dell'aggiornamento
-//TODO: adesso la schematic dei villaggi si chiama "Village.schematic" invece di "Island.schematic" <- scriverlo nelle note di aggiornamento
-//TODO: adesso il mondo dei villaggi si chiama "Villages" invece di "Islands" <- note di aggiornamento
-//TODO: ottimizzato l'upgrade delle building <- note di aggiornamento
-
-//TODO: tag Git: https://www.atlassian.com/git/tutorials/inspecting-a-repository/git-tag#:~:text=Tags%20are%20ref's%20that%20point,no%20further%20history%20of%20commits.
-
 //TODO: questo handler dovrebbe andare insieme agli altri nell'altro package (questa nuova struttura dei pacchetti si ritiene sempre la scelta giusta?)
 public final class SchematicHandler {
 
@@ -81,7 +71,7 @@ public final class SchematicHandler {
 
         final File schematicFile = getSchematicFile(schematic);
         if (!schematicFile.exists())
-            FileUtil.copyFile(schematic.getName(), schematicFile);
+            FileUtil.copyFile(schematic.getName() + SCHEMATIC_EXTENSION, schematicFile);
 
         switch (paster) {
             case WORLEDIT:

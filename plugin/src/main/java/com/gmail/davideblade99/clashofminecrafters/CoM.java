@@ -18,6 +18,7 @@ import com.gmail.davideblade99.clashofminecrafters.menu.holder.MenuInventoryHold
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicHandler;
+import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicPaster;
 import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
 import com.gmail.davideblade99.clashofminecrafters.storage.DatabaseFactory;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
@@ -361,7 +362,7 @@ public final class CoM extends JavaPlugin {
         world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false);
 
 
-        MessageUtil.sendInfo("World of islands has been loaded.");
+        MessageUtil.sendInfo("World of villages has been loaded.");
     }
 
     private void checkDependencies() {
@@ -370,7 +371,10 @@ public final class CoM extends JavaPlugin {
             MessageUtil.sendError("WorldEdit should handle the schematic(s) but it isn't enabled.");
             MessageUtil.sendError("Clash of minecrafters " + getDescription().getVersion() + " was disabled.");
             disablePlugin();
+            return;
         }
+
+        schematicHandler.setSchematicPaster(SchematicPaster.WORLEDIT);
     }
 
     private void registerCommands() {
