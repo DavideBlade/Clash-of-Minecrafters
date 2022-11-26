@@ -95,6 +95,7 @@ public final class UpgradeShop extends Menu {
     private static BaseItem createBuildingItem(@Nonnull final CoM plugin, @Nonnull final BuildingType building, int level, final byte slot) {
         final Settings config = plugin.getConfig();
 
+        //TODO: usare max() anziché considerarlo come livello 0 -> meno problemi e più ragionevole -> metterlo nel get() visto che è condiviso tra tutti
         /*
          * If any player has a level higher than the current maximum level
          * (e.g., some levels have been removed from the config.yml),

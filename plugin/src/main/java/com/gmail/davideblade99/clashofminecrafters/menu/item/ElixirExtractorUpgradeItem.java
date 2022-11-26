@@ -4,19 +4,18 @@ import com.gmail.davideblade99.clashofminecrafters.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Currency;
 import com.gmail.davideblade99.clashofminecrafters.User;
-import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
+import com.gmail.davideblade99.clashofminecrafters.exception.InvalidSchematicFormatException;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
 import com.gmail.davideblade99.clashofminecrafters.schematic.Schematics;
-import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.BuildingSettings;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
+import java.io.FileNotFoundException;
 
 /**
  * Represents the item used to upgrade elixir extractors
@@ -35,27 +34,16 @@ public final class ElixirExtractorUpgradeItem extends UpgradeMenuItem {
     /**
      * {@inheritDoc}
      */
-    //TODO: riguardare metodo
     @Override
     public void onClick(@Nonnull final CoM plugin, @Nonnull final Player clicker) {
-        final Settings config = plugin.getConfig();
         final World villageWorld = plugin.getVillageHandler().getVillageWorld();
         final Vector origin = new Vector(clicker.getLocation());
         final User user = plugin.getUser(clicker);
 
-        //TODO: usare max() anziché considerarlo come livello 0 -> meno problemi e più ragionevole
-        /*
-         * If any player has a level higher than the current maximum level
-         * (e.g., some levels have been removed from the config.yml),
-         * they are treated as if they have not purchased any upgrades
-         * and must therefore start over.
-         */
-        int currentLevel = nextBuilding.level - 1;
-        if (currentLevel > config.getMaxLevel(BuildingType.ELIXIR_EXTRACTOR))
-            currentLevel = 0;
-
-        // Check if player have money to upgrade
+        final int currentLevel = nextBuilding.level - 1;
         final int nextLevel = currentLevel + 1;
+
+        // Check if player has money to upgrade
         if (!user.hasMoneyToUpgrade(nextLevel, BuildingType.ELIXIR_EXTRACTOR)) {
             final Currency currency = nextBuilding.currency;
             final String currencyTranslation;
@@ -103,13 +91,23 @@ public final class ElixirExtractorUpgradeItem extends UpgradeMenuItem {
                 return;
             }
 
-            final Schematic schematic = plugin.getSchematicHandler().getSchematic(Schematics.ELIXIR_EXTRACTOR);
-
             // Paste schematic
             try {
-                schematic.paste(origin.toBukkitLocation(villageWorld));
-            } catch (final PastingException ignored) {
+                plugin.getSchematicHandler().paste(Schematics.ELIXIR_EXTRACTOR, origin.toBukkitLocation(villageWorld));
+            } catch (final FileNotFoundException e) {
                 MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.LOAD_ERROR, Schematics.ELIXIR_EXTRACTOR.getName()));
+                MessageUtil.sendError("It seems that the schematic within the .jar is missing. Download the plugin again.");
+                //TODO: file di log
+                return;
+            } catch (final InvalidSchematicFormatException e) {
+                MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.LOAD_ERROR, Schematics.ELIXIR_EXTRACTOR.getName()));
+                MessageUtil.sendError("It seems that the schematic format is invalid. They may not be up to date: create them again by checking for version matches.");
+                //TODO: file di log
+                return;
+            } catch (final Exception e) {
+                MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.LOAD_ERROR, Schematics.ELIXIR_EXTRACTOR.getName()));
+                MessageUtil.sendError("A generic error occurred in reading the schematic file.");
+                //TODO: file di log
                 return;
             }
 

@@ -45,9 +45,11 @@ import java.util.UUID;
 /* TODO list:
  *  Aggiungere supporto ad AsyncWorldEdit e FastAsyncWorldEdit + rimuovere il mio formato interno (beta da questo punto in poi) -> aggiornare wiki
  *  Aggiungere comando /com upgrade <NomeStruttura> (permesso: clashofminecrafters.command.?) così che possano essere utilizzati in GUI custom create con altri plugin come ChestCommands -> Grazie a https://www.spigotmc.org/members/fede1132.118978/
+ *  Tempi configurabili per l'inizio e la durata della guerra
  *  Supporto per PlaceholderAPI + rendere disabilitabile scoreboard dal config
  *  Tab completer -> vedi FullCloak
  *  Aggiungere tempo massimo al raid
+ *  Preview della zona in cui verrebbe incollata la schematic (interfaccia Placeable)
  *  Rank in base ai trofei (come le leghe)
  *  Anche il difensore in un raid vince o perde i trofei
  *  API
