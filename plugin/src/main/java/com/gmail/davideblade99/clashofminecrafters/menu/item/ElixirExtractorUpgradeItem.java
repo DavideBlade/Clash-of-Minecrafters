@@ -65,23 +65,6 @@ public final class ElixirExtractorUpgradeItem extends UpgradeMenuItem {
             return;
         }
 
-        /*
-         * Before increasing the level, collect what the extractors were storing.
-         * This prevents calculation of the extractor's production from the last collection
-         * with the parameters of the next level.
-         * Example:
-         * the player collected 10 hours ago and his extractor produces 100 units per hour.
-         * So it has produced 1000 units so far. The next level produces 200 units per hour.
-         * If collecting is not done now, 2000 units would be the result when computing the resources produced.
-         */
-        user.collectExtractors();
-        /*
-         * Notifies resource collection only if the player already had an extractor
-         * (if he is buying the first one, there is nothing to collect)
-         */
-        if (user.hasBuilding(BuildingType.ELIXIR_EXTRACTOR))
-            MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.COLLECTED_RESOURCES));
-
 
         // If the level is 0 it means that the player has not unlocked the building
         if (currentLevel <= 0) {
@@ -113,6 +96,23 @@ public final class ElixirExtractorUpgradeItem extends UpgradeMenuItem {
 
             MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.EXTRACTOR_PLACED));
         }
+
+        /*
+         * Before increasing the level, collect what the extractors were storing.
+         * This prevents calculation of the extractor's production from the last collection
+         * with the parameters of the next level.
+         * Example:
+         * the player collected 10 hours ago and his extractor produces 100 units per hour.
+         * So it has produced 1000 units so far. The next level produces 200 units per hour.
+         * If collecting is not done now, 2000 units would be the result when computing the resources produced.
+         */
+        user.collectExtractors();
+        /*
+         * Notifies resource collection only if the player already had an extractor
+         * (if he is buying the first one, there is nothing to collect)
+         */
+        if (user.hasBuilding(BuildingType.ELIXIR_EXTRACTOR))
+            MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.COLLECTED_RESOURCES));
 
         user.upgradeBuilding(BuildingType.ELIXIR_EXTRACTOR);
     }
