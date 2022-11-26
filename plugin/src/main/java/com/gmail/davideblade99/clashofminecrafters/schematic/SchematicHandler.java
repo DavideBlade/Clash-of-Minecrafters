@@ -37,6 +37,8 @@ import java.io.IOException;
 //TODO: adesso il mondo dei villaggi si chiama "Villages" invece di "Islands" <- note di aggiornamento + aggiornare wiki
 //TODO: ottimizzato l'upgrade delle building <- note di aggiornamento
 
+//TODO: tag Git: https://www.atlassian.com/git/tutorials/inspecting-a-repository/git-tag#:~:text=Tags%20are%20ref's%20that%20point,no%20further%20history%20of%20commits.
+
 //TODO: questo handler dovrebbe andare insieme agli altri nell'altro package (questa nuova struttura dei pacchetti si ritiene sempre la scelta giusta?)
 public final class SchematicHandler {
 
@@ -68,7 +70,7 @@ public final class SchematicHandler {
      * @throws IllegalArgumentException        If the {@link #paster}, set with {@link #setSchematicPaster(SchematicPaster)},
      *                                         is not recognized
      * @throws FileNotFoundException           If the schematic file cannot be found in the .jar
-     * @throws InvalidSchematicFormatException If the file format is not recognized by {@code paster}
+     * @throws InvalidSchematicFormatException If the file format is not recognized by {@link #paster}
      * @throws IOException                     If WorldEdit throws an I/O exception
      */
     @Nonnull
@@ -97,7 +99,7 @@ public final class SchematicHandler {
      *
      * @throws PastingException                In case of error during schematic pasting
      * @throws FileNotFoundException           If the schematic file cannot be found in the .jar
-     * @throws InvalidSchematicFormatException If the file format is not recognized by {@code paster}
+     * @throws InvalidSchematicFormatException If the file format is not recognized by {@link #paster}
      * @throws IOException                     If WorldEdit throws an I/O exception
      */
     public void paste(@Nonnull final Schematics schematic, @Nonnull final Location location) throws PastingException, FileNotFoundException, InvalidSchematicFormatException, IOException {
