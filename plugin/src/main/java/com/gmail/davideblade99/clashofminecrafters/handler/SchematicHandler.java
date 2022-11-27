@@ -11,7 +11,6 @@ import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
 import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicPaster;
 import com.gmail.davideblade99.clashofminecrafters.schematic.Schematics;
-import com.gmail.davideblade99.clashofminecrafters.schematic.WESchematic;
 import com.gmail.davideblade99.clashofminecrafters.util.FileUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
 import org.bukkit.Location;
@@ -26,8 +25,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
- * Class responsible for the management of schematic
+ * Class responsible for managing schematics through the use of external plugins (such as WorldEdit)
  *
+ * @see SchematicPaster
+ * @see Schematic
+ * @see Schematics
  * @since v3.1.2
  */
 public final class SchematicHandler {
@@ -38,6 +40,12 @@ public final class SchematicHandler {
     private final File schematicFolder;
     private SchematicPaster paster;
 
+    /**
+     * Create a new instance of this class
+     *
+     * @param plugin Plugin in whose {@link Plugin#getDataFolder()} look for the "Schematics" folder containing the
+     *               schematics
+     */
     public SchematicHandler(@Nonnull final Plugin plugin) {
         this.schematicFolder = new File(plugin.getDataFolder(), "Schematics");
     }
@@ -76,13 +84,7 @@ public final class SchematicHandler {
         if (!schematicFile.exists())
             FileUtil.copyFile(schematic.getName() + SCHEMATIC_EXTENSION, schematicFile);
 
-        switch (paster) {
-            case WORLEDIT:
-                return new WESchematic(schematicFile);
-
-            default:
-                throw new IllegalArgumentException("Unexpected paster: " + paster);
-        }
+        return paster.getSchematic(schematicFile);
     }
 
     /**

@@ -7,6 +7,7 @@ description: ${project.description}
 load: POSTWORLD
 website: https://www.spigotmc.org/resources/clash-of-minecrafters.31180/
 depend: [WorldEdit]
+softdepend: [AsyncWorldEdit]
 commands:
   com:
     usage: /<command> [help] [page]

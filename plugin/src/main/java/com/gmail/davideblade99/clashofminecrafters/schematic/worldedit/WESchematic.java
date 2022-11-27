@@ -4,13 +4,15 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.schematic;
+package com.gmail.davideblade99.clashofminecrafters.schematic.worldedit;
 
 import com.gmail.davideblade99.clashofminecrafters.exception.InvalidSchematicFormatException;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Size3D;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
+import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
 import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
@@ -33,13 +35,14 @@ import java.io.IOException;
 /**
  * Class representing the schematic of WorldEdit
  *
- * @since v3.1.2
+ * @since v3.1.3
  */
-public final class WESchematic implements Schematic {
+//TODO: https://gist.github.com/aikar/105311fd5d77e488bc6ec3e65872681f#file-worldedithelper-java-L82
+public class WESchematic implements Schematic {
 
-    private final Clipboard clipboard; // Clipboard of the schematic
-    private final Size3D size;
-    private Location origin;
+    protected final Clipboard clipboard; // Clipboard of the schematic
+    protected final Size3D size;
+    protected Location origin;
 
     /**
      * Creates a new instance of the class and loads the schematic
@@ -62,7 +65,7 @@ public final class WESchematic implements Schematic {
      */
     @Override
     @Nonnull
-    public Size3D getSize() {
+    public final Size3D getSize() {
         return this.size;
     }
 
@@ -71,13 +74,13 @@ public final class WESchematic implements Schematic {
      */
     @Override
     @Nullable
-    public Location getOrigin() {
+    public final Location getOrigin() {
         return this.origin;
     }
 
     @Override
     public String toString() {
-        return "Type: [WorldEdit], origin: [" + origin.toString() + "], size: [" + size.toString() + "]";
+        return "Type: [WorldEdit], origin: [" + (origin == null ? "not set" : origin.toString()) + "], size: [" + size.toString() + "]";
     }
 
     /**
@@ -92,8 +95,13 @@ public final class WESchematic implements Schematic {
 
         final Vector adjustedOrigin = getPasteLocation(origin);
 
-        try (EditSession editSession = com.sk89q.worldedit.WorldEdit.getInstance().newEditSession(new BukkitWorld(origin.getWorld()))) {
-            final Operation operation = new ClipboardHolder(clipboard).createPaste(editSession).to(BlockVector3.at(adjustedOrigin.getX(), adjustedOrigin.getY(), adjustedOrigin.getZ())).copyEntities(true).ignoreAirBlocks(false).build();
+        try (EditSession editSession = WorldEdit.getInstance().newEditSession(new BukkitWorld(origin.getWorld()))) {
+            editSession.setReorderMode(EditSession.ReorderMode.MULTI_STAGE);
+            final Operation operation = new ClipboardHolder(clipboard).createPaste(editSession)
+                    .to(BlockVector3.at(adjustedOrigin.getX(), adjustedOrigin.getY(), adjustedOrigin.getZ()))
+                    .copyEntities(true)
+                    .ignoreAirBlocks(false)
+                    .build();
             Operations.complete(operation);
         } catch (final Exception e) {
             e.printStackTrace();
@@ -128,7 +136,7 @@ public final class WESchematic implements Schematic {
      * @return the new position where the schematic is to be pasted
      */
     @Nonnull
-    private Vector getPasteLocation(@Nonnull final Location origin) {
+    protected final Vector getPasteLocation(@Nonnull final Location origin) {
         final Vector adjustedLocation = new Vector(origin);
         final Region region = clipboard.getRegion();
         final BlockVector3 minimumPoint = region.getMinimumPoint();

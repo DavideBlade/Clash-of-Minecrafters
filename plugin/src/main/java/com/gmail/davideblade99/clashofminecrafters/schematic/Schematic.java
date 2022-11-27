@@ -17,6 +17,7 @@ import javax.annotation.Nullable;
  * <p>Interface that generically represents a schematic.</p>
  * <p>Each class that implements this interface should represent a schematic for a different plugin.</p>
  *
+ * @see SchematicPaster
  * @since v3.1.2
  */
 public interface Schematic {
