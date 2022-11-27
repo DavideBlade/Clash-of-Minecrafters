@@ -17,7 +17,7 @@ import com.gmail.davideblade99.clashofminecrafters.listener.raid.*;
 import com.gmail.davideblade99.clashofminecrafters.menu.holder.MenuInventoryHolder;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicHandler;
+import com.gmail.davideblade99.clashofminecrafters.handler.SchematicHandler;
 import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicPaster;
 import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
 import com.gmail.davideblade99.clashofminecrafters.storage.DatabaseFactory;

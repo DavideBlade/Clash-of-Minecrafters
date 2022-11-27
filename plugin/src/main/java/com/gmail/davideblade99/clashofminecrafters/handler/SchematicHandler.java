@@ -4,10 +4,14 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.schematic;
+package com.gmail.davideblade99.clashofminecrafters.handler;
 
 import com.gmail.davideblade99.clashofminecrafters.exception.InvalidSchematicFormatException;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
+import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
+import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicPaster;
+import com.gmail.davideblade99.clashofminecrafters.schematic.Schematics;
+import com.gmail.davideblade99.clashofminecrafters.schematic.WESchematic;
 import com.gmail.davideblade99.clashofminecrafters.util.FileUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
 import org.bukkit.Location;
@@ -26,7 +30,6 @@ import java.io.IOException;
  *
  * @since v3.1.2
  */
-//TODO: questo handler dovrebbe andare insieme agli altri nell'altro package (questa nuova struttura dei pacchetti si ritiene sempre la scelta giusta?)
 public final class SchematicHandler {
 
     private final static String SCHEMATIC_EXTENSION = ".schematic";

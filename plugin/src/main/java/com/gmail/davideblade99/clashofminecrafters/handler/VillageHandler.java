@@ -14,7 +14,6 @@ import com.gmail.davideblade99.clashofminecrafters.exception.WorldBorderReachedE
 import com.gmail.davideblade99.clashofminecrafters.geometric.Size2D;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
-import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicHandler;
 import com.gmail.davideblade99.clashofminecrafters.schematic.Schematics;
 import com.gmail.davideblade99.clashofminecrafters.util.FileUtil;
 import com.gmail.davideblade99.clashofminecrafters.yaml.IslandConfiguration;
