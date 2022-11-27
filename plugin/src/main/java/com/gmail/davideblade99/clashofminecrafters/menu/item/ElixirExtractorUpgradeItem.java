@@ -5,16 +5,19 @@ import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Currency;
 import com.gmail.davideblade99.clashofminecrafters.User;
 import com.gmail.davideblade99.clashofminecrafters.exception.InvalidSchematicFormatException;
+import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.schematic.Schematics;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.BuildingSettings;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.thread.NullableCallback;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.FileNotFoundException;
 
 /**
@@ -76,44 +79,44 @@ public final class ElixirExtractorUpgradeItem extends UpgradeMenuItem {
 
             // Paste schematic
             try {
-                plugin.getSchematicHandler().paste(Schematics.ELIXIR_EXTRACTOR, origin.toBukkitLocation(villageWorld));
+                plugin.getSchematicHandler().getSchematic(Schematics.ELIXIR_EXTRACTOR).paste(origin.toBukkitLocation(villageWorld), new NullableCallback<PastingException>() {
+                    @Override
+                    public void call(@Nullable final PastingException result) {
+                        MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.EXTRACTOR_PLACED));
+
+                        /*
+                         * Before increasing the level, collect what the extractors were storing.
+                         * This prevents calculation of the extractor's production from the last collection
+                         * with the parameters of the next level.
+                         * Example:
+                         * the player collected 10 hours ago and his extractor produces 100 units per hour.
+                         * So it has produced 1000 units so far. The next level produces 200 units per hour.
+                         * If collecting is not done now, 2000 units would be the result when computing the resources produced.
+                         */
+                        user.collectExtractors();
+                        /*
+                         * Notifies resource collection only if the player already had an extractor
+                         * (if he is buying the first one, there is nothing to collect)
+                         */
+                        if (user.hasBuilding(BuildingType.ELIXIR_EXTRACTOR))
+                            MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.COLLECTED_RESOURCES));
+
+                        user.upgradeBuilding(BuildingType.ELIXIR_EXTRACTOR);
+                    }
+                });
             } catch (final FileNotFoundException e) {
                 MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.LOAD_ERROR, Schematics.ELIXIR_EXTRACTOR.getName()));
                 MessageUtil.sendError("It seems that the schematic within the .jar is missing. Download the plugin again.");
                 //TODO: file di log
-                return;
             } catch (final InvalidSchematicFormatException e) {
                 MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.LOAD_ERROR, Schematics.ELIXIR_EXTRACTOR.getName()));
                 MessageUtil.sendError("It seems that the schematic format is invalid. They may not be up to date: create them again by checking for version matches.");
                 //TODO: file di log
-                return;
             } catch (final Exception e) {
                 MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.LOAD_ERROR, Schematics.ELIXIR_EXTRACTOR.getName()));
                 MessageUtil.sendError("A generic error occurred in reading the schematic file.");
                 //TODO: file di log
-                return;
             }
-
-            MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.EXTRACTOR_PLACED));
         }
-
-        /*
-         * Before increasing the level, collect what the extractors were storing.
-         * This prevents calculation of the extractor's production from the last collection
-         * with the parameters of the next level.
-         * Example:
-         * the player collected 10 hours ago and his extractor produces 100 units per hour.
-         * So it has produced 1000 units so far. The next level produces 200 units per hour.
-         * If collecting is not done now, 2000 units would be the result when computing the resources produced.
-         */
-        user.collectExtractors();
-        /*
-         * Notifies resource collection only if the player already had an extractor
-         * (if he is buying the first one, there is nothing to collect)
-         */
-        if (user.hasBuilding(BuildingType.ELIXIR_EXTRACTOR))
-            MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.COLLECTED_RESOURCES));
-
-        user.upgradeBuilding(BuildingType.ELIXIR_EXTRACTOR);
     }
 }

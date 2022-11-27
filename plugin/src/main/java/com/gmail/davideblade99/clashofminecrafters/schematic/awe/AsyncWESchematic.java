@@ -10,7 +10,7 @@ import com.gmail.davideblade99.clashofminecrafters.exception.InvalidSchematicFor
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.schematic.worldedit.WESchematic;
-import com.gmail.davideblade99.clashofminecrafters.util.thread.Async;
+import com.gmail.davideblade99.clashofminecrafters.util.thread.NullableCallback;
 import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
@@ -18,7 +18,9 @@ import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.ClipboardHolder;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.plugin.Plugin;
 import org.primesoft.asyncworldedit.api.IAsyncWorldEdit;
 import org.primesoft.asyncworldedit.api.utils.IFuncParamEx;
 import org.primesoft.asyncworldedit.api.worldedit.IAsyncEditSessionFactory;
@@ -37,22 +39,24 @@ import java.io.IOException;
  */
 public final class AsyncWESchematic extends WESchematic {
 
-
+    private final Plugin plugin;
     private final IAsyncWorldEdit awe;
 
     /**
      * Creates a new instance of the class and loads the schematic
      *
      * @param schematicFile File containing the schematic
+     * @param plugin        Clash of Minecrafters instance
      * @param awe           AsyncWorldEdit instance
      *
      * @throws FileNotFoundException           If the schematic file does not exist
      * @throws InvalidSchematicFormatException If the file format is not recognized by WorldEdit
      * @throws IOException                     If WorldEdit throws an I/O exception
      */
-    public AsyncWESchematic(@Nonnull final File schematicFile, @Nonnull final IAsyncWorldEdit awe) throws FileNotFoundException, InvalidSchematicFormatException, IOException {
+    public AsyncWESchematic(@Nonnull final File schematicFile, @Nonnull final IAsyncWorldEdit awe, @Nonnull final Plugin plugin) throws FileNotFoundException, InvalidSchematicFormatException, IOException {
         super(schematicFile);
 
+        this.plugin = plugin;
         this.awe = awe;
     }
 
@@ -64,9 +68,8 @@ public final class AsyncWESchematic extends WESchematic {
     /**
      * {@inheritDoc}
      */
-    @Async
     @Override
-    public void paste(@Nonnull final Location origin) throws PastingException {
+    public void paste(@Nonnull final Location origin, @Nonnull final NullableCallback<PastingException> completionHandler) {
         super.origin = origin;
 
         final Vector adjustedOrigin = super.getPasteLocation(origin);
@@ -78,18 +81,18 @@ public final class AsyncWESchematic extends WESchematic {
          */
         final IAsyncEditSessionFactory aweEditSessionFactory = (IAsyncEditSessionFactory) WorldEdit.getInstance().getEditSessionFactory();
         final IThreadSafeEditSession editSession = aweEditSessionFactory.getThreadSafeEditSession(new BukkitWorld(origin.getWorld()), -1);
-        final IFuncParamEx<Integer, ICancelabeEditSession, MaxChangedBlocksException> action = new PasteAction(BlockVector3.at(adjustedOrigin.getX(), adjustedOrigin.getY(), adjustedOrigin.getZ()));
-        awe.getBlockPlacer().performAsAsyncJob(editSession, awe.getPlayerManager().getUnknownPlayer(), "pasting schematic", action);
-
-        //TODO: il metodo ritorna prima che il job sia completato
+        final IFuncParamEx<Integer, ICancelabeEditSession, MaxChangedBlocksException> action = new PasteAction(BlockVector3.at(adjustedOrigin.getX(), adjustedOrigin.getY(), adjustedOrigin.getZ()), completionHandler);
+        awe.getBlockPlacer().performAsAsyncJob(editSession, awe.getPlayerManager().getUnknownPlayer(), "CoM pasting schematic", action);
     }
 
-    private class PasteAction implements IFuncParamEx<Integer, ICancelabeEditSession, MaxChangedBlocksException> {
+    private final class PasteAction implements IFuncParamEx<Integer, ICancelabeEditSession, MaxChangedBlocksException> {
 
         private final BlockVector3 pasteLoc;
+        private final NullableCallback<PastingException> completionHandler;
 
-        public PasteAction(@Nonnull final BlockVector3 pasteLoc) {
+        public PasteAction(@Nonnull final BlockVector3 pasteLoc, @Nonnull final NullableCallback<PastingException> completionHandler) {
             this.pasteLoc = pasteLoc;
+            this.completionHandler = completionHandler;
         }
 
         @Override
@@ -105,16 +108,18 @@ public final class AsyncWESchematic extends WESchematic {
                         .build();
 
                 Operations.complete(operation);
+
+                // Go back on main thread
+                Bukkit.getScheduler().runTask(plugin, () -> completionHandler.call(null));
             } catch (final Exception e) {
                 e.printStackTrace();
 
-                throw new PastingException("Exception generated by WorldEdit");
-            }
-            finally {
+                // Go back on main thread
+                Bukkit.getScheduler().runTask(plugin, () -> completionHandler.call(new PastingException("Exception generated by AsyncWorldEdit")));
+            } finally {
                 editSession.flushSession();
             }
-            throw new RuntimeException("TEST");
-            //return editSession.size();
+            return editSession.size();
         }
     }
 }

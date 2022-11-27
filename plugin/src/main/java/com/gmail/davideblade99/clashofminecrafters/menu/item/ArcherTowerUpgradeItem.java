@@ -5,6 +5,7 @@ import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Currency;
 import com.gmail.davideblade99.clashofminecrafters.User;
 import com.gmail.davideblade99.clashofminecrafters.exception.InvalidSchematicFormatException;
+import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
@@ -12,10 +13,12 @@ import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
 import com.gmail.davideblade99.clashofminecrafters.schematic.Schematics;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.BuildingSettings;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.thread.NullableCallback;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.FileNotFoundException;
 
 /**
@@ -80,30 +83,30 @@ public final class ArcherTowerUpgradeItem extends UpgradeMenuItem {
             final Schematic schematic;
             try {
                 schematic = plugin.getSchematicHandler().getSchematic(Schematics.ARCHER_TOWER);
-                schematic.paste(origin.toBukkitLocation(villageWorld));
+                schematic.paste(origin.toBukkitLocation(villageWorld), new NullableCallback<PastingException>() {
+                    @Override
+                    public void call(@Nullable final PastingException result) {
+                        MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.TOWER_PLACED));
+
+                        // Save tower position
+                        user.setArcherPos(new Vector(origin.getX(), (origin.getY() + schematic.getSize().getHeight()), origin.getZ()));
+
+                        user.upgradeBuilding(BuildingType.ARCHER_TOWER);
+                    }
+                });
             } catch (final FileNotFoundException e) {
                 MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.LOAD_ERROR, Schematics.ARCHER_TOWER.getName()));
                 MessageUtil.sendError("It seems that the schematic within the .jar is missing. Download the plugin again.");
                 //TODO: file di log
-                return;
             } catch (final InvalidSchematicFormatException e) {
                 MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.LOAD_ERROR, Schematics.ARCHER_TOWER.getName()));
                 MessageUtil.sendError("It seems that the schematic format is invalid. They may not be up to date: create them again by checking for version matches.");
                 //TODO: file di log
-                return;
             } catch (final Exception e) {
                 MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.LOAD_ERROR, Schematics.ARCHER_TOWER.getName()));
                 MessageUtil.sendError("A generic error occurred in reading the schematic file.");
                 //TODO: file di log
-                return;
             }
-
-            // Save tower position
-            user.setArcherPos(new Vector(origin.getX(), (origin.getY() + schematic.getSize().getHeight()), origin.getZ()));
-
-            MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.TOWER_PLACED));
         }
-
-        user.upgradeBuilding(BuildingType.ARCHER_TOWER);
     }
 }

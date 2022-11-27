@@ -10,7 +10,9 @@ import com.gmail.davideblade99.clashofminecrafters.exception.InvalidSchematicFor
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
 import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicPaster;
+import com.gmail.davideblade99.clashofminecrafters.util.thread.NullableCallback;
 import org.bukkit.Location;
+import org.bukkit.plugin.Plugin;
 import org.primesoft.asyncworldedit.api.IAsyncWorldEdit;
 
 import javax.annotation.Nonnull;
@@ -25,9 +27,11 @@ import java.io.IOException;
  */
 public final class AsyncWEPaster implements SchematicPaster {
 
+    private final Plugin plugin;
     private final IAsyncWorldEdit awe;
 
-    public AsyncWEPaster(@Nonnull final IAsyncWorldEdit awe) {
+    public AsyncWEPaster(@Nonnull final Plugin plugin, @Nonnull final IAsyncWorldEdit awe) {
+        this.plugin = plugin;
         this.awe = awe;
     }
 
@@ -35,8 +39,8 @@ public final class AsyncWEPaster implements SchematicPaster {
      * {@inheritDoc}
      */
     @Override
-    public void paste(@Nonnull final File schematic, @Nonnull final Location location) throws PastingException, FileNotFoundException, InvalidSchematicFormatException, IOException {
-        getSchematic(schematic).paste(location);
+    public void paste(@Nonnull final Schematic schematic, @Nonnull final Location location, @Nonnull final NullableCallback<PastingException> completionHandler) {
+        schematic.paste(location, completionHandler);
     }
 
     /**
@@ -45,6 +49,6 @@ public final class AsyncWEPaster implements SchematicPaster {
     @Nonnull
     @Override
     public Schematic getSchematic(@Nonnull final File schematic) throws FileNotFoundException, InvalidSchematicFormatException, IOException {
-        return new AsyncWESchematic(schematic, awe);
+        return new AsyncWESchematic(schematic, awe, plugin);
     }
 }

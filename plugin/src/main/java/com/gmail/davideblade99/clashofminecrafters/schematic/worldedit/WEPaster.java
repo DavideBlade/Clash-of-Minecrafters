@@ -10,6 +10,7 @@ import com.gmail.davideblade99.clashofminecrafters.exception.InvalidSchematicFor
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
 import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicPaster;
+import com.gmail.davideblade99.clashofminecrafters.util.thread.NullableCallback;
 import org.bukkit.Location;
 
 import javax.annotation.Nonnull;
@@ -28,8 +29,8 @@ public final class WEPaster implements SchematicPaster {
      * {@inheritDoc}
      */
     @Override
-    public void paste(@Nonnull final File schematic, @Nonnull final Location location) throws PastingException, FileNotFoundException, InvalidSchematicFormatException, IOException {
-        getSchematic(schematic).paste(location);
+    public void paste(@Nonnull final Schematic schematic, @Nonnull final Location location, @Nonnull final NullableCallback<PastingException> completionHandler) {
+        schematic.paste(location, completionHandler);
     }
 
     /**

@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 /**
  * Exception that indicates a problem when pasting a schematic
  */
-public final class PastingException extends Exception {
+public final class PastingException extends SchematicException {
 
     public PastingException() {}
 

@@ -8,7 +8,6 @@ package com.gmail.davideblade99.clashofminecrafters.handler;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Village;
-import com.gmail.davideblade99.clashofminecrafters.exception.InvalidSchematicFormatException;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.exception.WorldBorderReachedException;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Size2D;
@@ -16,6 +15,9 @@ import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
 import com.gmail.davideblade99.clashofminecrafters.schematic.Schematics;
 import com.gmail.davideblade99.clashofminecrafters.util.FileUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.Pair;
+import com.gmail.davideblade99.clashofminecrafters.util.thread.NonnullCallback;
+import com.gmail.davideblade99.clashofminecrafters.util.thread.NullableCallback;
 import com.gmail.davideblade99.clashofminecrafters.yaml.IslandConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -23,9 +25,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public final class VillageHandler {
 
@@ -59,20 +60,29 @@ public final class VillageHandler {
         }
     }
 
-    @Nonnull
-    public Village generateIsland(@Nonnull final OfflinePlayer player) throws PastingException, WorldBorderReachedException {
+    /**
+     * <p>Generates the village for the specified player. The completion of the operation will correspond to the
+     * callback invocation.</p>
+     * <p>If any exception is thrown, it is passed to the callback received as a parameter.</p>
+     *
+     * @param player            Player to create island to
+     * @param completionHandler Callback that will be invoked when the operation is completed. It will have the
+     *                          created village as a parameter if the operation is completed successfully,
+     *                          otherwise it will receive the thrown exception. List of possible exceptions:
+     *                          <ul>
+     *                              <li>{@link WorldBorderReachedException} is thrown if there is no space left for other villages</li>
+     *                              <li>{@link PastingException} is thrown in case of error during schematic pasting</li>
+     *                          </ol>
+     *
+     * @since v3.1.3
+     */
+    public void generateVillage(@Nonnull final OfflinePlayer player, @Nonnull final NonnullCallback<Pair<Village, Exception>> completionHandler) {
         final Schematic schematic;
-        //TODO
         try {
             schematic = plugin.getSchematicHandler().getSchematic(Schematics.VILLAGE);
-        } catch (FileNotFoundException e) {
-            return null;
-        } catch (InvalidSchematicFormatException e) {
-            e.printStackTrace();
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+        } catch (final Exception e) { // Pass exceptions to the callback
+            completionHandler.call(new Pair<>(null, e));
+            return;
         }
 
         final IslandConfiguration islandStorage = new IslandConfiguration(islandDataFile);
@@ -91,26 +101,34 @@ public final class VillageHandler {
             origin.setZ(z);
 
             // If it exceeds the maximum z
-            if (origin.getZ() - (schematic.getSize().getLength() - 1) <= MAX_Z)
-                throw new WorldBorderReachedException();
+            if (origin.getZ() - (schematic.getSize().getLength() - 1) <= MAX_Z) {
+                completionHandler.call(new Pair<>(null, new WorldBorderReachedException()));
+                return;
+            }
         }
 
-        schematic.paste(origin.toBukkitLocation(world));
+        schematic.paste(origin.toBukkitLocation(world), new NullableCallback<PastingException>() {
+            @Override
+            public void call(@Nullable final PastingException result) {
+                final Location spawn = SchematicHandler.getSpawnLocation(schematic);
+                if (spawn == null) {
+                    completionHandler.call(new Pair<>(null, new PastingException()));
+                    return;
+                }
+
+                // Create village
+                final Village village = new Village(player.getName(), spawn, origin, new Size2D(schematic.getSize()), new Size2D(VillageHandler.this.expansions));
+                completionHandler.call(new Pair<>(village, null));
+            }
+        });
+
+        // Update x
         x = origin.getX() - expansions - DISTANCE_BETWEEN_ISLANDS;
-
-        final Location spawn = SchematicHandler.getSpawnLocation(schematic);
-        if (spawn == null)
-            throw new PastingException();
-
-        // Create village
-        final Village village = new Village(player.getName(), spawn, origin, new Size2D(schematic.getSize()), new Size2D(this.expansions));
 
         // Save on file
         islandStorage.setX(x);
         islandStorage.setZ(z);
         islandStorage.save();
-
-        return village;
     }
 
     /**

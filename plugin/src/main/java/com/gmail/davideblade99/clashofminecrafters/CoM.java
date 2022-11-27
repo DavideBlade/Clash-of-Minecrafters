@@ -378,7 +378,7 @@ public final class CoM extends JavaPlugin {
         // If installed, use AsyncWorldEdit for schematic
         final Plugin awe = Bukkit.getPluginManager().getPlugin("AsyncWorldEdit");
         if (awe != null && awe.isEnabled()) {
-            schematicHandler.setSchematicPaster(new AsyncWEPaster((IAsyncWorldEdit) awe));
+            schematicHandler.setSchematicPaster(new AsyncWEPaster(this, (IAsyncWorldEdit) awe));
             return;
         }
 

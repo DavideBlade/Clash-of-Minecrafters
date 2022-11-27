@@ -13,6 +13,7 @@ import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicPaster;
 import com.gmail.davideblade99.clashofminecrafters.schematic.Schematics;
 import com.gmail.davideblade99.clashofminecrafters.util.FileUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.thread.NullableCallback;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
@@ -88,18 +89,23 @@ public final class SchematicHandler {
     }
 
     /**
-     * Paste the schematic at the specified location
+     * <p>Paste the schematic at the specified location.</p>
+     * <p>The operation is delegated to the {@link #paster}: if it operates asynchronously (e.g., AsyncWorldEdit),
+     * the schematic will be pasted asynchronously, otherwise the main thread will be used. In any case, the
+     * completion of the operation will correspond to the callback invocation.</p>
+     * <p>If exceptions are thrown, they are passed to the callback received as parameter.</p>
      *
-     * @param schematic Schematic to be pasted
-     * @param location  Origin point where the schematic should be pasted
+     * @param schematic         Schematic to be pasted
+     * @param location          Origin point where the schematic should be pasted
+     * @param completionHandler Callback that will be invoked when the operation is completed. It will have {@code
+     *                          null} as parameter if the operation was completed successfully, otherwise it will
+     *                          receive the thrown exception. {@link PastingException} is thrown in case of error
+     *                          during schematic pasting.
      *
-     * @throws PastingException                In case of error during schematic pasting
-     * @throws FileNotFoundException           If the schematic file cannot be found in the .jar
-     * @throws InvalidSchematicFormatException If the file format is not recognized by {@link #paster}
-     * @throws IOException                     If WorldEdit throws an I/O exception
+     * @since v3.1.3
      */
-    public void paste(@Nonnull final Schematics schematic, @Nonnull final Location location) throws PastingException, FileNotFoundException, InvalidSchematicFormatException, IOException {
-        getSchematic(schematic).paste(location);
+    public void paste(@Nonnull final Schematic schematic, @Nonnull final Location location, @Nonnull final NullableCallback<PastingException> completionHandler) {
+        schematic.paste(location, completionHandler);
     }
 
     /**
