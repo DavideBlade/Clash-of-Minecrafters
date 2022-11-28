@@ -61,6 +61,8 @@ Player never joined: '&cThe player %player has never played on the server!'
 Too big number: '&cYou entered a number too big. %amount will be used.'
 # When a player invokes the /upgrade command but all buildings are disabled.
 No buildings: '&cAll buildings are disabled. There is nothing to upgrade.'
+# When a player uses the /upgrade [building] command but does not enter a valid building.
+Wrong building: '&cThe specified building does not exist!'
 
 
 ############################################################

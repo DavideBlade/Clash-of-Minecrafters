@@ -61,6 +61,8 @@ Player never joined: '&cIl giocatore %player non ha mai giocato nel server!'
 Too big number: '&cHai inserito un numero troppo grande. Verrà utilizzato %amount.'
 # Quando un giocatore invoca il comando /upgrade ma tutte le costruzioni sono disabilitate.
 No buildings: '&cTutte le costruzioni sono disabilitate. Non c''è niente da potenziare.'
+# Quando un giocatore usa il comando /upgrade [costruzione] ma non inserisce una costruzione valida.
+Wrong building: '&cLa costruzione specificata non esiste!'
 
 
 ############################################################
