@@ -45,7 +45,6 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.UUID;
 
 /* TODO list:
- *  Aggiungere supporto ad AsyncWorldEdit e FastAsyncWorldEdit (beta da questo punto in poi) -> aggiornare wiki
  *  Aggiungere comando /com upgrade <NomeStruttura> (permesso: clashofminecrafters.command.?) così che possano essere utilizzati in GUI custom create con altri plugin come ChestCommands -> Grazie a https://www.spigotmc.org/members/fede1132.118978/
  *  Tempi configurabili per l'inizio e la durata della guerra
  *  Supporto per PlaceholderAPI + rendere disabilitabile scoreboard dal config
@@ -55,6 +54,7 @@ import java.util.UUID;
  *  Rank in base ai trofei (come le leghe)
  *  Anche il difensore in un raid vince o perde i trofei
  *  API
+ *  Aggiungere supporto a FastAsyncWorldEdit -> aggiornare wiki
  *  Scudo che permette di non ricevere attacchi (viene dato in automatico a chi perde un raid; in più è acquistabile)
  *  Creare video dimostrativo
  *  Aggiungere boost risorse (temporaneo, es. di 1 ora): ogni volta che un giocatore boostato riceve delle risorse, queste vengono moltiplicate (es. anziché ricevere 10 trofei a seguito della vincita di un raid ne riceve 20)
