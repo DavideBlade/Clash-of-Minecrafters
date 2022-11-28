@@ -17,8 +17,8 @@ import com.gmail.davideblade99.clashofminecrafters.listener.raid.*;
 import com.gmail.davideblade99.clashofminecrafters.menu.holder.MenuInventoryHolder;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.handler.SchematicHandler;
-import com.gmail.davideblade99.clashofminecrafters.schematic.SchematicPaster;
+import com.gmail.davideblade99.clashofminecrafters.schematic.awe.AsyncWEPaster;
+import com.gmail.davideblade99.clashofminecrafters.schematic.worldedit.WEPaster;
 import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
 import com.gmail.davideblade99.clashofminecrafters.storage.DatabaseFactory;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
@@ -34,6 +34,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
+import org.primesoft.asyncworldedit.api.IAsyncWorldEdit;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,7 +45,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.UUID;
 
 /* TODO list:
- *  Aggiungere supporto ad AsyncWorldEdit e FastAsyncWorldEdit + rimuovere il mio formato interno (beta da questo punto in poi) -> aggiornare wiki
+ *  Aggiungere supporto ad AsyncWorldEdit e FastAsyncWorldEdit (beta da questo punto in poi) -> aggiornare wiki
  *  Aggiungere comando /com upgrade <NomeStruttura> (permesso: clashofminecrafters.command.?) così che possano essere utilizzati in GUI custom create con altri plugin come ChestCommands -> Grazie a https://www.spigotmc.org/members/fede1132.118978/
  *  Tempi configurabili per l'inizio e la durata della guerra
  *  Supporto per PlaceholderAPI + rendere disabilitabile scoreboard dal config
@@ -374,7 +375,15 @@ public final class CoM extends JavaPlugin {
             return;
         }
 
-        schematicHandler.setSchematicPaster(SchematicPaster.WORLEDIT);
+        // If installed, use AsyncWorldEdit for schematic
+        final Plugin awe = Bukkit.getPluginManager().getPlugin("AsyncWorldEdit");
+        if (awe != null && awe.isEnabled()) {
+            schematicHandler.setSchematicPaster(new AsyncWEPaster(this, (IAsyncWorldEdit) awe));
+            return;
+        }
+
+        // Use WorldEdit if there are no other alternative plugins
+        schematicHandler.setSchematicPaster(new WEPaster());
     }
 
     private void registerCommands() {

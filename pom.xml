@@ -47,6 +47,12 @@
             <id>enginehub-maven</id>
             <url>https://maven.enginehub.org/repo/</url>
         </repository>
+
+        <!-- AsyncWorldEdit -->
+        <repository>
+            <id>github-asyncworldedit-api</id>
+            <url>https://raw.githubusercontent.com/SBPrime/AsyncWorldEdit/maven-artifact/</url>
+        </repository>
     </repositories>
 
     <dependencyManagement>
@@ -116,7 +122,6 @@
                 <artifactId>worldedit-bukkit</artifactId>
                 <version>${worldedit.version}</version>
                 <scope>provided</scope>
-                <optional>true</optional>
             </dependency>
 
             <dependency>
@@ -124,7 +129,13 @@
                 <artifactId>worldedit-core</artifactId>
                 <version>${worldedit.version}</version>
                 <scope>provided</scope>
-                <optional>true</optional>
+            </dependency>
+
+            <dependency>
+                <groupId>org.primesoft.asyncworldedit</groupId>
+                <artifactId>AsyncWorldEdit-API</artifactId>
+                <version>2.2.0-rc-05</version>
+                <scope>provided</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

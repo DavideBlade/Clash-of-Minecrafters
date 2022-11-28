@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
  *
  * @since v3.1.2
  */
-public final class InvalidSchematicFormatException extends Exception {
+public final class InvalidSchematicFormatException extends SchematicException {
     public InvalidSchematicFormatException() { }
 
     public InvalidSchematicFormatException(@Nullable final String message) {

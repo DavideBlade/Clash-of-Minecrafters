@@ -16,9 +16,11 @@ import com.gmail.davideblade99.clashofminecrafters.setting.bean.BuildingSettings
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.ExtractorSettings;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
+import com.gmail.davideblade99.clashofminecrafters.util.Pair;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ScoreboardUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.number.IntegerUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.thread.NonnullCallback;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -475,23 +477,30 @@ public final class User {
     }
 
     public void createIsland() {
-        try {
-            this.island = plugin.getVillageHandler().generateIsland(getBase());
+        plugin.getVillageHandler().generateVillage(getBase(), result -> {
+            final Village village = result.getKey();
+            final Exception exception = result.getValue();
 
-            plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
+            if (exception != null) {
+                if (getBase() instanceof Player) {
+                    if (exception instanceof PastingException)
+                        MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.ISLAND_CREATION_ERROR));
+                    if (exception instanceof WorldBorderReachedException)
+                        MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.ISLAND_WORLD_LIMIT_REACHED));
+                }
+                return;
+            }
+
+            User.this.island = village;
+
+            plugin.getDatabase().storeUser(getBase().getUniqueId(), User.this);
 
             if (getBase() instanceof Player) {
                 MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.TELEPORTATION));
 
                 island.teleportToSpawn((Player) getBase());
             }
-        } catch (final PastingException ignored) {
-            if (getBase() instanceof Player)
-                MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.ISLAND_CREATION_ERROR));
-        } catch (final WorldBorderReachedException ignored) {
-            if (getBase() instanceof Player)
-                MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.ISLAND_WORLD_LIMIT_REACHED));
-        }
+        });
     }
 
     public void setIslandSpawn(@Nonnull final Location loc) {
