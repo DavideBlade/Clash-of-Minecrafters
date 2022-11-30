@@ -4,23 +4,26 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters;
+package com.gmail.davideblade99.clashofminecrafters.player;
 
+import com.gmail.davideblade99.clashofminecrafters.CoM;
+import com.gmail.davideblade99.clashofminecrafters.Village;
+import com.gmail.davideblade99.clashofminecrafters.building.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.exception.WorldBorderReachedException;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Balance;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.BuildingSettings;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.ExtractorSettings;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
-import com.gmail.davideblade99.clashofminecrafters.util.Pair;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ScoreboardUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.number.IntegerUtil;
-import com.gmail.davideblade99.clashofminecrafters.util.thread.NonnullCallback;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -32,14 +35,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-//TODO: prevenire gli switch sbagliati (usati per le currency): https://towardsdatascience.com/dont-be-a-basic-coder-and-use-5-possibilities-to-avoid-the-bad-switch-case-c92402f4061
 public final class User {
 
     private final CoM plugin;
     private final AtomicReference<OfflinePlayer> base; // Thread-safe field
-    private int gold;
-    private int elixir;
-    private int gems;
+    private final Balance balance;
     private int trophies;
     private String clanName;
     private int elixirExtractorLevel;
@@ -75,19 +75,15 @@ public final class User {
                 throw new IllegalStateException("Unable to create data for player who has never been on the server!");
 
             final Settings config = plugin.getConfig();
-            this.gold = config.getStartingGold();
-            this.elixir = config.getStartingElixir();
-            this.gems = config.getStartingGems();
+            this.balance = new Balance(config.getStartingGold(), config.getStartingElixir(), config.getStartingGems());
             this.townHallLevel = 1; // The base level of the town hall is 1
 
             // Store default values in the database
-            database.storeUser(uuid, this);
+            updateDatabase();
         } else {
             final UserDatabaseType userDatabaseType = database.fetchUser(uuid); //TODO: questo fetch può essere usato al posto di hasPlayedBefore (se è null non ha mai giocato)
 
-            this.gold = userDatabaseType.gold;
-            this.elixir = userDatabaseType.elixir;
-            this.gems = userDatabaseType.gems;
+            this.balance = userDatabaseType.balance;
             this.trophies = userDatabaseType.trophies;
             this.clanName = userDatabaseType.clanName;
             this.elixirExtractorLevel = userDatabaseType.elixirExtractorLevel;
@@ -149,105 +145,98 @@ public final class User {
         if (nextBuilding == null)
             throw new IllegalArgumentException("The \"" + nextLevel + "\" level of the building \"" + type + "\" does not exist");
 
-        return getBalance(nextBuilding.currency) >= nextBuilding.price;
+        return getBalanceAmount(nextBuilding.currency) >= nextBuilding.price;
     }
 
     /**
-     * @param type Currency in which to obtain the balance
+     * @return The {@link Balance} of the user
+     */
+    public Balance getBalance() {
+        return balance;
+    }
+
+    /**
+     * @param currency Currency of which to obtain the balance
      *
      * @return The player's balance for the specified currency
      */
-    public int getBalance(@Nonnull final Currency type) {
-        switch (type) {
-            case GEMS:
-                return gems;
-            case GOLD:
-                return gold;
-            case ELIXIR:
-                return elixir;
-
-            default:
-                throw new IllegalStateException("Unexpected value: " + type);
-        }
+    public int getBalanceAmount(@Nonnull final Currencies currency) {
+        return balance.getBalance(currency);
     }
 
-    public int addBalance(final int amount, @Nonnull final Currency type) {
-        final int currentBalance = getBalance(type);
-        final int newBalance = IntegerUtil.saturatedAdd(currentBalance, amount); // Avoid overflow
+    /**
+     * @return The amount of elixir the player owns
+     */
+    public int getElixir() {
+        return balance.getBalance(Currencies.ELIXIR);
+    }
 
-        setBalance(newBalance, type);
+    /**
+     * @return The amount of elixir the player owns
+     */
+    public int getGold() {
+        return balance.getBalance(Currencies.GOLD);
+    }
 
-        final MessageKey word;
-        switch (type) {
-            case GEMS:
-                word = amount == 1 ? MessageKey.GEM : MessageKey.GEMS;
-                break;
-            case GOLD:
-                word = MessageKey.GOLD;
-                break;
-            case ELIXIR:
-                word = MessageKey.ELIXIR;
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + type);
-        }
+    /**
+     * @return The amount of elixir the player owns
+     */
+    public int getGems() {
+        return balance.getBalance(Currencies.GEMS);
+    }
+
+    public int addBalance(final int amount, @Nonnull final Currencies currency) {
+        final int currentBalance = balance.getBalance(currency);
+        final int currencyAdded = balance.addCurrency(currency, amount);
+        final int newBalance = currentBalance + currencyAdded;
+
+        updateDatabase();
+        refreshScoreboard();
 
         if (getBase() instanceof Player) {
-            MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.ADDED_TO_BALANCE, String.valueOf(newBalance - currentBalance), Messages.getMessage(word)));
+            final String currencyTranslation = balance.getCurrencyTranslation(currency);
 
-            if (newBalance == Integer.MAX_VALUE)
+            MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.ADDED_TO_BALANCE, String.valueOf(currencyAdded), currencyTranslation));
+
+            if (newBalance == currency.getMax())
                 MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.MAX_MONEY));
         }
 
-        return newBalance - currentBalance;
+        return currencyAdded;
     }
 
-    public int removeBalance(final int amount, @Nonnull final Currency type) {
-        final int currentBalance = getBalance(type);
-        final int newBalance = Math.max(IntegerUtil.saturatedSub(currentBalance, amount), 0);
+    public int removeBalance(final int amount, @Nonnull final Currencies currency) {
+        final int currencyRemoved = balance.removeCurrency(currency, amount);
 
-        setBalance(newBalance, type);
+        updateDatabase();
+        refreshScoreboard();
 
-        final MessageKey word;
-        switch (type) {
-            case GEMS:
-                word = amount == 1 ? MessageKey.GEM : MessageKey.GEMS;
-                break;
-            case GOLD:
-                word = MessageKey.GOLD;
-                break;
-            case ELIXIR:
-                word = MessageKey.ELIXIR;
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + type);
+        if (getBase() instanceof Player) {
+            final String currencyTranslation = balance.getCurrencyTranslation(currency);
+
+            MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.REMOVED_FROM_BALANCE, String.valueOf(currencyRemoved), currencyTranslation));
         }
 
+        return currencyRemoved;
+    }
+
+    /**
+     * Updates the data in the player's scoreboard if he is an online player
+     *
+     * @since v3.1.4
+     */
+    private void refreshScoreboard() {
         if (getBase() instanceof Player)
-            MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.REMOVED_FROM_BALANCE, String.valueOf(currentBalance - newBalance), Messages.getMessage(word)));
-
-        return currentBalance - newBalance;
+            ScoreboardUtil.refreshData(balance, trophies, ((Player) getBase()).getScoreboard());
     }
 
-    private void setBalance(final int amount, @Nonnull final Currency currency) {
-        switch (currency) {
-            case GEMS:
-                gems = amount;
-                break;
-            case GOLD:
-                gold = amount;
-                break;
-            case ELIXIR:
-                elixir = amount;
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + currency);
-        }
-
+    /**
+     * Update the database with new player data
+     *
+     * @since v3.1.4
+     */
+    private void updateDatabase() {
         plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
-
-        if (getBase() instanceof Player)
-            ScoreboardUtil.refreshData(gems, gold, elixir, trophies, ((Player) getBase()).getScoreboard());
     }
 
     public void addTrophies(final int amount) {
@@ -277,10 +266,8 @@ public final class User {
     private void setTrophies(final int trophies) {
         this.trophies = trophies;
 
-        plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
-
-        if (getBase() instanceof Player)
-            ScoreboardUtil.refreshData(gems, gold, elixir, trophies, ((Player) getBase()).getScoreboard());
+        updateDatabase();
+        refreshScoreboard();
     }
 
     public int getTrophies() {
@@ -295,7 +282,7 @@ public final class User {
     public void setClanName(@Nullable final String clanName) {
         this.clanName = clanName;
 
-        plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
+        updateDatabase();
     }
 
     public void removeClan() {
@@ -391,24 +378,11 @@ public final class User {
 
         final BuildingSettings nextBuilding = plugin.getConfig().getBuilding(type, nextLevel);
         final int price = nextBuilding.price;
-        final Currency currency = nextBuilding.currency;
+        final Currencies currency = nextBuilding.currency;
 
         if (!hasMoneyToUpgrade(nextLevel, type)) {
             if (getBase() instanceof Player) {
-                final String currencyTranslation;
-                switch (currency) {
-                    case GEMS:
-                        currencyTranslation = Messages.getMessage(MessageKey.GEMS);
-                        break;
-                    case GOLD:
-                        currencyTranslation = Messages.getMessage(MessageKey.GOLD);
-                        break;
-                    case ELIXIR:
-                        currencyTranslation = Messages.getMessage(MessageKey.ELIXIR);
-                        break;
-                    default:
-                        throw new IllegalStateException("Unexpected value: " + currency);
-                }
+                final String currencyTranslation = balance.getCurrencyTranslation(currency);
 
                 MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.NOT_ENOUGH_MONEY, currencyTranslation));
             }
@@ -452,7 +426,7 @@ public final class User {
                 throw new IllegalStateException("Unexpected value: " + type);
         }
 
-        plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
+        updateDatabase();
     }
 
     @Nullable
@@ -468,7 +442,7 @@ public final class User {
     public void setArcherPos(@Nonnull final Vector position) {
         archerLoc = position;
 
-        plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
+        updateDatabase();
     }
 
     @Nullable
@@ -493,7 +467,7 @@ public final class User {
 
             User.this.island = village;
 
-            plugin.getDatabase().storeUser(getBase().getUniqueId(), User.this);
+            updateDatabase();
 
             if (getBase() instanceof Player) {
                 MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.TELEPORTATION));
@@ -507,7 +481,7 @@ public final class User {
         island.spawn = loc;
 
         // Save changes to the database
-        plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
+        updateDatabase();
     }
 
     @Nullable
@@ -523,15 +497,15 @@ public final class User {
         final ExtractorSettings elixirExtractor = (ExtractorSettings) this.getBuilding(BuildingType.ELIXIR_EXTRACTOR);
 
         if (goldExtractor != null) // If the player bought the gold extractor
-            this.addBalance(getResourcesProduced(goldExtractor, this.collectionTime), Currency.GOLD);
+            this.addBalance(getResourcesProduced(goldExtractor, this.collectionTime), Currencies.GOLD);
         if (elixirExtractor != null) // If the player bought the elixir extractor
-            this.addBalance(getResourcesProduced(elixirExtractor, this.collectionTime), Currency.ELIXIR);
+            this.addBalance(getResourcesProduced(elixirExtractor, this.collectionTime), Currencies.ELIXIR);
 
         // Update collection time
         this.collectionTime = LocalDateTime.now();
 
         // Save changes to the database
-        plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
+        updateDatabase();
     }
 
     /**
@@ -584,9 +558,9 @@ public final class User {
     public String toString() {
         return "User{" +
                 "uuid=" + getBase().getUniqueId() +
-                ", gold=" + gold +
-                ", elixir=" + elixir +
-                ", gems=" + gems +
+                ", gold=" + balance.getGold() +
+                ", elixir=" + balance.getElixir() +
+                ", gems=" + balance.getGems() +
                 ", trophies=" + trophies +
                 ", clan='" + clanName + "'" +
                 ", elixir extractor level=" + elixirExtractorLevel +

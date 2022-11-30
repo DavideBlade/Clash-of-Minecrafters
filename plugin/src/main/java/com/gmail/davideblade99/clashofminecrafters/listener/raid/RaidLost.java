@@ -7,12 +7,12 @@
 package com.gmail.davideblade99.clashofminecrafters.listener.raid;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Currency;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.event.raid.RaidLostEvent;
 import com.gmail.davideblade99.clashofminecrafters.listener.CoMListener;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.User;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.util.Pair;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.entity.Player;
@@ -52,7 +52,7 @@ public final class RaidLost extends CoMListener {
         plugin.getWarHandler().removeUnderAttack(attacker);
 
         final User user = plugin.getUser(attacker);
-        final Pair<Pair<Integer, Currency>, Integer> raidPenalty = plugin.getConfig().getRaidPenalty();
+        final Pair<Pair<Integer, Currencies>, Integer> raidPenalty = plugin.getConfig().getRaidPenalty();
 
         user.removeBalance(raidPenalty.getKey().getKey(), raidPenalty.getKey().getValue());
         user.removeTrophies(raidPenalty.getValue());

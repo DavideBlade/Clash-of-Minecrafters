@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.menu.item;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Currency;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.util.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
  */
 public final class ConfigItem extends BaseItem {
 
-    private final Pair<Integer, Currency> requiredBalance;
+    private final Pair<Integer, Currencies> requiredBalance;
     private final ItemStack requiredItem;
     private final String command;
 
@@ -29,7 +29,7 @@ public final class ConfigItem extends BaseItem {
         this(item, slot, null, null, command);
     }
 
-    public ConfigItem(@Nonnull final ItemStack item, final byte slot, @Nullable final Pair<Integer, Currency> requiredBalance, @Nullable final String command) {
+    public ConfigItem(@Nonnull final ItemStack item, final byte slot, @Nullable final Pair<Integer, Currencies> requiredBalance, @Nullable final String command) {
         this(item, slot, requiredBalance, null, command);
     }
 
@@ -37,7 +37,7 @@ public final class ConfigItem extends BaseItem {
         this(item, slot, null, requiredItem, command);
     }
 
-    public ConfigItem(@Nonnull final ItemStack item, final byte slot, @Nullable final Pair<Integer, Currency> requiredBalance, @Nullable final ItemStack requiredItem, @Nullable final String command) {
+    public ConfigItem(@Nonnull final ItemStack item, final byte slot, @Nullable final Pair<Integer, Currencies> requiredBalance, @Nullable final ItemStack requiredItem, @Nullable final String command) {
         super(item, slot);
 
         this.requiredBalance = requiredBalance;
@@ -67,7 +67,7 @@ public final class ConfigItem extends BaseItem {
     }
 
     @Nullable
-    public Pair<Integer, Currency> getRequiredBalance() {
+    public Pair<Integer, Currencies> getRequiredBalance() {
         return requiredBalance;
     }
 

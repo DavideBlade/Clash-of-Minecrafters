@@ -7,19 +7,19 @@
 package com.gmail.davideblade99.clashofminecrafters.storage.sql.mysql;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Currency;
-import com.gmail.davideblade99.clashofminecrafters.file.log.ErrorLog;
 import com.gmail.davideblade99.clashofminecrafters.Village;
-import com.gmail.davideblade99.clashofminecrafters.BuildingType;
-import com.gmail.davideblade99.clashofminecrafters.User;
+import com.gmail.davideblade99.clashofminecrafters.building.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.file.log.ErrorLog;
+import com.gmail.davideblade99.clashofminecrafters.geometric.Size2D;
+import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Balance;
 import com.gmail.davideblade99.clashofminecrafters.storage.Columns;
 import com.gmail.davideblade99.clashofminecrafters.storage.sql.AbstractSQLDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.sql.mysql.query.*;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
-import com.gmail.davideblade99.clashofminecrafters.geometric.Size2D;
-import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -230,7 +230,7 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
 
                 final int townHallLevel = resultSet.getInt(Columns.TOWN_HALL_LEVEL);
 
-                return new UserDatabaseType(gold, elixir, gems, trophies, clanName, elixirExtractorLevel, goldExtractorLevel, archerLevel, archerPos, island, collectionTime, townHallLevel);
+                return new UserDatabaseType(new Balance(gold, elixir, gems), trophies, clanName, elixirExtractorLevel, goldExtractorLevel, archerLevel, archerPos, island, collectionTime, townHallLevel);
             });
 
         } catch (final SQLException ex) {
@@ -245,9 +245,9 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
      */
     @Override
     public void storeUser(@Nonnull final UUID playerUUID, @Nonnull final User user) {
-        final int gold = user.getBalance(Currency.GOLD);
-        final int elixir = user.getBalance(Currency.ELIXIR);
-        final int gems = user.getBalance(Currency.GEMS);
+        final int gold = user.getGold();
+        final int elixir = user.getElixir();
+        final int gems = user.getGems();
         final int trophies = user.getTrophies();
         final String clan = user.getClanName();
         final int elixirExtractorLevel = user.getBuildingLevel(BuildingType.ELIXIR_EXTRACTOR);

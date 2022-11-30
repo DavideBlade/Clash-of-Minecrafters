@@ -6,9 +6,9 @@
 
 package com.gmail.davideblade99.clashofminecrafters.setting;
 
-import com.gmail.davideblade99.clashofminecrafters.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.building.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Currency;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.menu.Menu;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages.Language;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.*;
@@ -46,8 +46,8 @@ public final class Settings extends CoMYamlConfiguration {
     private final Language lang;
     private final byte maxExpansions;
     private final Location spawn;
-    private final Pair<Pair<Integer, Currency>, Integer> raidRewards; // <<Amount, Currency>, Trophies>
-    private final Pair<Pair<Integer, Currency>, Integer> raidPenalty; // <<Amount, Currency>, Trophies>
+    private final Pair<Pair<Integer, Currencies>, Integer> raidRewards; // <<Amount, Currency>, Trophies>
+    private final Pair<Pair<Integer, Currencies>, Integer> raidPenalty; // <<Amount, Currency>, Trophies>
     private final int raidTimeout;
     private final int clanRaidRewards;
     private final int maxPlayerPerClan;
@@ -170,9 +170,9 @@ public final class Settings extends CoMYamlConfiguration {
 
 
         // Check raid rewards
-        Currency rewardCurrency = Currency.matchCurrency(super.getString("Raid rewards.Currency", null));
+        Currencies rewardCurrency = Currencies.matchCurrency(super.getString("Raid rewards.Currency", null));
         if (rewardCurrency == null) {
-            rewardCurrency = Currency.GEMS;
+            rewardCurrency = Currencies.GEMS;
 
             MessageUtil.sendError("The currency specified in the \"Raid rewards\" section (in the config) does not exist.");
             MessageUtil.sendError(rewardCurrency + " will be used as currency.");
@@ -194,9 +194,9 @@ public final class Settings extends CoMYamlConfiguration {
 
 
         // Check raid penalty
-        Currency penaltyCurrency = Currency.matchCurrency(super.getString("Raid failure.Currency", null));
+        Currencies penaltyCurrency = Currencies.matchCurrency(super.getString("Raid failure.Currency", null));
         if (penaltyCurrency == null) {
-            penaltyCurrency = Currency.GEMS;
+            penaltyCurrency = Currencies.GEMS;
 
             MessageUtil.sendError("The currency specified in the \"Raid failure\" section (in the config) does not exist.");
             MessageUtil.sendError(penaltyCurrency + " will be used as currency.");
@@ -328,12 +328,12 @@ public final class Settings extends CoMYamlConfiguration {
     }
 
     @Nonnull
-    public Pair<Pair<Integer, Currency>, Integer> getRaidRewards() {
+    public Pair<Pair<Integer, Currencies>, Integer> getRaidRewards() {
         return raidRewards;
     }
 
     @Nonnull
-    public Pair<Pair<Integer, Currency>, Integer> getRaidPenalty() {
+    public Pair<Pair<Integer, Currencies>, Integer> getRaidPenalty() {
         return raidPenalty;
     }
 

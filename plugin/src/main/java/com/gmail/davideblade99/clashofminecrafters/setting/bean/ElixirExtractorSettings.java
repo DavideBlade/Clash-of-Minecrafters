@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.setting.bean;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Currency;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
  */
 public final class ElixirExtractorSettings extends ExtractorSettings {
 
-    public ElixirExtractorSettings(final int level, final int production, final int capacity, final int price, @Nonnull final Currency currency) {
+    public ElixirExtractorSettings(final int level, final int production, final int capacity, final int price, @Nonnull final Currencies currency) {
         super(level, production, capacity, price, currency);
     }
 

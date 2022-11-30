@@ -8,7 +8,7 @@ package com.gmail.davideblade99.clashofminecrafters.listener.player;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.listener.CoMListener;
-import com.gmail.davideblade99.clashofminecrafters.User;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ScoreboardUtil;
 import org.bukkit.entity.Player;
@@ -17,8 +17,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import javax.annotation.Nonnull;
-
-import static com.gmail.davideblade99.clashofminecrafters.Currency.*;
 
 public final class PlayerJoin extends CoMListener {
 
@@ -38,6 +36,6 @@ public final class PlayerJoin extends CoMListener {
         if (config.teleportOnJoin())
             player.teleport(config.getSpawn());
 
-        player.setScoreboard(ScoreboardUtil.createScoreboard(user.getBalance(GEMS), user.getBalance(GOLD), user.getBalance(ELIXIR), user.getTrophies()));
+        player.setScoreboard(ScoreboardUtil.createScoreboard(user.getBalance(), user.getTrophies()));
     }
 }

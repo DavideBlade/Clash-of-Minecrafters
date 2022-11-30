@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.storage;
 
 import com.gmail.davideblade99.clashofminecrafters.Village;
-import com.gmail.davideblade99.clashofminecrafters.User;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
 
 import javax.annotation.Nonnull;

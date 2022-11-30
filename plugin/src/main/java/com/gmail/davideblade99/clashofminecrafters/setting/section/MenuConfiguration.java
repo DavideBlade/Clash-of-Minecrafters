@@ -6,7 +6,7 @@
 
 package com.gmail.davideblade99.clashofminecrafters.setting.section;
 
-import com.gmail.davideblade99.clashofminecrafters.Currency;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.menu.Menu;
 import com.gmail.davideblade99.clashofminecrafters.menu.item.BaseItem;
 import com.gmail.davideblade99.clashofminecrafters.menu.item.ConfigItem;
@@ -136,7 +136,7 @@ public final class MenuConfiguration extends SectionConfiguration {
             final String headOwner;
             final boolean hideAttribute;
             final byte slot;
-            final Pair<Integer, Currency> requiredBalance;
+            final Pair<Integer, Currencies> requiredBalance;
             final ItemStack requiredItem;
             final String command;
 
@@ -243,7 +243,7 @@ public final class MenuConfiguration extends SectionConfiguration {
                     continue; // Negative amount
                 }
 
-                final Currency requiredCurrency = Currency.matchCurrency(split[1].trim());
+                final Currencies requiredCurrency = Currencies.matchCurrency(split[1].trim());
                 if (requiredCurrency == null) {
                     MessageUtil.sendError("The currency \"" + split[1] + "\", in \"Required item\", of \"" + itemName + "\" item in menu \"" + menuName + "\" is incorrect. This item will be ignored.");
                     continue; // Wrong currency

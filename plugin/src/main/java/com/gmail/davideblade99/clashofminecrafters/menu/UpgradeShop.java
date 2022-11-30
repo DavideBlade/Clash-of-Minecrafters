@@ -6,9 +6,9 @@
 
 package com.gmail.davideblade99.clashofminecrafters.menu;
 
-import com.gmail.davideblade99.clashofminecrafters.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.building.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.User;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.menu.item.*;
 import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
 import org.bukkit.inventory.ItemStack;

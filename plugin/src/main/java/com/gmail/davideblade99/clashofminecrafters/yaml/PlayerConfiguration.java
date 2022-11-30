@@ -6,8 +6,8 @@
 
 package com.gmail.davideblade99.clashofminecrafters.yaml;
 
-import com.gmail.davideblade99.clashofminecrafters.Currency;
-import com.gmail.davideblade99.clashofminecrafters.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
+import com.gmail.davideblade99.clashofminecrafters.building.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.storage.Columns;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Size2D;
@@ -159,7 +159,7 @@ public final class PlayerConfiguration extends CoMYamlConfiguration {
         super.set(Columns.ARCHER_TOWER_LOCATION, location);
     }
 
-    public int getBalance(@Nonnull final Currency currency) {
+    public int getBalance(@Nonnull final Currencies currency) {
         switch (currency) {
             case GOLD:
                 return super.getInt(Columns.GOLD);
@@ -178,7 +178,7 @@ public final class PlayerConfiguration extends CoMYamlConfiguration {
      * @param currency Currency to set
      * @param amount   New amount to set
      */
-    public void setBalance(@Nonnull final Currency currency, final int amount) {
+    public void setBalance(@Nonnull final Currencies currency, final int amount) {
         switch (currency) {
             case GOLD:
                 super.set(Columns.GOLD, amount);

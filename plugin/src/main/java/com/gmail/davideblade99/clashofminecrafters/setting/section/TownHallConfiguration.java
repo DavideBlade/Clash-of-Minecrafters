@@ -6,7 +6,7 @@
 
 package com.gmail.davideblade99.clashofminecrafters.setting.section;
 
-import com.gmail.davideblade99.clashofminecrafters.Currency;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.TownHallSettings;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.yaml.CoMYamlConfiguration;
@@ -77,7 +77,7 @@ public final class TownHallConfiguration extends SectionConfiguration {
             level++;
 
             final int price = townHallSection.getInt(townHall + ".Price", -1);
-            final Currency currency = Currency.matchCurrency(townHallSection.getString(townHall + ".Currency", null));
+            final Currencies currency = Currencies.matchCurrency(townHallSection.getString(townHall + ".Currency", null));
             final String command = townHallSection.getString(townHall + ".Command", null);
             final byte hearts = (byte) townHallSection.getInt(townHall + ".Guardian.Health", -1); //TODO: differenziare il caso in cui è -1 perché non lo ha configurato (ammesso) o perché ha settato lui -1
             final Material helmet = Material.matchMaterial(townHallSection.getString(townHall + ".Guardian.Equipment.Helmet", ""));

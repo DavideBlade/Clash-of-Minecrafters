@@ -6,11 +6,10 @@
 
 package com.gmail.davideblade99.clashofminecrafters.handler;
 
-import com.gmail.davideblade99.clashofminecrafters.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.building.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.TownHallSettings;
-import com.gmail.davideblade99.clashofminecrafters.User;
-import org.bukkit.Bukkit;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;

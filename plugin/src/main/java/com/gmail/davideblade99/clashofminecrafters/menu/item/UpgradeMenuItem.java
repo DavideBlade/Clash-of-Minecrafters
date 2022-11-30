@@ -31,6 +31,4 @@ public abstract class UpgradeMenuItem extends BaseItem {
         this.plugin = plugin;
         this.nextBuilding = nextBuilding;
     }
-
-    //TODO: interfaccia Upgradeable: shouldBePasted() -> true per il 1° livello; int firstLevel() -> restituisce il primo livello (es. 1 per town hall, 0 per gli altri)
 }

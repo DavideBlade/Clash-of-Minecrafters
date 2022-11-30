@@ -6,7 +6,7 @@
 
 package com.gmail.davideblade99.clashofminecrafters.setting.section;
 
-import com.gmail.davideblade99.clashofminecrafters.Currency;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.ArcherTowerSettings;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.yaml.CoMYamlConfiguration;
@@ -75,7 +75,7 @@ public final class ArcherTowerConfiguration extends SectionConfiguration {
 
             final double damage = archerSection.getDouble(archerTower + ".Damage", -1);
             final int price = archerSection.getInt(archerTower + ".Price", -1);
-            final Currency currency = Currency.matchCurrency(archerSection.getString(archerTower + ".Currency", null));
+            final Currencies currency = Currencies.matchCurrency(archerSection.getString(archerTower + ".Currency", null));
 
             if (damage < 0) {
                 MessageUtil.sendError("The damage of the archer tower \"" + archerTower + "\" (in the config) cannot be negative!");

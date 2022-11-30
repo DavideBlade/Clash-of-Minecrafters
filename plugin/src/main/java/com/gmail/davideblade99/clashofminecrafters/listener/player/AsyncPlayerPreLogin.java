@@ -11,7 +11,7 @@ import com.gmail.davideblade99.clashofminecrafters.Village;
 import com.gmail.davideblade99.clashofminecrafters.listener.CoMListener;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.User;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ColorUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

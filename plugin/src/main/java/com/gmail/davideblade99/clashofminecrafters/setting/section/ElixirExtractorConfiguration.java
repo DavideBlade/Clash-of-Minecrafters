@@ -6,7 +6,7 @@
 
 package com.gmail.davideblade99.clashofminecrafters.setting.section;
 
-import com.gmail.davideblade99.clashofminecrafters.Currency;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.ElixirExtractorSettings;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.yaml.CoMYamlConfiguration;
@@ -76,7 +76,7 @@ public final class ElixirExtractorConfiguration extends SectionConfiguration {
             final int production = elixirExtractorSection.getInt(extractor + ".Production", -1);
             final int capacity = elixirExtractorSection.getInt(extractor + ".Capacity", 0);
             final int price = elixirExtractorSection.getInt(extractor + ".Price", -1);
-            final Currency currency = Currency.matchCurrency(elixirExtractorSection.getString(extractor + ".Currency", null));
+            final Currencies currency = Currencies.matchCurrency(elixirExtractorSection.getString(extractor + ".Currency", null));
 
             if (production < 0) {
                 MessageUtil.sendError("The production of level \"" + extractor + "\" elixir extractor (in the config) cannot be negative!");

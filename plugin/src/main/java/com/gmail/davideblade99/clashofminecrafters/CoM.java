@@ -17,6 +17,7 @@ import com.gmail.davideblade99.clashofminecrafters.listener.raid.*;
 import com.gmail.davideblade99.clashofminecrafters.menu.holder.MenuInventoryHolder;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.schematic.awe.AsyncWEPaster;
 import com.gmail.davideblade99.clashofminecrafters.schematic.worldedit.WEPaster;
 import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
@@ -116,6 +117,12 @@ public final class CoM extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // Added: supporto per AsyncWorldEdit
+        // Added: Comando /upgrade [building]
+        // Other: Aggiunto messaggio "Wrong building" nei file dei messaggi
+        // Other: Migliorata la qualità del codice
+        // Fixed: Alcuni messaggi in cui non veniva mostrato correttamente il singolare e il plurale
+
         //TODO: suggerimenti: https://www.spigotmc.org/conversations/clash-of-minecrafters.171775/
 
         //TODO: Aggiungere al guardiano teletrasporto casuale dietro il giocatore (cosicché possa sempre raggiungerlo nel caso sia bloccato da dei blocchi)

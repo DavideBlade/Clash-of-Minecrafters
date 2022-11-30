@@ -6,6 +6,7 @@
 
 package com.gmail.davideblade99.clashofminecrafters.util.bukkit;
 
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Balance;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -25,8 +26,18 @@ public final class ScoreboardUtil {
     private final static String ELIXIR = "§d§l> Elixir §5";
     private final static String TROPHIES = "§6§l> Trophies §e";
 
+    /**
+     * Create a side scoreboard with the data provided
+     *
+     * @param balance  Balance to show
+     * @param trophies Trophies to show
+     *
+     * @return A new {@link Scoreboard}
+     *
+     * @since v3.1.4
+     */
     @Nonnull
-    public static Scoreboard createScoreboard(final int gems, final int gold, final int elixir, final int trophies) {
+    public static Scoreboard createScoreboard(@Nonnull final Balance balance, final int trophies) {
         final Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
 
         final Objective objective = board.registerNewObjective("CoM", "dummy", "§6§lStats");
@@ -46,16 +57,24 @@ public final class ScoreboardUtil {
         objective.getScore("    ").setScore(2);
         objective.getScore(TROPHIES).setScore(1);
 
-        refreshData(gems, gold, elixir, trophies, board);
+        refreshData(balance, trophies, board);
 
         return board;
     }
 
-    // Update scoreboard content
-    public static void refreshData(final int gems, final int gold, final int elixir, final int trophies, @Nonnull final Scoreboard scoreboard) {
-        scoreboard.getTeam("Gems").setSuffix(String.valueOf(gems));
-        scoreboard.getTeam("Gold").setSuffix(String.valueOf(gold));
-        scoreboard.getTeam("Elixir").setSuffix(String.valueOf(elixir));
+    /**
+     * Update the content of the specified side scoreboard
+     *
+     * @param balance    New balance to show
+     * @param trophies   New trophies to show
+     * @param scoreboard Scoreboard to be updated
+     *
+     * @since v3.1.4
+     */
+    public static void refreshData(@Nonnull final Balance balance, final int trophies, @Nonnull final Scoreboard scoreboard) {
+        scoreboard.getTeam("Gems").setSuffix(String.valueOf(balance.getGems()));
+        scoreboard.getTeam("Gold").setSuffix(String.valueOf(balance.getGold()));
+        scoreboard.getTeam("Elixir").setSuffix(String.valueOf(balance.getElixir()));
         scoreboard.getTeam("Trophies").setSuffix(String.valueOf(trophies));
     }
 }

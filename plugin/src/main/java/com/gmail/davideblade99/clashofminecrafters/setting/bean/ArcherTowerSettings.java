@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.setting.bean;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Currency;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -24,7 +24,7 @@ public final class ArcherTowerSettings extends BuildingSettings {
 
     public final double damage;
 
-    public ArcherTowerSettings(final int level, final double damage, final int price, @Nonnull final Currency currency) {
+    public ArcherTowerSettings(final int level, final double damage, final int price, @Nonnull final Currencies currency) {
         super(level, price, currency);
 
         this.damage = damage;

@@ -7,17 +7,18 @@
 package com.gmail.davideblade99.clashofminecrafters.storage.file;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Currency;
-import com.gmail.davideblade99.clashofminecrafters.yaml.PlayerConfiguration;
 import com.gmail.davideblade99.clashofminecrafters.Village;
-import com.gmail.davideblade99.clashofminecrafters.BuildingType;
-import com.gmail.davideblade99.clashofminecrafters.User;
+import com.gmail.davideblade99.clashofminecrafters.building.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.geometric.Size2D;
+import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Balance;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.collection.RandomItemExtractor;
-import com.gmail.davideblade99.clashofminecrafters.geometric.Size2D;
-import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
+import com.gmail.davideblade99.clashofminecrafters.yaml.PlayerConfiguration;
 import org.bukkit.Location;
 
 import javax.annotation.Nonnull;
@@ -147,13 +148,13 @@ public final class YAMLDatabase implements PlayerDatabase {
     /**
      * {@inheritDoc}
      */
-    @Nullable
+    @Nonnull
     @Override
     public UserDatabaseType fetchUser(@Nonnull final UUID playerUUID) {
         final PlayerConfiguration conf = new PlayerConfiguration(getPlayerFile(playerUUID));
-        final int gold = conf.getBalance(Currency.GOLD);
-        final int elixir = conf.getBalance(Currency.ELIXIR);
-        final int gems = conf.getBalance(Currency.GEMS);
+        final int gold = conf.getBalance(Currencies.GOLD);
+        final int elixir = conf.getBalance(Currencies.ELIXIR);
+        final int gems = conf.getBalance(Currencies.GEMS);
         final int trophies = conf.getTrophies();
         final String clanName = conf.getClanName();
         final int townHallLevel = conf.getBuildingLevel(BuildingType.TOWN_HALL);
@@ -174,7 +175,7 @@ public final class YAMLDatabase implements PlayerDatabase {
         final String timestamp = conf.getCollectionTime();
         final LocalDateTime collectionTime = timestamp == null ? null : LocalDateTime.parse(timestamp, CoM.DATE_FORMAT);
 
-        return new UserDatabaseType(gold, elixir, gems, trophies, clanName, elixirExtractorLevel, goldExtractorLevel, archerTowerLevel, archerTowerPos, island, collectionTime, townHallLevel);
+        return new UserDatabaseType(new Balance(gold, elixir, gems), trophies, clanName, elixirExtractorLevel, goldExtractorLevel, archerTowerLevel, archerTowerPos, island, collectionTime, townHallLevel);
     }
 
     /**
@@ -182,9 +183,9 @@ public final class YAMLDatabase implements PlayerDatabase {
      */
     @Override
     public void storeUser(@Nonnull final UUID playerUUID, @Nonnull final User user) {
-        final int gold = user.getBalance(Currency.GOLD);
-        final int elixir = user.getBalance(Currency.ELIXIR);
-        final int gems = user.getBalance(Currency.GEMS);
+        final int gold = user.getGold();
+        final int elixir = user.getElixir();
+        final int gems = user.getGems();
         final int trophies = user.getTrophies();
         final String clanName = user.getClanName();
         final int townHallLevel = user.getBuildingLevel(BuildingType.TOWN_HALL);
@@ -198,9 +199,9 @@ public final class YAMLDatabase implements PlayerDatabase {
 
         final PlayerConfiguration conf = new PlayerConfiguration(getPlayerFile(playerUUID));
 
-        conf.setBalance(Currency.GOLD, gold);
-        conf.setBalance(Currency.ELIXIR, elixir);
-        conf.setBalance(Currency.GEMS, gems);
+        conf.setBalance(Currencies.GOLD, gold);
+        conf.setBalance(Currencies.ELIXIR, elixir);
+        conf.setBalance(Currencies.GEMS, gems);
         conf.setTrophies(trophies);
         conf.setClan(clanName);
         conf.setBuildingLevel(BuildingType.TOWN_HALL, townHallLevel);
