@@ -1,7 +1,7 @@
 package com.gmail.davideblade99.clashofminecrafters.menu.item;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.building.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
@@ -36,13 +36,13 @@ public final class TownHallUpgradeItem extends UpgradeMenuItem {
         final int nextLevel = currentLevel + 1;
 
         // Check if player has money to upgrade
-        if (!user.hasMoneyToUpgrade(nextLevel, BuildingType.GOLD_EXTRACTOR)) {
+        if (!user.hasMoneyToUpgrade(nextLevel, Buildings.GOLD_EXTRACTOR)) {
             final String currencyTranslation = user.getBalance().getCurrencyTranslation(nextBuilding.currency);
 
             MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.NOT_ENOUGH_MONEY, currencyTranslation));
             return;
         }
 
-        user.upgradeBuilding(BuildingType.TOWN_HALL);
+        user.upgradeBuilding(Buildings.TOWN_HALL);
     }
 }

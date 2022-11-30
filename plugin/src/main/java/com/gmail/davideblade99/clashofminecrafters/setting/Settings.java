@@ -6,7 +6,7 @@
 
 package com.gmail.davideblade99.clashofminecrafters.setting;
 
-import com.gmail.davideblade99.clashofminecrafters.building.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.menu.Menu;
@@ -480,7 +480,7 @@ public final class Settings extends CoMYamlConfiguration {
      *
      * @return the maximum configured level of the specified building
      */
-    public int getMaxLevel(@Nonnull final BuildingType building) {
+    public int getMaxLevel(@Nonnull final Buildings building) {
         switch (building) {
             case ARCHER_TOWER:
                 return archerTowers.size();
@@ -506,7 +506,7 @@ public final class Settings extends CoMYamlConfiguration {
      *
      * @since v3.1
      */
-    public boolean isBuildingEnabled(@Nonnull final BuildingType building) {
+    public boolean isBuildingEnabled(@Nonnull final Buildings building) {
         switch (building) {
             case ARCHER_TOWER:
                 return !archerTowers.isEmpty();
@@ -528,7 +528,7 @@ public final class Settings extends CoMYamlConfiguration {
      * @since v3.1
      */
     public boolean anyBuildingEnabled() {
-        for (BuildingType type : BuildingType.values())
+        for (Buildings type : Buildings.values())
             if (isBuildingEnabled(type))
                 return true;
         return false;
@@ -547,7 +547,7 @@ public final class Settings extends CoMYamlConfiguration {
      * @see #getTownHall(int)
      */
     @Nullable
-    public BuildingSettings getBuilding(@Nonnull final BuildingType type, final int level) {
+    public BuildingSettings getBuilding(@Nonnull final Buildings type, final int level) {
         switch (type) {
             case ARCHER_TOWER:
                 return getArcherTower(level);

@@ -6,7 +6,7 @@
 
 package com.gmail.davideblade99.clashofminecrafters.handler;
 
-import com.gmail.davideblade99.clashofminecrafters.Clan;
+import com.gmail.davideblade99.clashofminecrafters.player.Clan;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;

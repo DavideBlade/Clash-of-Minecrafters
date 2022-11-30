@@ -1,7 +1,7 @@
 package com.gmail.davideblade99.clashofminecrafters.menu.item;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.building.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.exception.InvalidSchematicFormatException;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
@@ -47,7 +47,7 @@ public final class ArcherTowerUpgradeItem extends UpgradeMenuItem {
         final int nextLevel = currentLevel + 1;
 
         // Check if player has money to upgrade
-        if (!user.hasMoneyToUpgrade(nextLevel, BuildingType.ARCHER_TOWER)) {
+        if (!user.hasMoneyToUpgrade(nextLevel, Buildings.ARCHER_TOWER)) {
             final String currencyTranslation = user.getBalance().getCurrencyTranslation(nextBuilding.currency);
 
             MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.NOT_ENOUGH_MONEY, currencyTranslation));
@@ -76,7 +76,7 @@ public final class ArcherTowerUpgradeItem extends UpgradeMenuItem {
                         // Save tower position
                         user.setArcherPos(new Vector(origin.getX(), (origin.getY() + schematic.getSize().getHeight()), origin.getZ()));
 
-                        user.upgradeBuilding(BuildingType.ARCHER_TOWER);
+                        user.upgradeBuilding(Buildings.ARCHER_TOWER);
                     }
                 });
             } catch (final FileNotFoundException e) {

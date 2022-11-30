@@ -4,14 +4,14 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters;
+package com.gmail.davideblade99.clashofminecrafters.player;
 
+import com.gmail.davideblade99.clashofminecrafters.geometric.Size2D;
+import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
-import com.gmail.davideblade99.clashofminecrafters.geometric.Size2D;
-import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -21,7 +21,8 @@ import javax.annotation.Nullable;
 /**
  * Class representing a player's village
  *
- * @since v3.1.2
+ * @author DavideBlade
+ * @since v3.1.4
  */
 public final class Village {
 

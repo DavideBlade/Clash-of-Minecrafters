@@ -9,7 +9,7 @@ package com.gmail.davideblade99.clashofminecrafters.listener.player;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.event.raid.RaidLostEvent;
 import com.gmail.davideblade99.clashofminecrafters.listener.CoMListener;
-import com.gmail.davideblade99.clashofminecrafters.Village;
+import com.gmail.davideblade99.clashofminecrafters.player.Village;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

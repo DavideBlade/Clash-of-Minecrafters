@@ -33,7 +33,7 @@ public final class BalanceCommand extends CommandFramework {
         final Player player = (Player) sender;
         final User user = plugin.getUser(player);
         for (Currencies currency : Currencies.values()) {
-            final int balance = user.getBalanceAmount(currency);
+            final int balance = user.getBalance(currency);
             final String currencyTranslation = user.getBalance().getCurrencyTranslation(currency);
 
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.SHOW_BALANCE, String.valueOf(balance), currencyTranslation));

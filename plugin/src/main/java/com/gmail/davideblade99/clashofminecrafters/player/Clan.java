@@ -4,8 +4,9 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters;
+package com.gmail.davideblade99.clashofminecrafters.player;
 
+import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
@@ -21,6 +22,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Represents an existing clan
+ *
+ * @author DavideBlade
+ * @since v3.1.4
+ */
 public final class Clan {
 
     private final CoM plugin;

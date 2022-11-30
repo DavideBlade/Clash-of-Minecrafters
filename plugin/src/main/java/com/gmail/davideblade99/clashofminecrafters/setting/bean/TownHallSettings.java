@@ -7,6 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.setting.bean;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
+import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ItemBuilder;
 import com.google.common.collect.ImmutableList;
@@ -32,60 +33,55 @@ public final class TownHallSettings extends BuildingSettings {
 
     /**
      * Number of guardian hearts
-     *
-     * @since v3.1
      */
     public final byte hearts;
 
     /**
      * Material of the guardian's helmet
-     *
-     * @since v3.1
      */
     public final Material helmet;
 
     /**
      * Material of the guardian's chestplate
-     *
-     * @since v3.1
      */
     public final Material chestplate;
 
     /**
      * Material of the guardian's leggings
-     *
-     * @since v3.1
      */
     public final Material leggings;
 
     /**
      * Material of the guardian's boots
-     *
-     * @since v3.1
      */
     public final Material boots;
 
     /**
      * (Immutable) list of effects to be applied to the guardian
-     *
-     * @since v3.1
      */
     public final List<PotionEffectType> potions;
 
     /**
-     * {@inheritDoc}
+     * Creates a new level for the town hall with the specified parameters with the default guardian (without extra
+     * equipment or hearts) and without any schematic
      *
-     * @param command Command to be executed when {@code this} level is reached
+     * @param level    Level of the town hall
+     * @param price    Cost of building for this {@code level}
+     * @param currency {@code price} currency
+     * @param command  Command to be executed when {@code this} level is reached
      *
-     * @throws IllegalArgumentException If the level is less than 2 or if the number of hearts is not positive.
+     * @see #TownHallSettings(int, int, Currencies, String, byte, Material, Material, Material, Material, List)
      */
     public TownHallSettings(final int level, final int price, @Nonnull final Currencies currency, @Nullable final String command) {
         this(level, price, currency, command, (byte) 10, null, null, null, null, null);
     }
 
     /**
-     * {@inheritDoc}
+     * Creates a new level for the town hall with the specified parameters and without any schematic
      *
+     * @param level      Level of the town hall
+     * @param price      Cost of building for this {@code level}
+     * @param currency   {@code price} currency
      * @param command    Command to be executed when {@code this} level is reached
      * @param hearts     Number of hearts of the island guardian
      * @param helmet     Helmet of the island guardian
@@ -94,14 +90,39 @@ public final class TownHallSettings extends BuildingSettings {
      * @param boots      Boots of the island guardian
      * @param potions    Effects to apply to the island guardian
      *
-     * @throws IllegalArgumentException If the level is less than 2 or if the number of hearts is not positive.
-     * @since v3.1
+     * @see #TownHallSettings(int, int, Currencies, String, byte, Material, Material, Material, Material, List,
+     * String)
+     * @since v3.1.4
      */
     public TownHallSettings(final int level, final int price, @Nonnull final Currencies currency, @Nullable final String command, final byte hearts, @Nullable final Material helmet, @Nullable final Material chestplate, @Nullable final Material leggings, @Nullable final Material boots, @Nullable final List<PotionEffectType> potions) {
-        super(level, price, currency);
+        this(level, price, currency, command, hearts, helmet, chestplate, leggings, boots, potions, null);
+    }
 
-        if (level < 2)
-            throw new IllegalArgumentException("Invalid level: must be greater than or equal to 2");
+    /**
+     * Creates a new level for the town hall with the specified parameters
+     *
+     * @param level      Level of the town hall
+     * @param price      Cost of building for this {@code level}
+     * @param currency   {@code price} currency
+     * @param command    Command to be executed when {@code this} level is reached
+     * @param hearts     Number of hearts of the island guardian
+     * @param helmet     Helmet of the island guardian
+     * @param chestplate Chestplate of the island guardian
+     * @param leggings   Leggings of the island guardian
+     * @param boots      Boots of the island guardian
+     * @param potions    Effects to apply to the island guardian
+     * @param schematic  Schematic for this {@code level}, which will be pasted at the time of purchase. {@code
+     *                   Null} if this {@code level} does not have a schematic.
+     *
+     * @throws IllegalArgumentException If the level is less than {@link Buildings#firstLevel} or if the number of
+     *                                  hearts is not positive
+     * @since v3.1.4
+     */
+    public TownHallSettings(final int level, final int price, @Nonnull final Currencies currency, @Nullable final String command, final byte hearts, @Nullable final Material helmet, @Nullable final Material chestplate, @Nullable final Material leggings, @Nullable final Material boots, @Nullable final List<PotionEffectType> potions, @Nullable final String schematic) {
+        super(level, price, currency, schematic);
+
+        if (level < Buildings.TOWN_HALL.firstLevel)
+            throw new IllegalArgumentException("Invalid level: must be greater than or equal to " + Buildings.TOWN_HALL.firstLevel);
         if (hearts <= 0)
             throw new IllegalArgumentException("Invalid health: must be a positive number");
 
@@ -126,5 +147,13 @@ public final class TownHallSettings extends BuildingSettings {
         itemBuilder.addLoreLine("&7&lPrice:&4 " + super.price + " " + super.currency);
 
         return itemBuilder.build();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isFirstLevel() {
+        return super.level == Buildings.TOWN_HALL.firstLevel;
     }
 }

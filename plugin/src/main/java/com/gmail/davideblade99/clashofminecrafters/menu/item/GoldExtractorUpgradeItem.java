@@ -1,7 +1,7 @@
 package com.gmail.davideblade99.clashofminecrafters.menu.item;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.building.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.exception.InvalidSchematicFormatException;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
@@ -46,7 +46,7 @@ public final class GoldExtractorUpgradeItem extends UpgradeMenuItem {
         final int nextLevel = currentLevel + 1;
 
         // Check if player has money to upgrade
-        if (!user.hasMoneyToUpgrade(nextLevel, BuildingType.GOLD_EXTRACTOR)) {
+        if (!user.hasMoneyToUpgrade(nextLevel, Buildings.GOLD_EXTRACTOR)) {
             final String currencyTranslation = user.getBalance().getCurrencyTranslation(nextBuilding.currency);
 
             MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.NOT_ENOUGH_MONEY, currencyTranslation));
@@ -83,10 +83,10 @@ public final class GoldExtractorUpgradeItem extends UpgradeMenuItem {
                          * Notifies resource collection only if the player already had an extractor
                          * (if he is buying the first one, there is nothing to collect)
                          */
-                        if (user.hasBuilding(BuildingType.GOLD_EXTRACTOR))
+                        if (user.hasBuilding(Buildings.GOLD_EXTRACTOR))
                             MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.COLLECTED_RESOURCES));
 
-                        user.upgradeBuilding(BuildingType.GOLD_EXTRACTOR);
+                        user.upgradeBuilding(Buildings.GOLD_EXTRACTOR);
                     }
                 });
             } catch (final FileNotFoundException e) {

@@ -8,10 +8,10 @@ package com.gmail.davideblade99.clashofminecrafters.handler;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.event.raid.RaidLostEvent;
-import com.gmail.davideblade99.clashofminecrafters.Village;
+import com.gmail.davideblade99.clashofminecrafters.player.Village;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.ArcherTowerSettings;
 import com.gmail.davideblade99.clashofminecrafters.setting.bean.BuildingSettings;
-import com.gmail.davideblade99.clashofminecrafters.building.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
@@ -98,7 +98,7 @@ public final class WarHandler {
             // Spawn creature
             plugin.getGuardianHandler().spawn(targetUser, targetIsland.owner, targetIsland.spawn);
 
-            final BuildingSettings archerTower = targetUser.getBuilding(BuildingType.ARCHER_TOWER);
+            final BuildingSettings archerTower = targetUser.getBuilding(Buildings.ARCHER_TOWER);
             if (archerTower != null) // If the player has archer tower
                 plugin.getArcherHandler().spawn(targetIsland.owner, ((ArcherTowerSettings) archerTower).damage, targetUser.getTowerLoc());
 

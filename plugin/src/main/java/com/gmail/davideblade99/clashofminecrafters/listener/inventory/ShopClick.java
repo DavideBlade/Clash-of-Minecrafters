@@ -68,7 +68,7 @@ public final class ShopClick extends CoMListener {
                         if (price != 0 && currency != null) {
                             final User user = plugin.getUser(player);
 
-                            if (user.getBalanceAmount(currency) < price) {
+                            if (user.getBalance(currency) < price) {
                                 final String currencyTranslation = user.getBalance().getCurrencyTranslation(currency);
 
                                 MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NOT_ENOUGH_MONEY, currencyTranslation));

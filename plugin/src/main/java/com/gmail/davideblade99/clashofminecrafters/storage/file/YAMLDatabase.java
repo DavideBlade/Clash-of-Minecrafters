@@ -7,8 +7,8 @@
 package com.gmail.davideblade99.clashofminecrafters.storage.file;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Village;
-import com.gmail.davideblade99.clashofminecrafters.building.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.player.Village;
+import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Size2D;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
@@ -157,10 +157,10 @@ public final class YAMLDatabase implements PlayerDatabase {
         final int gems = conf.getBalance(Currencies.GEMS);
         final int trophies = conf.getTrophies();
         final String clanName = conf.getClanName();
-        final int townHallLevel = conf.getBuildingLevel(BuildingType.TOWN_HALL);
-        final int elixirExtractorLevel = conf.getBuildingLevel(BuildingType.ELIXIR_EXTRACTOR);
-        final int goldExtractorLevel = conf.getBuildingLevel(BuildingType.GOLD_EXTRACTOR);
-        final int archerTowerLevel = conf.getBuildingLevel(BuildingType.ARCHER_TOWER);
+        final int townHallLevel = conf.getBuildingLevel(Buildings.TOWN_HALL);
+        final int elixirExtractorLevel = conf.getBuildingLevel(Buildings.ELIXIR_EXTRACTOR);
+        final int goldExtractorLevel = conf.getBuildingLevel(Buildings.GOLD_EXTRACTOR);
+        final int archerTowerLevel = conf.getBuildingLevel(Buildings.ARCHER_TOWER);
         final Vector archerTowerPos = conf.getArcherTowerPosition();
 
         final String playerName = plugin.getPlayerHandler().getPlayerName(conf.getUUID());
@@ -188,10 +188,10 @@ public final class YAMLDatabase implements PlayerDatabase {
         final int gems = user.getGems();
         final int trophies = user.getTrophies();
         final String clanName = user.getClanName();
-        final int townHallLevel = user.getBuildingLevel(BuildingType.TOWN_HALL);
-        final int elixirExtractorLevel = user.getBuildingLevel(BuildingType.ELIXIR_EXTRACTOR);
-        final int goldExtractorLevel = user.getBuildingLevel(BuildingType.GOLD_EXTRACTOR);
-        final int archerLevel = user.getBuildingLevel(BuildingType.ARCHER_TOWER);
+        final int townHallLevel = user.getBuildingLevel(Buildings.TOWN_HALL);
+        final int elixirExtractorLevel = user.getBuildingLevel(Buildings.ELIXIR_EXTRACTOR);
+        final int goldExtractorLevel = user.getBuildingLevel(Buildings.GOLD_EXTRACTOR);
+        final int archerLevel = user.getBuildingLevel(Buildings.ARCHER_TOWER);
         final Vector towerPos = user.getTowerPos();
         final Village island = user.getIsland();
         final LocalDateTime collectionTime = user.getCollectionTime();
@@ -204,10 +204,10 @@ public final class YAMLDatabase implements PlayerDatabase {
         conf.setBalance(Currencies.GEMS, gems);
         conf.setTrophies(trophies);
         conf.setClan(clanName);
-        conf.setBuildingLevel(BuildingType.TOWN_HALL, townHallLevel);
-        conf.setBuildingLevel(BuildingType.ELIXIR_EXTRACTOR, elixirExtractorLevel);
-        conf.setBuildingLevel(BuildingType.GOLD_EXTRACTOR, goldExtractorLevel);
-        conf.setBuildingLevel(BuildingType.ARCHER_TOWER, archerLevel);
+        conf.setBuildingLevel(Buildings.TOWN_HALL, townHallLevel);
+        conf.setBuildingLevel(Buildings.ELIXIR_EXTRACTOR, elixirExtractorLevel);
+        conf.setBuildingLevel(Buildings.GOLD_EXTRACTOR, goldExtractorLevel);
+        conf.setBuildingLevel(Buildings.ARCHER_TOWER, archerLevel);
 
         if (towerPos != null)
             conf.setArcherTowerLocation(towerPos.toString());

@@ -7,8 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.player;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Village;
-import com.gmail.davideblade99.clashofminecrafters.building.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.exception.WorldBorderReachedException;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
@@ -121,7 +120,7 @@ public final class User {
      *
      * @throws IllegalArgumentException If the specified level does not exist for the passed building type
      */
-    public boolean hasMoneyToUpgrade(final int nextLevel, @Nonnull final BuildingType type) {
+    public boolean hasMoneyToUpgrade(final int nextLevel, @Nonnull final Buildings type) {
         final BuildingSettings nextBuilding;
 
         switch (type) {
@@ -145,7 +144,7 @@ public final class User {
         if (nextBuilding == null)
             throw new IllegalArgumentException("The \"" + nextLevel + "\" level of the building \"" + type + "\" does not exist");
 
-        return getBalanceAmount(nextBuilding.currency) >= nextBuilding.price;
+        return getBalance(nextBuilding.currency) >= nextBuilding.price;
     }
 
     /**
@@ -160,7 +159,7 @@ public final class User {
      *
      * @return The player's balance for the specified currency
      */
-    public int getBalanceAmount(@Nonnull final Currencies currency) {
+    public int getBalance(@Nonnull final Currencies currency) {
         return balance.getBalance(currency);
     }
 
@@ -289,7 +288,7 @@ public final class User {
         setClanName(null);
     }
 
-    public boolean hasBuilding(@Nonnull final BuildingType type) {
+    public boolean hasBuilding(@Nonnull final Buildings type) {
         return getBuildingLevel(type) > 0; // If the level is 0 it means that the player has not unlocked the building
     }
 
@@ -301,7 +300,7 @@ public final class User {
      * @since v3.1.2
      */
     public boolean hasExtractor() {
-        return getBuilding(BuildingType.GOLD_EXTRACTOR) != null || getBuilding(BuildingType.ELIXIR_EXTRACTOR) != null;
+        return getBuilding(Buildings.GOLD_EXTRACTOR) != null || getBuilding(Buildings.ELIXIR_EXTRACTOR) != null;
     }
 
     /**
@@ -311,7 +310,7 @@ public final class User {
      *
      * @return the building level or 0 if the player did not buy the building or some error has occurred
      */
-    public int getBuildingLevel(@Nonnull final BuildingType type) {
+    public int getBuildingLevel(@Nonnull final Buildings type) {
         switch (type) {
             case ARCHER_TOWER:
                 return archerLevel;
@@ -334,20 +333,20 @@ public final class User {
      * happen if, for example, there is a configuration error or if levels have been deleted)
      */
     @Nullable
-    public BuildingSettings getBuilding(@Nonnull final BuildingType type) {
+    public BuildingSettings getBuilding(@Nonnull final Buildings type) {
         final int currentLevel = getBuildingLevel(type);
 
         // If the level is 1, it means that the player has the basic level of the town hall (never upgraded it)
-        if (type == BuildingType.TOWN_HALL && currentLevel == 1)
+        if (type == Buildings.TOWN_HALL && currentLevel == 1)
             return null;
         // If the level is 0 it means that the player does not have the building (never unlocked)
-        if (type != BuildingType.TOWN_HALL && currentLevel == 0)
+        if (type != Buildings.TOWN_HALL && currentLevel == 0)
             return null;
 
         return plugin.getConfig().getBuilding(type, currentLevel);
     }
 
-    public void upgradeBuilding(@Nonnull final BuildingType type) {
+    public void upgradeBuilding(@Nonnull final Buildings type) {
         final int nextLevel = getBuildingLevel(type) + 1;
 
         final String replacement;
@@ -405,7 +404,7 @@ public final class User {
      * @throws IllegalArgumentException If the level is negative
      * @throws IllegalStateException    If the building type does not exist
      */
-    private void setBuildingLevel(final int level, @Nonnull final BuildingType type) {
+    private void setBuildingLevel(final int level, @Nonnull final Buildings type) {
         if (level < 0)
             throw new IllegalArgumentException("Level must be greater than or equal to 0");
 
@@ -493,8 +492,8 @@ public final class User {
      * Collects all resources in the extractors unlocked by the player
      */
     public void collectExtractors() {
-        final ExtractorSettings goldExtractor = (ExtractorSettings) this.getBuilding(BuildingType.GOLD_EXTRACTOR);
-        final ExtractorSettings elixirExtractor = (ExtractorSettings) this.getBuilding(BuildingType.ELIXIR_EXTRACTOR);
+        final ExtractorSettings goldExtractor = (ExtractorSettings) this.getBuilding(Buildings.GOLD_EXTRACTOR);
+        final ExtractorSettings elixirExtractor = (ExtractorSettings) this.getBuilding(Buildings.ELIXIR_EXTRACTOR);
 
         if (goldExtractor != null) // If the player bought the gold extractor
             this.addBalance(getResourcesProduced(goldExtractor, this.collectionTime), Currencies.GOLD);

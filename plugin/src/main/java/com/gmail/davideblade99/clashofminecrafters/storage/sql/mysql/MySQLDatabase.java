@@ -7,8 +7,8 @@
 package com.gmail.davideblade99.clashofminecrafters.storage.sql.mysql;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Village;
-import com.gmail.davideblade99.clashofminecrafters.building.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.player.Village;
+import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.file.log.ErrorLog;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Size2D;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
@@ -250,10 +250,10 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
         final int gems = user.getGems();
         final int trophies = user.getTrophies();
         final String clan = user.getClanName();
-        final int elixirExtractorLevel = user.getBuildingLevel(BuildingType.ELIXIR_EXTRACTOR);
-        final int goldExtractorLevel = user.getBuildingLevel(BuildingType.GOLD_EXTRACTOR);
-        final int archerLevel = user.getBuildingLevel(BuildingType.ARCHER_TOWER);
-        final int townHallLevel = user.getBuildingLevel(BuildingType.TOWN_HALL);
+        final int elixirExtractorLevel = user.getBuildingLevel(Buildings.ELIXIR_EXTRACTOR);
+        final int goldExtractorLevel = user.getBuildingLevel(Buildings.GOLD_EXTRACTOR);
+        final int archerLevel = user.getBuildingLevel(Buildings.ARCHER_TOWER);
+        final int townHallLevel = user.getBuildingLevel(Buildings.TOWN_HALL);
         final String archerPos = user.getTowerPos() == null ? null : user.getTowerPos().toString();
         final Village island = user.getIsland();
         final String islandSpawn = island == null ? null : BukkitLocationUtil.toString(island.spawn);

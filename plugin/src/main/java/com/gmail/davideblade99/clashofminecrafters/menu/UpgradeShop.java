@@ -6,7 +6,7 @@
 
 package com.gmail.davideblade99.clashofminecrafters.menu;
 
-import com.gmail.davideblade99.clashofminecrafters.building.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.menu.item.*;
@@ -42,36 +42,36 @@ public final class UpgradeShop extends Menu {
         final List<BaseItem> items = new ArrayList<>(4);
 
         // Show item only if building is not disabled
-        if (config.isBuildingEnabled(BuildingType.ARCHER_TOWER)) {
+        if (config.isBuildingEnabled(Buildings.ARCHER_TOWER)) {
             final byte slot = 10;
-            final BuildingType currentBuilding = BuildingType.ARCHER_TOWER;
+            final Buildings currentBuilding = Buildings.ARCHER_TOWER;
             final int currentLevel = user.getBuildingLevel(currentBuilding);
 
             items.add(createBuildingItem(plugin, currentBuilding, currentLevel, slot));
         }
 
         // Show item only if building is not disabled
-        if (config.isBuildingEnabled(BuildingType.ELIXIR_EXTRACTOR)) {
+        if (config.isBuildingEnabled(Buildings.ELIXIR_EXTRACTOR)) {
             final byte slot = 13;
-            final BuildingType currentBuilding = BuildingType.ELIXIR_EXTRACTOR;
+            final Buildings currentBuilding = Buildings.ELIXIR_EXTRACTOR;
             final int currentLevel = user.getBuildingLevel(currentBuilding);
 
             items.add(createBuildingItem(plugin, currentBuilding, currentLevel, slot));
         }
 
         // Show item only if building is not disabled
-        if (config.isBuildingEnabled(BuildingType.GOLD_EXTRACTOR)) {
+        if (config.isBuildingEnabled(Buildings.GOLD_EXTRACTOR)) {
             final byte slot = 16;
-            final BuildingType currentBuilding = BuildingType.GOLD_EXTRACTOR;
+            final Buildings currentBuilding = Buildings.GOLD_EXTRACTOR;
             final int currentLevel = user.getBuildingLevel(currentBuilding);
 
             items.add(createBuildingItem(plugin, currentBuilding, currentLevel, slot));
         }
 
         // Show item only if building is not disabled
-        if (config.isBuildingEnabled(BuildingType.TOWN_HALL)) {
+        if (config.isBuildingEnabled(Buildings.TOWN_HALL)) {
             final byte slot = 22;
-            final BuildingType currentBuilding = BuildingType.TOWN_HALL;
+            final Buildings currentBuilding = Buildings.TOWN_HALL;
             final int currentLevel = user.getBuildingLevel(currentBuilding);
 
             items.add(createBuildingItem(plugin, currentBuilding, currentLevel, slot));
@@ -92,7 +92,7 @@ public final class UpgradeShop extends Menu {
      *
      * @since v3.0.3
      */
-    private static BaseItem createBuildingItem(@Nonnull final CoM plugin, @Nonnull final BuildingType building, int level, final byte slot) {
+    private static BaseItem createBuildingItem(@Nonnull final CoM plugin, @Nonnull final Buildings building, int level, final byte slot) {
         final Settings config = plugin.getConfig();
 
         //TODO: usare max() anziché considerarlo come livello 0 -> meno problemi e più ragionevole -> metterlo nel get() visto che è condiviso tra tutti
@@ -104,7 +104,7 @@ public final class UpgradeShop extends Menu {
          */
         final int maxLevel = config.getMaxLevel(building);
         if (level > maxLevel)
-            level = building == BuildingType.TOWN_HALL ? 1 : 0; // The base level of the town hall is 1 while for other buildings is 0
+            level = building == Buildings.TOWN_HALL ? 1 : 0; // The base level of the town hall is 1 while for other buildings is 0
 
 
         if (level < maxLevel) {

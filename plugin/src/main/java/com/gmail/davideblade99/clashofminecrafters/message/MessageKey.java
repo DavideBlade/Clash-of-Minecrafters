@@ -35,6 +35,7 @@ public enum MessageKey {
     UNKNOWN_PLAYER("Player never joined", "%player"),
     TOO_BIG_NUMBER("Too big number", "%amount"),
     NO_BUILDINGS("No buildings"),
+    WRONG_BUILDING("Wrong building"),
 
     /* Usage of commands */
     ADD_COMMAND_USAGE("Add command usage"),

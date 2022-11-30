@@ -1,7 +1,7 @@
 package com.gmail.davideblade99.clashofminecrafters.menu.item;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.building.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.exception.InvalidSchematicFormatException;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
@@ -46,7 +46,7 @@ public final class ElixirExtractorUpgradeItem extends UpgradeMenuItem {
         final int nextLevel = currentLevel + 1;
 
         // Check if player has money to upgrade
-        if (!user.hasMoneyToUpgrade(nextLevel, BuildingType.ELIXIR_EXTRACTOR)) {
+        if (!user.hasMoneyToUpgrade(nextLevel, Buildings.ELIXIR_EXTRACTOR)) {
             final String currencyTranslation = user.getBalance().getCurrencyTranslation(nextBuilding.currency);
 
             MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.NOT_ENOUGH_MONEY, currencyTranslation));
@@ -83,10 +83,10 @@ public final class ElixirExtractorUpgradeItem extends UpgradeMenuItem {
                          * Notifies resource collection only if the player already had an extractor
                          * (if he is buying the first one, there is nothing to collect)
                          */
-                        if (user.hasBuilding(BuildingType.ELIXIR_EXTRACTOR))
+                        if (user.hasBuilding(Buildings.ELIXIR_EXTRACTOR))
                             MessageUtil.sendMessage(clicker, Messages.getMessage(MessageKey.COLLECTED_RESOURCES));
 
-                        user.upgradeBuilding(BuildingType.ELIXIR_EXTRACTOR);
+                        user.upgradeBuilding(Buildings.ELIXIR_EXTRACTOR);
                     }
                 });
             } catch (final FileNotFoundException e) {
