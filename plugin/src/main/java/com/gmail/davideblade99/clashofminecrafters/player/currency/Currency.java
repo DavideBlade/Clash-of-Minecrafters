@@ -30,7 +30,7 @@ public interface Currency {
      *
      * @return The amount effectively added
      *
-     * @see Currencies#addableAmount(Currencies, int, int)
+     * @see Currencies#addableAmount(Currencies, int)
      */
     int addCurrency(final int amount);
 
@@ -42,7 +42,7 @@ public interface Currency {
      *
      * @return The amount effectively removed
      *
-     * @see Currencies#removableAmount(Currencies, int, int)
+     * @see Currencies#removableAmount(Currencies, int)
      */
     int removeCurrency(final int amount);
 

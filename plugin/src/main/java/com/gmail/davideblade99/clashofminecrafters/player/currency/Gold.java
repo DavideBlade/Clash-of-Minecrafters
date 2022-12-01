@@ -50,9 +50,9 @@ public final class Gold implements Currency {
      */
     @Override
     public int addCurrency(final int amount) {
-        final int addableAmount = Currencies.addableAmount(Currencies.GOLD, this.gold, amount);
-        this.gold += addableAmount;
-        return addableAmount;
+        final int toAdd = Math.min(amount, Currencies.addableAmount(Currencies.GOLD, this.gold));
+        this.gold += toAdd;
+        return toAdd;
     }
 
     /**
@@ -60,9 +60,9 @@ public final class Gold implements Currency {
      */
     @Override
     public int removeCurrency(final int amount) {
-        final int removableAmount = Currencies.removableAmount(Currencies.GOLD, this.gold, amount);
-        this.gold += removableAmount;
-        return removableAmount;
+        final int toRemove = Math.min(amount, Currencies.removableAmount(Currencies.GOLD, this.gold));
+        this.gold -= toRemove;
+        return toRemove;
     }
 
     /**

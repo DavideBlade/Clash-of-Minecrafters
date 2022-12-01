@@ -50,9 +50,9 @@ public final class Elixir implements Currency {
      */
     @Override
     public int addCurrency(final int amount) {
-        final int addableAmount = Currencies.addableAmount(Currencies.ELIXIR, this.elixir, amount);
-        this.elixir += addableAmount;
-        return addableAmount;
+        final int toAdd = Math.min(amount, Currencies.addableAmount(Currencies.ELIXIR, this.elixir));
+        this.elixir += toAdd;
+        return toAdd;
     }
 
     /**
@@ -60,9 +60,9 @@ public final class Elixir implements Currency {
      */
     @Override
     public int removeCurrency(final int amount) {
-        final int removableAmount = Currencies.removableAmount(Currencies.ELIXIR, this.elixir, amount);
-        this.elixir += removableAmount;
-        return removableAmount;
+        final int toRemove = Math.min(amount, Currencies.removableAmount(Currencies.ELIXIR, this.elixir));
+        this.elixir -= toRemove;
+        return toRemove;
     }
 
     /**

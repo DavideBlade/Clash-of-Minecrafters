@@ -50,9 +50,9 @@ public final class Gems implements Currency {
      */
     @Override
     public int addCurrency(final int amount) {
-        final int addableAmount = Currencies.addableAmount(Currencies.GEMS, this.gems, amount);
-        this.gems += addableAmount;
-        return addableAmount;
+        final int toAdd = Math.min(amount, Currencies.addableAmount(Currencies.GEMS, this.gems));
+        this.gems += toAdd;
+        return toAdd;
     }
 
     /**
@@ -60,9 +60,9 @@ public final class Gems implements Currency {
      */
     @Override
     public int removeCurrency(final int amount) {
-        final int removableAmount = Currencies.removableAmount(Currencies.GEMS, this.gems, amount);
-        this.gems += removableAmount;
-        return removableAmount;
+        final int toRemove = Math.min(amount, Currencies.removableAmount(Currencies.GEMS, this.gems));
+        this.gems -= toRemove;
+        return toRemove;
     }
 
     /**

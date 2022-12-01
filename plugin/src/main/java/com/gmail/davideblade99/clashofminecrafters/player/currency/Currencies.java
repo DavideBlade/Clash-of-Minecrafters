@@ -7,7 +7,6 @@
 package com.gmail.davideblade99.clashofminecrafters.player.currency;
 
 import com.gmail.davideblade99.clashofminecrafters.util.EnumUtil;
-import com.gmail.davideblade99.clashofminecrafters.util.number.IntegerUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -71,31 +70,29 @@ public enum Currencies {
      *
      * @param currency      The currency of which to check the upper limit
      * @param currentAmount The current amount of the {@code currency}
-     * @param amountToAdd   The amount you would like to add
      *
      * @return The amount that can be added to the specified currency before reaching its upper limit
      */
-    public static int addableAmount(@Nonnull final Currencies currency, final int currentAmount, final int amountToAdd) {
-        final int newAmountNoOverflow = IntegerUtil.saturatedAdd(currentAmount, amountToAdd); // Avoid overflow
-        final int newAmount = currentAmount + amountToAdd; // Can be wrong (in case of overflow)
+    public static int addableAmount(@Nonnull final Currencies currency, final int currentAmount) {
+        if (currentAmount >= currency.max)
+            return 0;
 
-        return Math.min(currency.max, Math.max(newAmountNoOverflow, newAmount));
+        return currency.max - currentAmount;
     }
 
     /**
      * Calculates the amount that can be removed to a currency before reaching the lower limit
      *
-     * @param currency       The currency of which to check the lower limit
-     * @param currentAmount  The current amount of the {@code currency}
-     * @param amountToRemove The amount you would like to remove
+     * @param currency      The currency of which to check the lower limit
+     * @param currentAmount The current amount of the {@code currency}
      *
      * @return The amount that can be removed to the specified currency before reaching its lower limit
      */
-    public static int removableAmount(@Nonnull final Currencies currency, final int currentAmount, final int amountToRemove) {
-        final int newAmountNoUnderflow = IntegerUtil.saturatedSub(currentAmount, amountToRemove); // Avoid underflow
-        final int newAmount = currentAmount - amountToRemove; // Can be wrong (in case of underflow)
+    public static int removableAmount(@Nonnull final Currencies currency, final int currentAmount) {
+        if (currentAmount <= currency.min)
+            return 0;
 
-        return Math.max(currency.min, Math.min(newAmountNoUnderflow, newAmount));
+        return currentAmount - currency.min;
     }
 
     public static boolean isCorrectCurrency(@Nullable final String currency) {
