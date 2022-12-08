@@ -83,7 +83,7 @@ import java.util.UUID;
 
 //TODO: https://www.spigotmc.org/resources/1-13-1-18-craftofclans.22966/
 
-//TODO: catch errori non gestiti da nessuno:d https://stackoverflow.com/a/13507137 + https://docs.oracle.com/javase/6/docs/api/java/lang/Thread.html#setDefaultUncaughtExceptionHandler%28java.lang.Thread.UncaughtExceptionHandler%29 + https://www.javatpoint.com/java-thread-setdefaultuncaughtexceptionhandler-method + https://stackoverflow.com/a/46591885
+//TODO: catch errori non gestiti da nessuno: https://stackoverflow.com/a/13507137 + https://docs.oracle.com/javase/6/docs/api/java/lang/Thread.html#setDefaultUncaughtExceptionHandler%28java.lang.Thread.UncaughtExceptionHandler%29 + https://www.javatpoint.com/java-thread-setdefaultuncaughtexceptionhandler-method + https://stackoverflow.com/a/46591885
 public final class CoM extends JavaPlugin {
 
     /**
