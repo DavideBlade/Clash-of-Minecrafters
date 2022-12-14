@@ -6,7 +6,7 @@
 
 package com.gmail.davideblade99.clashofminecrafters.setting.section;
 
-import com.gmail.davideblade99.clashofminecrafters.setting.bean.ClanSettings;
+import com.gmail.davideblade99.clashofminecrafters.setting.ClanLevel;
 import com.gmail.davideblade99.clashofminecrafters.util.Pair;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.yaml.CoMYamlConfiguration;
@@ -30,10 +30,10 @@ public final class ClanConfiguration extends SectionConfiguration {
 
 
     /**
-     * List of {@link ClanSettings}s extracted from the configuration representing, for each level, the exp
+     * List of {@link ClanLevel}s extracted from the configuration representing, for each level, the exp
      * required and the command to be executed when a clan reaches the level.
      */
-    private final List<ClanSettings> clans;
+    private final List<ClanLevel> clans;
 
     /**
      * Create a new instance of {@link ClanConfiguration} and load all the clans with {@link #loadClans()}
@@ -53,7 +53,7 @@ public final class ClanConfiguration extends SectionConfiguration {
      *
      * @since v3.1.2
      */
-    public List<ClanSettings> getClans() {
+    public List<ClanLevel> getClans() {
         return this.clans;
     }
 
@@ -85,7 +85,7 @@ public final class ClanConfiguration extends SectionConfiguration {
                 return;
             }
 
-            this.clans.add(new ClanSettings(expRequired, command));
+            this.clans.add(new ClanLevel(expRequired, command));
         }
     }
 }

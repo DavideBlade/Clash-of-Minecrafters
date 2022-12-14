@@ -4,7 +4,7 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.setting.bean;
+package com.gmail.davideblade99.clashofminecrafters.setting;
 
 import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 
@@ -12,12 +12,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * JavaBean that contains the extractor shared settings retrieved from config.yml.
+ * Represents a level of an extractor, configured in the config.yml
  *
  * @author DavideBlade
- * @since v3.1.2
+ * @since v3.1.4
  */
-public abstract class ExtractorSettings extends BuildingSettings {
+public abstract class ExtractorLevel extends BuildingLevel {
 
     public final int production;
     public final int capacity;
@@ -32,10 +32,8 @@ public abstract class ExtractorSettings extends BuildingSettings {
      * @param currency   {@code price} currency
      * @param schematic  Schematic for this {@code level}, which will be pasted at the time of purchase. {@code
      *                   Null} if this {@code level} does not have a schematic.
-     *
-     * @since v3.1.4
      */
-    public ExtractorSettings(final int level, final int production, final int capacity, final int price, @Nonnull final Currencies currency, @Nullable final String schematic) {
+    public ExtractorLevel(final int level, final int production, final int capacity, final int price, @Nonnull final Currencies currency, @Nullable final String schematic) {
         super(level, price, currency, schematic);
 
         this.production = production;

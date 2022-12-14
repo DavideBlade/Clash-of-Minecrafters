@@ -4,7 +4,7 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.setting.bean;
+package com.gmail.davideblade99.clashofminecrafters.setting;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
@@ -17,12 +17,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * JavaBean that contains elixir extractor settings retrieved from config.yml.
+ * Represents a level of the elixir extractor, configured in the config.yml
  *
  * @author DavideBlade
- * @since v3.1.2
+ * @since v3.1.4
  */
-public final class ElixirExtractorSettings extends ExtractorSettings {
+public final class ElixirExtractorLevel extends ExtractorLevel {
 
     /**
      * Creates a new level for the elixir extractor with the specified parameters and the default schematic
@@ -34,10 +34,10 @@ public final class ElixirExtractorSettings extends ExtractorSettings {
      * @param price      Cost of building for this {@code level}
      * @param currency   {@code price} currency
      *
-     * @see #ElixirExtractorSettings(int, int, int, int, Currencies, String)
+     * @see #ElixirExtractorLevel(int, int, int, int, Currencies, String)
      */
-    public ElixirExtractorSettings(final int level, final int production, final int capacity, final int price, @Nonnull final Currencies currency) {
-        this(level, production, capacity, price, currency, level == Buildings.ELIXIR_EXTRACTOR.firstLevel ? "ElixirExtractor" : null);
+    public ElixirExtractorLevel(final int level, final int production, final int capacity, final int price, @Nonnull final Currencies currency) {
+        this(level, production, capacity, price, currency, level == Buildings.ELIXIR_EXTRACTOR.firstLevel+1 ? "ElixirExtractor" : null);
     }
 
     /**
@@ -52,9 +52,8 @@ public final class ElixirExtractorSettings extends ExtractorSettings {
      *                   Null} if this {@code level} does not have a schematic.
      *
      * @throws IllegalArgumentException If the level is less than {@link Buildings#firstLevel}
-     * @since v3.1.4
      */
-    public ElixirExtractorSettings(final int level, final int production, final int capacity, final int price, @Nonnull final Currencies currency, @Nullable final String schematic) {
+    public ElixirExtractorLevel(final int level, final int production, final int capacity, final int price, @Nonnull final Currencies currency, @Nullable final String schematic) {
         super(level, production, capacity, price, currency, schematic);
 
         if (level < Buildings.ELIXIR_EXTRACTOR.firstLevel)

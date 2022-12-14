@@ -4,7 +4,7 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.setting.bean;
+package com.gmail.davideblade99.clashofminecrafters.setting;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
@@ -20,12 +20,12 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * JavaBean that contains town hall settings retrieved from config.yml.
+ * Represents a level of the town hall, configured in the config.yml
  *
  * @author DavideBlade
- * @since v3.1.2
+ * @since v3.1.4
  */
-public final class TownHallSettings extends BuildingSettings {
+public final class TownHallLevel extends BuildingLevel {
 
     private final String command; //TODO: questo comando privato come fa ad essere eseguito?
 
@@ -70,9 +70,9 @@ public final class TownHallSettings extends BuildingSettings {
      * @param currency {@code price} currency
      * @param command  Command to be executed when {@code this} level is reached
      *
-     * @see #TownHallSettings(int, int, Currencies, String, byte, Material, Material, Material, Material, List)
+     * @see #TownHallLevel(int, int, Currencies, String, byte, Material, Material, Material, Material, List)
      */
-    public TownHallSettings(final int level, final int price, @Nonnull final Currencies currency, @Nullable final String command) {
+    public TownHallLevel(final int level, final int price, @Nonnull final Currencies currency, @Nullable final String command) {
         this(level, price, currency, command, (byte) 10, null, null, null, null, null);
     }
 
@@ -90,11 +90,10 @@ public final class TownHallSettings extends BuildingSettings {
      * @param boots      Boots of the island guardian
      * @param potions    Effects to apply to the island guardian
      *
-     * @see #TownHallSettings(int, int, Currencies, String, byte, Material, Material, Material, Material, List,
+     * @see #TownHallLevel(int, int, Currencies, String, byte, Material, Material, Material, Material, List,
      * String)
-     * @since v3.1.4
      */
-    public TownHallSettings(final int level, final int price, @Nonnull final Currencies currency, @Nullable final String command, final byte hearts, @Nullable final Material helmet, @Nullable final Material chestplate, @Nullable final Material leggings, @Nullable final Material boots, @Nullable final List<PotionEffectType> potions) {
+    public TownHallLevel(final int level, final int price, @Nonnull final Currencies currency, @Nullable final String command, final byte hearts, @Nullable final Material helmet, @Nullable final Material chestplate, @Nullable final Material leggings, @Nullable final Material boots, @Nullable final List<PotionEffectType> potions) {
         this(level, price, currency, command, hearts, helmet, chestplate, leggings, boots, potions, null);
     }
 
@@ -116,9 +115,8 @@ public final class TownHallSettings extends BuildingSettings {
      *
      * @throws IllegalArgumentException If the level is less than {@link Buildings#firstLevel} or if the number of
      *                                  hearts is not positive
-     * @since v3.1.4
      */
-    public TownHallSettings(final int level, final int price, @Nonnull final Currencies currency, @Nullable final String command, final byte hearts, @Nullable final Material helmet, @Nullable final Material chestplate, @Nullable final Material leggings, @Nullable final Material boots, @Nullable final List<PotionEffectType> potions, @Nullable final String schematic) {
+    public TownHallLevel(final int level, final int price, @Nonnull final Currencies currency, @Nullable final String command, final byte hearts, @Nullable final Material helmet, @Nullable final Material chestplate, @Nullable final Material leggings, @Nullable final Material boots, @Nullable final List<PotionEffectType> potions, @Nullable final String schematic) {
         super(level, price, currency, schematic);
 
         if (level < Buildings.TOWN_HALL.firstLevel)

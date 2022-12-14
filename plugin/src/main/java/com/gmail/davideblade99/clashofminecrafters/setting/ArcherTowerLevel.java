@@ -4,7 +4,7 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.setting.bean;
+package com.gmail.davideblade99.clashofminecrafters.setting;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
@@ -17,12 +17,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * JavaBean that contains archer tower settings retrieved from config.yml.
+ * Represents a level of the archer tower, configured in the config.yml
  *
  * @author DavideBlade
- * @since v3.1.2
+ * @since v3.1.4
  */
-public final class ArcherTowerSettings extends BuildingSettings {
+public final class ArcherTowerLevel extends BuildingLevel {
 
     public final double damage;
 
@@ -35,10 +35,10 @@ public final class ArcherTowerSettings extends BuildingSettings {
      * @param price    Cost of building for this {@code level}
      * @param currency {@code price} currency
      *
-     * @see #ArcherTowerSettings(int, double, int, Currencies, String)
+     * @see #ArcherTowerLevel(int, double, int, Currencies, String)
      */
-    public ArcherTowerSettings(final int level, final double damage, final int price, @Nonnull final Currencies currency) {
-        this(level, damage, price, currency, level == Buildings.ARCHER_TOWER.firstLevel ? "ArcherTower" : null);
+    public ArcherTowerLevel(final int level, final double damage, final int price, @Nonnull final Currencies currency) {
+        this(level, damage, price, currency, level == Buildings.ARCHER_TOWER.firstLevel+1 ? "ArcherTower" : null);
     }
 
     /**
@@ -52,10 +52,8 @@ public final class ArcherTowerSettings extends BuildingSettings {
      *                  Null} if this {@code level} does not have a schematic.
      *
      * @throws IllegalArgumentException If the level is less than {@link Buildings#firstLevel}
-     *
-     * @since v3.1.4
      */
-    public ArcherTowerSettings(final int level, final double damage, final int price, @Nonnull final Currencies currency, @Nullable final String schematic) {
+    public ArcherTowerLevel(final int level, final double damage, final int price, @Nonnull final Currencies currency, @Nullable final String schematic) {
         super(level, price, currency, schematic);
 
         if (level < Buildings.ARCHER_TOWER.firstLevel)

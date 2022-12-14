@@ -10,7 +10,7 @@ import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Permissions;
 import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
 import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
-import com.gmail.davideblade99.clashofminecrafters.setting.bean.ExtractorSettings;
+import com.gmail.davideblade99.clashofminecrafters.setting.ExtractorLevel;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
@@ -33,8 +33,8 @@ public final class ExtractorsCommand extends CommandFramework {
         CommandValidator.isTrue(plugin.getConfig().isBuildingEnabled(Buildings.GOLD_EXTRACTOR) || plugin.getConfig().isBuildingEnabled(Buildings.ELIXIR_EXTRACTOR), Messages.getMessage(MessageKey.DISABLED_EXTRACTORS));
 
         final User user = plugin.getUser((Player) sender);
-        final ExtractorSettings goldExtractor = (ExtractorSettings) user.getBuilding(Buildings.GOLD_EXTRACTOR);
-        final ExtractorSettings elixirExtractor = (ExtractorSettings) user.getBuilding(Buildings.ELIXIR_EXTRACTOR);
+        final ExtractorLevel goldExtractor = (ExtractorLevel) user.getBuilding(Buildings.GOLD_EXTRACTOR);
+        final ExtractorLevel elixirExtractor = (ExtractorLevel) user.getBuilding(Buildings.ELIXIR_EXTRACTOR);
 
         // If the player owns at least one extractor
         CommandValidator.isTrue(goldExtractor != null || elixirExtractor != null, Messages.getMessage(MessageKey.NO_EXTRACTOR));

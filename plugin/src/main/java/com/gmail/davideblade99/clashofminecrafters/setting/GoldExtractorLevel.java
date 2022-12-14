@@ -4,7 +4,7 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.setting.bean;
+package com.gmail.davideblade99.clashofminecrafters.setting;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
@@ -17,12 +17,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * JavaBean that contains gold extractor settings retrieved from config.yml.
+ * Represents a level of the gold extractor, configured in the config.yml
  *
  * @author DavideBlade
- * @since v3.1.2
+ * @since v3.1.4
  */
-public final class GoldExtractorSettings extends ExtractorSettings {
+public final class GoldExtractorLevel extends ExtractorLevel {
 
     /**
      * Creates a new level for the gold extractor with the specified parameters and the default schematic
@@ -34,10 +34,10 @@ public final class GoldExtractorSettings extends ExtractorSettings {
      * @param price      Cost of building for this {@code level}
      * @param currency   {@code price} currency
      *
-     * @see #GoldExtractorSettings(int, int, int, int, Currencies, String)
+     * @see #GoldExtractorLevel(int, int, int, int, Currencies, String)
      */
-    public GoldExtractorSettings(final int level, final int production, final int capacity, final int price, @Nonnull final Currencies currency) {
-        this(level, production, capacity, price, currency, level == Buildings.GOLD_EXTRACTOR.firstLevel ? "GoldExtractor" : null);
+    public GoldExtractorLevel(final int level, final int production, final int capacity, final int price, @Nonnull final Currencies currency) {
+        this(level, production, capacity, price, currency, level == Buildings.GOLD_EXTRACTOR.firstLevel+1 ? "GoldExtractor" : null);
     }
 
     /**
@@ -52,9 +52,8 @@ public final class GoldExtractorSettings extends ExtractorSettings {
      *                   Null} if this {@code level} does not have a schematic.
      *
      * @throws IllegalArgumentException If the level is less than {@link Buildings#firstLevel}
-     * @since v3.1.4
      */
-    public GoldExtractorSettings(final int level, final int production, final int capacity, final int price, @Nonnull final Currencies currency, @Nullable final String schematic) {
+    public GoldExtractorLevel(final int level, final int production, final int capacity, final int price, @Nonnull final Currencies currency, @Nullable final String schematic) {
         super(level, production, capacity, price, currency, schematic);
 
         if (level < Buildings.GOLD_EXTRACTOR.firstLevel)

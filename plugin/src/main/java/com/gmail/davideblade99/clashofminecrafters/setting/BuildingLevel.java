@@ -4,8 +4,9 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.setting.bean;
+package com.gmail.davideblade99.clashofminecrafters.setting;
 
+import com.gmail.davideblade99.clashofminecrafters.schematic.Pasteable;
 import com.gmail.davideblade99.clashofminecrafters.building.Upgradeable;
 import com.gmail.davideblade99.clashofminecrafters.menu.Icon;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
@@ -15,12 +16,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * JavaBean that contains general building settings retrieved from config.yml.
+ * Represents a level of a building, configured in the config.yml
  *
  * @author DavideBlade
- * @since v3.1.2
+ * @since v3.1.4
  */
-public abstract class BuildingSettings implements Icon, Upgradeable {
+public abstract class BuildingLevel implements Icon, Upgradeable, Pasteable {
 
     public final int level;
     public final int price;
@@ -39,7 +40,7 @@ public abstract class BuildingSettings implements Icon, Upgradeable {
      *
      * @throws IllegalArgumentException If the passed level is invalid (<= 0)
      */
-    BuildingSettings(final int level, final int price, @Nonnull final Currencies currency, @Nullable final String schematic) {
+    BuildingLevel(final int level, final int price, @Nonnull final Currencies currency, @Nullable final String schematic) {
         if (level < 1)
             throw new IllegalArgumentException("Invalid level: must be greater than or equal to 1");
 

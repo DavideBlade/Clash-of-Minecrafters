@@ -8,7 +8,7 @@ package com.gmail.davideblade99.clashofminecrafters.handler;
 
 import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.setting.bean.TownHallSettings;
+import com.gmail.davideblade99.clashofminecrafters.setting.TownHallLevel;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -45,7 +45,7 @@ public final class GuardianHandler {
     public void spawn(@Nonnull final User owner, @Nonnull final String playerName, @Nonnull final Location loc) {
         final Zombie zombie = (Zombie) plugin.getVillageHandler().getVillageWorld().spawnEntity(loc, EntityType.ZOMBIE);
 
-        final TownHallSettings townHall = (TownHallSettings) owner.getBuilding(Buildings.TOWN_HALL);
+        final TownHallLevel townHall = (TownHallLevel) owner.getBuilding(Buildings.TOWN_HALL);
         if (townHall != null) // The town hall level may not exist
         {
             // Set equipment
