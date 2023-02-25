@@ -27,17 +27,56 @@ import javax.annotation.Nullable;
 public final class Village {
 
     public final String owner;
-    public Location spawn;
+    private Location spawn;
     public final Vector origin;
     public final Size2D size;
     public final Size2D expansions;
 
-    public Village(@Nonnull final String owner, @Nonnull final Location spawn, @Nonnull final Vector origin, @Nonnull final Size2D islandSize, @Nonnull final Size2D expansions) {
+    /**
+     * Creates a new village
+     *
+     * @param owner      Village owner
+     * @param spawn      Village spawn
+     * @param origin     Point where the schematic is pasted
+     * @param size       Village size
+     * @param expansions Expansions that the village owns
+     *
+     * @throws IllegalArgumentException If the {@code spawn} does not have a world (i.e., {@link
+     *                                  Location#getWorld()} {@code = null})
+     */
+    public Village(@Nonnull final String owner, @Nonnull final Location spawn, @Nonnull final Vector origin, @Nonnull final Size2D size, @Nonnull final Size2D expansions) {
+        if (spawn.getWorld() == null)
+            throw new IllegalArgumentException("Invalid spawn: does not have a specified world");
+
         this.owner = owner;
         this.spawn = spawn;
         this.origin = origin;
-        this.size = islandSize;
+        this.size = size;
         this.expansions = expansions;
+    }
+
+    /**
+     * @return A new copy of the spawn point
+     */
+    public Location getSpawn() {
+        return this.spawn.clone();
+    }
+
+    /**
+     * Sets the spawn to the specified location, if it is safe
+     *
+     * @param spawn New spawn point to be set
+     *
+     * @return True if the location was safe and the new spawn could be set, otherwise false
+     *
+     * @see BukkitLocationUtil#isSafeLocation(Location)
+     */
+    public boolean setSpawn(@Nonnull final Location spawn) {
+        if (!BukkitLocationUtil.isSafeLocation(spawn))
+            return false;
+
+        this.spawn = spawn;
+        return true;
     }
 
     public void teleportToSpawn(@Nonnull final Player player) {
@@ -49,8 +88,17 @@ public final class Village {
         }
     }
 
-    // Check if loc is into island
-    public boolean canBuildOnLocation(@Nonnull final Location loc) {
+    /**
+     * It checks whether the location is within the village
+     *
+     * @param loc Location to be checked
+     *
+     * @return True if the location is within the village, otherwise false
+     */
+    public boolean isInsideVillage(@Nonnull final Location loc) {
+        if (!spawn.getWorld().equals(loc.getWorld())) // Not village world
+            return false;
+
         int minX = origin.getX() - expansions.getWidth(), minZ = origin.getZ() + expansions.getLength();
         int maxX = origin.getX() + (size.getWidth() - 1) + expansions.getWidth(), maxZ = origin.getZ() - (size.getLength() - 1) - expansions.getLength();
 
