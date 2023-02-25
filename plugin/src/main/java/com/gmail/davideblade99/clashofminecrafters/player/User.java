@@ -16,8 +16,8 @@ import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.currency.Balance;
 import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
-import com.gmail.davideblade99.clashofminecrafters.setting.bean.BuildingSettings;
-import com.gmail.davideblade99.clashofminecrafters.setting.bean.ExtractorSettings;
+import com.gmail.davideblade99.clashofminecrafters.setting.BuildingLevel;
+import com.gmail.davideblade99.clashofminecrafters.setting.ExtractorLevel;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
@@ -45,7 +45,7 @@ public final class User {
     private int goldExtractorLevel;
     private int archerLevel;
     private Vector archerLoc;
-    private Village island;
+    private Village village;
     private LocalDateTime collectionTime;
     private int townHallLevel;
 
@@ -89,7 +89,7 @@ public final class User {
             this.goldExtractorLevel = userDatabaseType.goldExtractorLevel;
             this.archerLevel = userDatabaseType.archerTowerLevel;
             this.archerLoc = userDatabaseType.archerTowerLoc;
-            this.island = userDatabaseType.island;
+            this.village = userDatabaseType.island;
             this.collectionTime = userDatabaseType.collectionTime;
             this.townHallLevel = userDatabaseType.townHallLevel;
 
@@ -108,43 +108,6 @@ public final class User {
 
     public void setBasePlayer(@Nonnull final OfflinePlayer player) {
         this.base.set(player);
-    }
-
-    /**
-     * Checks whether the player has sufficient balance to upgrade a building
-     *
-     * @param nextLevel Next level to purchase
-     * @param type      Type of building to upgrade
-     *
-     * @return True if the player can afford it, otherwise false
-     *
-     * @throws IllegalArgumentException If the specified level does not exist for the passed building type
-     */
-    public boolean hasMoneyToUpgrade(final int nextLevel, @Nonnull final Buildings type) {
-        final BuildingSettings nextBuilding;
-
-        switch (type) {
-            case ELIXIR_EXTRACTOR:
-                nextBuilding = plugin.getConfig().getElixirExtractor(nextLevel);
-                break;
-            case GOLD_EXTRACTOR:
-                nextBuilding = plugin.getConfig().getGoldExtractor(nextLevel);
-                break;
-            case ARCHER_TOWER:
-                nextBuilding = plugin.getConfig().getArcherTower(nextLevel);
-                break;
-            case TOWN_HALL:
-                nextBuilding = plugin.getConfig().getTownHall(nextLevel);
-                break;
-
-            default:
-                throw new IllegalStateException("Unexpected value: " + type);
-        }
-
-        if (nextBuilding == null)
-            throw new IllegalArgumentException("The \"" + nextLevel + "\" level of the building \"" + type + "\" does not exist");
-
-        return getBalance(nextBuilding.currency) >= nextBuilding.price;
     }
 
     /**
@@ -328,12 +291,12 @@ public final class User {
     /**
      * @param type Type of construction to obtain
      *
-     * @return the {@link BuildingSettings} corresponding to the level the player has unlocked or {@code null} if
+     * @return the {@link BuildingLevel} corresponding to the level the player has unlocked or {@code null} if
      * the player has not unlocked the building or if the level is not found among the configured ones (this can
      * happen if, for example, there is a configuration error or if levels have been deleted)
      */
     @Nullable
-    public BuildingSettings getBuilding(@Nonnull final Buildings type) {
+    public BuildingLevel getBuilding(@Nonnull final Buildings type) {
         final int currentLevel = getBuildingLevel(type);
 
         // If the level is 1, it means that the player has the basic level of the town hall (never upgraded it)
@@ -346,11 +309,18 @@ public final class User {
         return plugin.getConfig().getBuilding(type, currentLevel);
     }
 
-    public void upgradeBuilding(@Nonnull final Buildings type) {
-        final int nextLevel = getBuildingLevel(type) + 1;
+    /**
+     * Upgrades the building without performing any checks (player's balance, placement within the village, etc.).
+     * Sends a message to the player if he has already reached the maximum level of the building (can no longer
+     * upgrade it) and if the upgrade was successful. Removes the cost of the upgrade from the player's balance.
+     *
+     * @param building building to upgrade
+     */
+    public void upgradeBuilding(@Nonnull final Buildings building) {
+        final int nextLevel = getBuildingLevel(building) + 1;
 
         final String replacement;
-        switch (type) {
+        switch (building) {
             case ARCHER_TOWER:
                 replacement = Messages.getMessage(MessageKey.ARCHER_TOWER);
                 break;
@@ -365,31 +335,20 @@ public final class User {
                 break;
 
             default:
-                throw new IllegalStateException("Unexpected value: " + type);
+                throw new IllegalStateException("Unexpected building: " + building);
         }
 
         // Max level reached
-        if (nextLevel > plugin.getConfig().getMaxLevel(type)) {
+        if (nextLevel > plugin.getConfig().getMaxLevel(building)) {
             if (getBase() instanceof Player)
                 MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.MAX_LEVEL_REACHED, replacement));
             return;
         }
 
-        final BuildingSettings nextBuilding = plugin.getConfig().getBuilding(type, nextLevel);
-        final int price = nextBuilding.price;
-        final Currencies currency = nextBuilding.currency;
+        final BuildingLevel nextBuilding = plugin.getConfig().getBuilding(building, nextLevel);
 
-        if (!hasMoneyToUpgrade(nextLevel, type)) {
-            if (getBase() instanceof Player) {
-                final String currencyTranslation = balance.getCurrencyTranslation(currency);
-
-                MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.NOT_ENOUGH_MONEY, currencyTranslation));
-            }
-            return;
-        }
-
-        removeBalance(price, currency);
-        setBuildingLevel(nextLevel, type);
+        removeBalance(nextBuilding.price, nextBuilding.currency);
+        setBuildingLevel(nextLevel, building);
 
         if (getBase() instanceof Player)
             MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.UPGRADE_COMPLETED, replacement, String.valueOf(nextLevel)));
@@ -445,8 +404,8 @@ public final class User {
     }
 
     @Nullable
-    public Village getIsland() {
-        return island;
+    public Village getVillage() {
+        return village;
     }
 
     public void createIsland() {
@@ -464,23 +423,34 @@ public final class User {
                 return;
             }
 
-            User.this.island = village;
+            User.this.village = village;
 
             updateDatabase();
 
             if (getBase() instanceof Player) {
                 MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.TELEPORTATION));
 
-                island.teleportToSpawn((Player) getBase());
+                this.village.teleportToSpawn((Player) getBase());
             }
         });
     }
 
-    public void setIslandSpawn(@Nonnull final Location loc) {
-        island.spawn = loc;
+    /**
+     * Sets a new spawn point for the player's village
+     *
+     * @param loc New spawn point to be set
+     *
+     * @return True if the location was safe and the new spawn could be set, otherwise false
+     *
+     * @since v3.1.4
+     */
+    public boolean setIslandSpawn(@Nonnull final Location loc) {
+        final boolean result = village.setSpawn(loc);
 
         // Save changes to the database
         updateDatabase();
+
+        return result;
     }
 
     @Nullable
@@ -492,8 +462,8 @@ public final class User {
      * Collects all resources in the extractors unlocked by the player
      */
     public void collectExtractors() {
-        final ExtractorSettings goldExtractor = (ExtractorSettings) this.getBuilding(Buildings.GOLD_EXTRACTOR);
-        final ExtractorSettings elixirExtractor = (ExtractorSettings) this.getBuilding(Buildings.ELIXIR_EXTRACTOR);
+        final ExtractorLevel goldExtractor = (ExtractorLevel) this.getBuilding(Buildings.GOLD_EXTRACTOR);
+        final ExtractorLevel elixirExtractor = (ExtractorLevel) this.getBuilding(Buildings.ELIXIR_EXTRACTOR);
 
         if (goldExtractor != null) // If the player bought the gold extractor
             this.addBalance(getResourcesProduced(goldExtractor, this.collectionTime), Currencies.GOLD);
@@ -516,7 +486,7 @@ public final class User {
      *
      * @return the amount of resources produced (accumulated in the extractor)
      */
-    public int getResourcesProduced(@Nonnull final ExtractorSettings extractor, @Nonnull final LocalDateTime collectionTime) {
+    public int getResourcesProduced(@Nonnull final ExtractorLevel extractor, @Nonnull final LocalDateTime collectionTime) {
         /*
          * Calculate the hours that have passed since the last time the player collected.
          * For the minutes that are left (less than 60), I calculate the approximate production.
@@ -566,7 +536,7 @@ public final class User {
                 ", gold extractor level=" + goldExtractorLevel +
                 ", archer level=" + archerLevel +
                 ", archer location=" + archerLoc +
-                ", island=" + island +
+                ", island=" + village +
                 ", collection time=" + collectionTime +
                 ", town hall level=" + townHallLevel +
                 '}';
