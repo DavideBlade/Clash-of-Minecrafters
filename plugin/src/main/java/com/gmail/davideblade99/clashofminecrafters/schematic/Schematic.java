@@ -36,7 +36,7 @@ public interface Schematic {
      *                          receive the thrown exception. {@link PastingException} will be thrown in case of
      *                          error during schematic pasting.
      *
-     * @since v3.1.3
+     * @since v3.1.4
      */
     void paste(@Nonnull final Location location, @Nonnull final NullableCallback<PastingException> completionHandler);
 

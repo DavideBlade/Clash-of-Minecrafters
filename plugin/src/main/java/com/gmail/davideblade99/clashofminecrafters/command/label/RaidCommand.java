@@ -35,7 +35,7 @@ public final class RaidCommand extends CommandFramework {
 
         CommandValidator.notNull(user.getClanName(), Messages.getMessage(MessageKey.CLAN_REQUIRED));
         CommandValidator.isTrue(plugin.getWarHandler().isStarted(), Messages.getMessage(MessageKey.WAR_REQUIRED));
-        CommandValidator.notNull(user.getIsland(), Messages.getMessage(MessageKey.ISLAND_REQUIRED));
+        CommandValidator.notNull(user.getVillage(), Messages.getMessage(MessageKey.ISLAND_REQUIRED));
         CommandValidator.isFalse(plugin.getWarHandler().isAttacking(player), Messages.getMessage(MessageKey.ALREADY_ATTACKING));
 
 
