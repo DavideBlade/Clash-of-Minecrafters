@@ -29,7 +29,7 @@ public final class PlayerQuit extends CoMListener {
     public void onPlayerQuit(final PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         final User user = plugin.getUser(player);
-        if (user.getIsland() == null)
+        if (user.getVillage() == null)
             return;
 
         final Village attackedIsland = plugin.getWarHandler().getAttackedIsland(player);

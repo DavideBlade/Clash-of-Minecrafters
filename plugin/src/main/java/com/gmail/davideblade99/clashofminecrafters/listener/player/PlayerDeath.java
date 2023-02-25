@@ -31,8 +31,8 @@ public final class PlayerDeath extends IslandListener {
         if (!isVillageWorld(player.getWorld()))
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
-        if (island != null && !island.canBuildOnLocation(player.getLocation())) // If player dies out of own island
+        final Village island = plugin.getUser(player).getVillage();
+        if (island != null && !island.isInsideVillage(player.getLocation())) // If player dies out of own island
         {
             // Prevent the loss of inventory and exp
             event.setDroppedExp(0);

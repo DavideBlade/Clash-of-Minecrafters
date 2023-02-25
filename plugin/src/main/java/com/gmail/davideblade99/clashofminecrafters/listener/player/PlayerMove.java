@@ -41,14 +41,14 @@ public final class PlayerMove extends IslandListener {
         if (from.getBlockX() == to.getBlockX() && from.getBlockY() == to.getBlockY() && from.getBlockZ() == to.getBlockZ())
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
+        final Village island = plugin.getUser(player).getVillage();
         if (island == null)
             return;
 
         //TODO: funziona?
-        if (island.canBuildOnLocation(from) && !island.canBuildOnLocation(to))
+        if (island.isInsideVillage(from) && !island.isInsideVillage(to))
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.LEFT_ISLAND));
-        else if (island.canBuildOnLocation(to) && !island.canBuildOnLocation(from))
+        else if (island.isInsideVillage(to) && !island.isInsideVillage(from))
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.ENTERED_IN_ISLAND));
     }
 }
