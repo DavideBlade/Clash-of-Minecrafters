@@ -122,7 +122,8 @@ public enum MessageKey {
     TOWER_NOT_PLACED("Tower not placed"),
 
     /* Schematic messages */
-    LOAD_ERROR("Load error", "%schem");
+    LOAD_ERROR("Load error", "%schem"),
+    PASTE_ERROR("Paste error", "%schem");
 
     private final String path;
     private final String[] tags;

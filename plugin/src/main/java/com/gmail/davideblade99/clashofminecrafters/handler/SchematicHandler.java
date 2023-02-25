@@ -63,27 +63,25 @@ public final class SchematicHandler {
     /**
      * Load the specified schematic with one of the supported plugins
      *
-     * @param schematic Schematic to load
+     * @param schematic Name of schematic file to load
      *
      * @return A new {@link Schematic}
      *
      * @throws IllegalStateException           If the plugin to be used to paste schematics has not yet been
      *                                         defined with the {@link #setSchematicPaster(SchematicPaster)}
      *                                         method
-     * @throws IllegalArgumentException        If the {@link #paster}, set with {@link #setSchematicPaster(SchematicPaster)},
-     *                                         is not recognized
-     * @throws FileNotFoundException           If the schematic file cannot be found in the .jar
+     * @throws FileNotFoundException           If the schematic file does not exist and cannot be found in the .jar
      * @throws InvalidSchematicFormatException If the file format is not recognized by {@link #paster}
      * @throws IOException                     If WorldEdit throws an I/O exception
      */
     @Nonnull
-    public Schematic getSchematic(@Nonnull final Schematics schematic) throws FileNotFoundException, InvalidSchematicFormatException, IOException {
+    public Schematic getSchematic(@Nonnull final String schematic) throws FileNotFoundException, InvalidSchematicFormatException, IOException {
         if (paster == null)
             throw new IllegalStateException("Schematic paster not yet defined");
 
         final File schematicFile = getSchematicFile(schematic);
         if (!schematicFile.exists())
-            FileUtil.copyFile(schematic.getName() + SCHEMATIC_EXTENSION, schematicFile);
+            FileUtil.copyFile(schematic + SCHEMATIC_EXTENSION, schematicFile);
 
         return paster.getSchematic(schematicFile);
     }
@@ -102,7 +100,7 @@ public final class SchematicHandler {
      *                          receive the thrown exception. {@link PastingException} is thrown in case of error
      *                          during schematic pasting.
      *
-     * @since v3.1.3
+     * @since v3.1.4
      */
     public void paste(@Nonnull final Schematic schematic, @Nonnull final Location location, @Nonnull final NullableCallback<PastingException> completionHandler) {
         schematic.paste(location, completionHandler);
@@ -127,16 +125,16 @@ public final class SchematicHandler {
     }
 
     /**
-     * Create a new {@link File} within the schematic folder and with the name related to the specified schematic.
-     * The existence of the file will not be checked nor will it be created if it is absent.
+     * Create a new {@link File} instance within the schematic folder and with the name related to the specified
+     * schematic. The existence of the file will not be checked nor will it be created if it is absent.
      *
-     * @param schematic Schematic to get the file of
+     * @param schematicName Schematic file name (without the extension!)
      *
      * @return a new {@link File} corresponding to the schematic
      */
     @Nonnull
-    private File getSchematicFile(@Nonnull final Schematics schematic) {
-        return new File(schematicFolder, schematic.getName() + SCHEMATIC_EXTENSION);
+    private File getSchematicFile(@Nonnull final String schematicName) {
+        return new File(schematicFolder, schematicName + SCHEMATIC_EXTENSION);
     }
 
     /**

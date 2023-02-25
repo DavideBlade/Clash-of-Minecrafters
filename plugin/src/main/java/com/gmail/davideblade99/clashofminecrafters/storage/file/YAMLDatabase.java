@@ -193,7 +193,7 @@ public final class YAMLDatabase implements PlayerDatabase {
         final int goldExtractorLevel = user.getBuildingLevel(Buildings.GOLD_EXTRACTOR);
         final int archerLevel = user.getBuildingLevel(Buildings.ARCHER_TOWER);
         final Vector towerPos = user.getTowerPos();
-        final Village island = user.getIsland();
+        final Village island = user.getVillage();
         final LocalDateTime collectionTime = user.getCollectionTime();
 
 
@@ -213,7 +213,7 @@ public final class YAMLDatabase implements PlayerDatabase {
             conf.setArcherTowerLocation(towerPos.toString());
 
         if (island != null) {
-            conf.setIslandSpawn(BukkitLocationUtil.toString(island.spawn));
+            conf.setIslandSpawn(BukkitLocationUtil.toString(island.getSpawn()));
             conf.setIslandOrigin(island.origin);
             conf.setIslandSize(island.size);
             conf.setIslandExpansions(island.expansions);

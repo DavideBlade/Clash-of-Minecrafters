@@ -7,12 +7,12 @@
 package com.gmail.davideblade99.clashofminecrafters.storage.sql.mysql;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.player.Village;
 import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.file.log.ErrorLog;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Size2D;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
+import com.gmail.davideblade99.clashofminecrafters.player.Village;
 import com.gmail.davideblade99.clashofminecrafters.player.currency.Balance;
 import com.gmail.davideblade99.clashofminecrafters.storage.Columns;
 import com.gmail.davideblade99.clashofminecrafters.storage.sql.AbstractSQLDatabase;
@@ -255,8 +255,8 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
         final int archerLevel = user.getBuildingLevel(Buildings.ARCHER_TOWER);
         final int townHallLevel = user.getBuildingLevel(Buildings.TOWN_HALL);
         final String archerPos = user.getTowerPos() == null ? null : user.getTowerPos().toString();
-        final Village island = user.getIsland();
-        final String islandSpawn = island == null ? null : BukkitLocationUtil.toString(island.spawn);
+        final Village island = user.getVillage();
+        final String islandSpawn = island == null ? null : BukkitLocationUtil.toString(island.getSpawn());
         final String islandOrigin = island == null ? null : island.origin.toString();
         final String islandSize = island == null ? null : island.size.toString();
         final String islandExpansions = island == null ? null : island.expansions.toString();

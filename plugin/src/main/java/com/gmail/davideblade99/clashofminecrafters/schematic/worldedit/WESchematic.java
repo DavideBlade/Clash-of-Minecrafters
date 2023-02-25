@@ -36,7 +36,7 @@ import java.io.IOException;
 /**
  * Class representing the schematic of WorldEdit
  *
- * @since v3.1.3
+ * @since v3.1.4
  */
 //TODO: https://gist.github.com/aikar/105311fd5d77e488bc6ec3e65872681f#file-worldedithelper-java-L82
 public class WESchematic implements Schematic {
