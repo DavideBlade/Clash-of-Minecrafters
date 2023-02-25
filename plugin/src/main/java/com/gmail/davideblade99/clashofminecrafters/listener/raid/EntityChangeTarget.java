@@ -40,7 +40,7 @@ public final class EntityChangeTarget extends IslandListener {
             if (!plugin.getArcherHandler().isArcher(archer))
                 return;
 
-            final Player islandAttacker = plugin.getWarHandler().getAttacker(plugin.getUser(plugin.getArcherHandler().getOwner(archer)).getIsland());
+            final Player islandAttacker = plugin.getWarHandler().getAttacker(plugin.getUser(plugin.getArcherHandler().getOwner(archer)).getVillage());
             if (islandAttacker == null)
                 throw new IllegalStateException("Attacker not found");
 
@@ -53,7 +53,7 @@ public final class EntityChangeTarget extends IslandListener {
             if (!plugin.getGuardianHandler().isGuardian(guardian))
                 return;
 
-            final Player islandAttacker = plugin.getWarHandler().getAttacker(plugin.getUser(plugin.getGuardianHandler().getOwner(guardian)).getIsland());
+            final Player islandAttacker = plugin.getWarHandler().getAttacker(plugin.getUser(plugin.getGuardianHandler().getOwner(guardian)).getVillage());
             if (islandAttacker == null)
                 throw new IllegalStateException("Attacker not found");
 
