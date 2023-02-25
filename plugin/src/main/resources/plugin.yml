@@ -36,8 +36,8 @@ commands:
     usage: /<command> <menu name> [player]
     description: "Open the specified menu."
   upgrade:
-    usage: /<command>
-    description: "Open the menu with buildings' upgrades."
+    usage: /<command> [building]
+    description: "Open the menu with building upgrades or upgrade the specified building."
   war:
     usage: /<command> state
     description: "Check the state of clan war."
