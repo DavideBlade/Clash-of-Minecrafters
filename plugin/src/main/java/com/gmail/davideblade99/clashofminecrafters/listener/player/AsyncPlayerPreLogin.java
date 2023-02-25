@@ -53,7 +53,7 @@ public final class AsyncPlayerPreLogin extends CoMListener {
         if (user == null)
             return;
 
-        final Village island = user.getIsland();
+        final Village island = user.getVillage();
         if (island == null)
             return;
 
