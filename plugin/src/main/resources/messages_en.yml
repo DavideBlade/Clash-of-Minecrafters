@@ -251,3 +251,5 @@ Tower not placed: '&cThe archer tower can only be placed inside your island!'
 ############################################################
 # When an error occurs while loading a schematic.
 Load error: '&cThe schematic %schem could not be loaded correctly.'
+# When an error occurs while pasting a schematic.
+Paste error: '&cA problem occurred while pasting the schematic %schem.'

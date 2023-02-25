@@ -251,3 +251,5 @@ Tower not placed: '&cLa torre degli arcieri può essere posizionata solo dentro 
 ############################################################
 # Quando si verifica un errore durante il caricamento di una schematic.
 Load error: '&cNon è stato possibile caricare correttamente la schematic %schem.'
+# Quando si verifica un errore durante il posizionamento di una schematic.
+Paste error: '&cSi è verificato un problema durante l''incollamento della schematic %schem.'
