@@ -26,6 +26,7 @@ import org.bukkit.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
+import java.util.UUID;
 
 public final class VillageHandler {
 
@@ -122,10 +123,13 @@ public final class VillageHandler {
             }
         });
 
-        // Update x
-        x = origin.getX() - expansions - DISTANCE_BETWEEN_ISLANDS;
+        /*
+         * Variables are updated regardless, even in case of an error.
+         * This is to avoid placing an island near a schematic stump in the event of an error
+         */
 
-        // Save on file
+        // Save on file x and z
+        x = origin.getX() - expansions - DISTANCE_BETWEEN_ISLANDS;
         islandStorage.setX(x);
         islandStorage.setZ(z);
         islandStorage.save();

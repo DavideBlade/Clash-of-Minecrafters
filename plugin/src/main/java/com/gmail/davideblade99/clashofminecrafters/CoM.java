@@ -123,6 +123,7 @@ public final class CoM extends JavaPlugin {
         // Other: Migliorata la qualità del codice
         // Fixed: Alcuni messaggi in cui non veniva mostrato correttamente il singolare e il plurale
         // Fixed: Un importante (ma raro) bug che poteva permettere di incollare le schematic al di fuori del villaggio o di creare delle zone intoccabili in tutti i mondi
+        // Fixed: Un bug che non permetteva di creare un villaggio (era possibile farlo solo con AsyncWorldEdit)
         // Other: Creata sezione per settaggi dei villaggi nel config.yml //TODO: aggiornare wiki
         // Other: Cambiato il nome del file "island data.yml" in "village data.yml"
 
