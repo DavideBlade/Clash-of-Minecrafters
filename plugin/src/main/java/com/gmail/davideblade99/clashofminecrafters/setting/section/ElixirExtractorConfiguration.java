@@ -6,8 +6,8 @@
 
 package com.gmail.davideblade99.clashofminecrafters.setting.section;
 
-import com.gmail.davideblade99.clashofminecrafters.Currency;
-import com.gmail.davideblade99.clashofminecrafters.setting.bean.ElixirExtractorSettings;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
+import com.gmail.davideblade99.clashofminecrafters.setting.ElixirExtractorLevel;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.yaml.CoMYamlConfiguration;
 import org.bukkit.configuration.ConfigurationSection;
@@ -29,8 +29,8 @@ public final class ElixirExtractorConfiguration extends SectionConfiguration {
     private final static String SECTION = "Elixir extractors";
 
 
-    /** List of {@link ElixirExtractorSettings}s obtained from the configuration */
-    private final List<ElixirExtractorSettings> elixirExtractors;
+    /** List of {@link ElixirExtractorLevel}s obtained from the configuration */
+    private final List<ElixirExtractorLevel> elixirExtractors;
 
     /**
      * Create a new instance of {@link ElixirExtractorConfiguration} and load all the elixir extractors with {@link
@@ -49,13 +49,13 @@ public final class ElixirExtractorConfiguration extends SectionConfiguration {
     /**
      * @return The list containing the settings of the elixir extractors loaded
      */
-    public List<ElixirExtractorSettings> getElixirExtractors() {
+    public List<ElixirExtractorLevel> getElixirExtractors() {
         return this.elixirExtractors;
     }
 
     /**
      * Reads the elixir extractors section in the {@link SectionConfiguration#section} and builds {@link
-     * ElixirExtractorSettings}s. If a misconfigured level (with invalid or missing settings) is encountered, loading will
+     * ElixirExtractorLevel}s. If a misconfigured level (with invalid or missing settings) is encountered, loading will
      * be stopped. Elixir extractors loaded to that point, however, will remain valid.
      */
     private void loadElixirExtractors() {
@@ -76,7 +76,7 @@ public final class ElixirExtractorConfiguration extends SectionConfiguration {
             final int production = elixirExtractorSection.getInt(extractor + ".Production", -1);
             final int capacity = elixirExtractorSection.getInt(extractor + ".Capacity", 0);
             final int price = elixirExtractorSection.getInt(extractor + ".Price", -1);
-            final Currency currency = Currency.matchCurrency(elixirExtractorSection.getString(extractor + ".Currency", null));
+            final Currencies currency = Currencies.matchCurrency(elixirExtractorSection.getString(extractor + ".Currency", null));
 
             if (production < 0) {
                 MessageUtil.sendError("The production of level \"" + extractor + "\" elixir extractor (in the config) cannot be negative!");
@@ -99,7 +99,7 @@ public final class ElixirExtractorConfiguration extends SectionConfiguration {
                 return;
             }
 
-            this.elixirExtractors.add(new ElixirExtractorSettings(level, production, capacity, price, currency));
+            this.elixirExtractors.add(new ElixirExtractorLevel(level, production, capacity, price, currency));
         }
     }
 }

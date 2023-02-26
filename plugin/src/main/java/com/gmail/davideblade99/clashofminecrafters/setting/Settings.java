@@ -6,12 +6,11 @@
 
 package com.gmail.davideblade99.clashofminecrafters.setting;
 
-import com.gmail.davideblade99.clashofminecrafters.BuildingType;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Currency;
+import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.menu.Menu;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages.Language;
-import com.gmail.davideblade99.clashofminecrafters.setting.bean.*;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.setting.section.*;
 import com.gmail.davideblade99.clashofminecrafters.storage.DatabaseType;
 import com.gmail.davideblade99.clashofminecrafters.util.FileUtil;
@@ -44,10 +43,9 @@ public final class Settings extends CoMYamlConfiguration {
      * General settings
      */
     private final Language lang;
-    private final byte maxExpansions;
     private final Location spawn;
-    private final Pair<Pair<Integer, Currency>, Integer> raidRewards; // <<Amount, Currency>, Trophies>
-    private final Pair<Pair<Integer, Currency>, Integer> raidPenalty; // <<Amount, Currency>, Trophies>
+    private final Pair<Pair<Integer, Currencies>, Integer> raidRewards; // <<Amount, Currency>, Trophies>
+    private final Pair<Pair<Integer, Currencies>, Integer> raidPenalty; // <<Amount, Currency>, Trophies>
     private final int raidTimeout;
     private final int clanRaidRewards;
     private final int maxPlayerPerClan;
@@ -63,21 +61,26 @@ public final class Settings extends CoMYamlConfiguration {
     private final Map<String, Menu> menus;
 
     /*
+     * Village settings
+     */
+    private final VillageSettings villageSettings;
+
+    /*
      * Town hall settings
      */
-    private final List<TownHallSettings> townHalls; // List containing various levels of town halls
+    private final List<TownHallLevel> townHalls; // List containing various levels of town halls
 
     /*
      * Structure settings
      */
-    private final List<GoldExtractorSettings> goldExtractors; // List containing various levels of gold extractors
-    private final List<ElixirExtractorSettings> elixirExtractors; // List containing various levels of elixir extractors
-    private final List<ArcherTowerSettings> archerTowers; // List containing various levels of archer towers
+    private final List<GoldExtractorLevel> goldExtractors; // List containing various levels of gold extractors
+    private final List<ElixirExtractorLevel> elixirExtractors; // List containing various levels of elixir extractors
+    private final List<ArcherTowerLevel> archerTowers; // List containing various levels of archer towers
 
     /*
      * Clan settings
      */
-    private final List<ClanSettings> clans; // // List containing various levels of clans
+    private final List<ClanLevel> clans; // // List containing various levels of clans
 
     public Settings(@Nonnull final CoM plugin) {
         super(new File(plugin.getDataFolder(), "config.yml"));
@@ -121,16 +124,6 @@ public final class Settings extends CoMYamlConfiguration {
         }
 
 
-        // Check the number of expansions
-        byte maxExpansions = super.getByte("Max expansions", (byte) -1);
-        if (maxExpansions < 0 || maxExpansions > 120) {
-            maxExpansions = 8;
-
-            MessageUtil.sendError("The number specified in the \"Max expansions\" line (in the config) is incorrect.");
-            MessageUtil.sendError("The default value (" + maxExpansions + ") will be used.");
-        }
-
-
         // Check if the spawn location is valid
         Location spawn;
         final String[] defaultSpawn = super.getString("Default spawn.Location", "").split(",");
@@ -170,9 +163,9 @@ public final class Settings extends CoMYamlConfiguration {
 
 
         // Check raid rewards
-        Currency rewardCurrency = Currency.matchCurrency(super.getString("Raid rewards.Currency", null));
+        Currencies rewardCurrency = Currencies.matchCurrency(super.getString("Raid rewards.Currency", null));
         if (rewardCurrency == null) {
-            rewardCurrency = Currency.GEMS;
+            rewardCurrency = Currencies.GEMS;
 
             MessageUtil.sendError("The currency specified in the \"Raid rewards\" section (in the config) does not exist.");
             MessageUtil.sendError(rewardCurrency + " will be used as currency.");
@@ -194,9 +187,9 @@ public final class Settings extends CoMYamlConfiguration {
 
 
         // Check raid penalty
-        Currency penaltyCurrency = Currency.matchCurrency(super.getString("Raid failure.Currency", null));
+        Currencies penaltyCurrency = Currencies.matchCurrency(super.getString("Raid failure.Currency", null));
         if (penaltyCurrency == null) {
-            penaltyCurrency = Currency.GEMS;
+            penaltyCurrency = Currencies.GEMS;
 
             MessageUtil.sendError("The currency specified in the \"Raid failure\" section (in the config) does not exist.");
             MessageUtil.sendError(penaltyCurrency + " will be used as currency.");
@@ -251,6 +244,7 @@ public final class Settings extends CoMYamlConfiguration {
         }
 
 
+        // Check the size of player cache
         int maxPlayerCacheCount = super.getInt("Max player cache");
         if (maxPlayerCacheCount < 0) {
             final long maxAllocatedMemory = Runtime.getRuntime().maxMemory(); // Parameter -Xmx, in bytes
@@ -265,9 +259,18 @@ public final class Settings extends CoMYamlConfiguration {
         }
 
 
+        // Check the number of expansions
+        byte maxExpansions = super.getByte("Max expansions", (byte) -1);
+        if (maxExpansions < 0 || maxExpansions > 120) {
+            maxExpansions = 8;
+
+            MessageUtil.sendError("The number specified in the \"Max expansions\" line (in the config) is incorrect.");
+            MessageUtil.sendError("The default value (" + maxExpansions + ") will be used.");
+        }
+
+
         // Global settings
         this.lang = locale;
-        this.maxExpansions = maxExpansions;
         this.spawn = spawn;
         this.raidRewards = new Pair<>(new Pair<>(rewardAmount, rewardCurrency), rewardTrophies);
         this.raidPenalty = new Pair<>(new Pair<>(penaltyAmount, penaltyCurrency), penaltyTrophies);
@@ -285,6 +288,11 @@ public final class Settings extends CoMYamlConfiguration {
          * Menu settings
          */
         this.menus = new MenuConfiguration(this).getMenus();
+
+        /*
+         * Village settings
+         */
+        this.villageSettings = new VillageSettings(maxExpansions);
 
         /*
          * Town hall settings
@@ -309,10 +317,6 @@ public final class Settings extends CoMYamlConfiguration {
         return lang;
     }
 
-    public byte getMaxExpansions() {
-        return maxExpansions;
-    }
-
     /**
      * @return True if the player must be teleported to the spawn when joining the server, otherwise false
      *
@@ -328,12 +332,12 @@ public final class Settings extends CoMYamlConfiguration {
     }
 
     @Nonnull
-    public Pair<Pair<Integer, Currency>, Integer> getRaidRewards() {
+    public Pair<Pair<Integer, Currencies>, Integer> getRaidRewards() {
         return raidRewards;
     }
 
     @Nonnull
-    public Pair<Pair<Integer, Currency>, Integer> getRaidPenalty() {
+    public Pair<Pair<Integer, Currencies>, Integer> getRaidPenalty() {
         return raidPenalty;
     }
 
@@ -416,15 +420,25 @@ public final class Settings extends CoMYamlConfiguration {
     }
 
     /**
+     * @return {@link VillageSettings} Containing the village settings
+     *
+     * @since v3.1.4
+     */
+    @Nonnull
+    public VillageSettings getVillageSettings() {
+        return villageSettings;
+    }
+
+    /**
      * @param level Town hall level
      *
-     * @return {@link TownHallSettings} corresponding to the specified level or {@code null} if the specified level
+     * @return {@link TownHallLevel} corresponding to the specified level or {@code null} if the specified level
      * does not exist
      *
      * @since v3.1
      */
     @Nullable
-    public TownHallSettings getTownHall(final int level) {
+    public TownHallLevel getTownHall(final int level) {
         final int index = level - 2;
 
         return index >= townHalls.size() ? null : townHalls.get(index);
@@ -433,13 +447,13 @@ public final class Settings extends CoMYamlConfiguration {
     /**
      * @param level Gold extractor level
      *
-     * @return {@link GoldExtractorSettings} corresponding to the specified level or {@code null} if the specified
+     * @return {@link GoldExtractorLevel} corresponding to the specified level or {@code null} if the specified
      * level does not exist
      *
      * @since v3.1
      */
     @Nullable
-    public GoldExtractorSettings getGoldExtractor(final int level) {
+    public GoldExtractorLevel getGoldExtractor(final int level) {
         final int index = level - 1;
 
         return index >= goldExtractors.size() ? null : goldExtractors.get(index);
@@ -448,13 +462,13 @@ public final class Settings extends CoMYamlConfiguration {
     /**
      * @param level Elixir extractor level
      *
-     * @return {@link ElixirExtractorSettings} corresponding to the specified level or {@code null} if the
+     * @return {@link ElixirExtractorLevel} corresponding to the specified level or {@code null} if the
      * specified level does not exist
      *
      * @since v3.1
      */
     @Nullable
-    public ElixirExtractorSettings getElixirExtractor(final int level) {
+    public ElixirExtractorLevel getElixirExtractor(final int level) {
         final int index = level - 1;
 
         return index >= elixirExtractors.size() ? null : elixirExtractors.get(index);
@@ -463,13 +477,13 @@ public final class Settings extends CoMYamlConfiguration {
     /**
      * @param level Archer tower level
      *
-     * @return {@link ArcherTowerSettings} corresponding to the specified level or {@code null} if the specified
+     * @return {@link ArcherTowerLevel} corresponding to the specified level or {@code null} if the specified
      * level does not exist
      *
      * @since v3.1
      */
     @Nullable
-    public ArcherTowerSettings getArcherTower(final int level) {
+    public ArcherTowerLevel getArcherTower(final int level) {
         final int index = level - 1;
 
         return index >= archerTowers.size() ? null : archerTowers.get(index);
@@ -480,7 +494,7 @@ public final class Settings extends CoMYamlConfiguration {
      *
      * @return the maximum configured level of the specified building
      */
-    public int getMaxLevel(@Nonnull final BuildingType building) {
+    public int getMaxLevel(@Nonnull final Buildings building) {
         switch (building) {
             case ARCHER_TOWER:
                 return archerTowers.size();
@@ -506,7 +520,7 @@ public final class Settings extends CoMYamlConfiguration {
      *
      * @since v3.1
      */
-    public boolean isBuildingEnabled(@Nonnull final BuildingType building) {
+    public boolean isBuildingEnabled(@Nonnull final Buildings building) {
         switch (building) {
             case ARCHER_TOWER:
                 return !archerTowers.isEmpty();
@@ -528,7 +542,7 @@ public final class Settings extends CoMYamlConfiguration {
      * @since v3.1
      */
     public boolean anyBuildingEnabled() {
-        for (BuildingType type : BuildingType.values())
+        for (Buildings type : Buildings.values())
             if (isBuildingEnabled(type))
                 return true;
         return false;
@@ -538,7 +552,7 @@ public final class Settings extends CoMYamlConfiguration {
      * @param type  Type of building to obtain
      * @param level Building level in which you are interested
      *
-     * @return {@link BuildingSettings} corresponding to the specified level or {@code null} if the specified level
+     * @return {@link BuildingLevel} corresponding to the specified level or {@code null} if the specified level
      * does not exist
      *
      * @see #getArcherTower(int)
@@ -547,7 +561,7 @@ public final class Settings extends CoMYamlConfiguration {
      * @see #getTownHall(int)
      */
     @Nullable
-    public BuildingSettings getBuilding(@Nonnull final BuildingType type, final int level) {
+    public BuildingLevel getBuilding(@Nonnull final Buildings type, final int level) {
         switch (type) {
             case ARCHER_TOWER:
                 return getArcherTower(level);

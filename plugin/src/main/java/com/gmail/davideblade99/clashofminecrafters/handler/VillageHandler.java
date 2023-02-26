@@ -7,13 +7,12 @@
 package com.gmail.davideblade99.clashofminecrafters.handler;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Village;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.exception.WorldBorderReachedException;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Size2D;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
+import com.gmail.davideblade99.clashofminecrafters.player.Village;
 import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
-import com.gmail.davideblade99.clashofminecrafters.schematic.Schematics;
 import com.gmail.davideblade99.clashofminecrafters.util.FileUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.Pair;
 import com.gmail.davideblade99.clashofminecrafters.util.thread.NonnullCallback;
@@ -27,6 +26,7 @@ import org.bukkit.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
+import java.util.UUID;
 
 public final class VillageHandler {
 
@@ -42,18 +42,18 @@ public final class VillageHandler {
 
     private final CoM plugin;
     private final int expansions;
-    public final File islandDataFile;
+    public final File villageDataFile;
 
     public VillageHandler(@Nonnull final CoM plugin) {
         this.plugin = plugin;
-        this.expansions = plugin.getConfig().getMaxExpansions() * 16;
-        this.islandDataFile = new File(plugin.getDataFolder(), "island data.yml"); //TODO: cambiare in "village data.yml"
+        this.expansions = plugin.getConfig().getVillageSettings().maxExpansions * 16;
+        this.villageDataFile = new File(plugin.getDataFolder(), "village data.yml");
 
         // Setup storage
-        if (!islandDataFile.exists()) {
-            FileUtil.createFile(islandDataFile);
+        if (!villageDataFile.exists()) {
+            FileUtil.createFile(villageDataFile);
 
-            final IslandConfiguration islandConfiguration = new IslandConfiguration(islandDataFile);
+            final IslandConfiguration islandConfiguration = new IslandConfiguration(villageDataFile);
             islandConfiguration.setX(VillageHandler.MIN_X);
             islandConfiguration.setZ(VillageHandler.MIN_Z);
             islandConfiguration.save();
@@ -74,18 +74,19 @@ public final class VillageHandler {
      *                              <li>{@link PastingException} is thrown in case of error during schematic pasting</li>
      *                          </ol>
      *
-     * @since v3.1.3
+     * @since v3.1.4
      */
     public void generateVillage(@Nonnull final OfflinePlayer player, @Nonnull final NonnullCallback<Pair<Village, Exception>> completionHandler) {
         final Schematic schematic;
         try {
-            schematic = plugin.getSchematicHandler().getSchematic(Schematics.VILLAGE);
+            //TODO: metodo nella classe Settings per ottenere VillageSettings (come per i settaggi degli edifici)
+            schematic = plugin.getSchematicHandler().getSchematic(plugin.getConfig().getVillageSettings().getRelatedSchematic());
         } catch (final Exception e) { // Pass exceptions to the callback
             completionHandler.call(new Pair<>(null, e));
             return;
         }
 
-        final IslandConfiguration islandStorage = new IslandConfiguration(islandDataFile);
+        final IslandConfiguration islandStorage = new IslandConfiguration(villageDataFile);
         int x = islandStorage.getX();
         int z = islandStorage.getZ();
 
@@ -122,10 +123,13 @@ public final class VillageHandler {
             }
         });
 
-        // Update x
-        x = origin.getX() - expansions - DISTANCE_BETWEEN_ISLANDS;
+        /*
+         * Variables are updated regardless, even in case of an error.
+         * This is to avoid placing an island near a schematic stump in the event of an error
+         */
 
-        // Save on file
+        // Save on file x and z
+        x = origin.getX() - expansions - DISTANCE_BETWEEN_ISLANDS;
         islandStorage.setX(x);
         islandStorage.setZ(z);
         islandStorage.save();

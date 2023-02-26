@@ -61,6 +61,8 @@ Player never joined: '&cIl giocatore %player non ha mai giocato nel server!'
 Too big number: '&cHai inserito un numero troppo grande. Verrà utilizzato %amount.'
 # Quando un giocatore invoca il comando /upgrade ma tutte le costruzioni sono disabilitate.
 No buildings: '&cTutte le costruzioni sono disabilitate. Non c''è niente da potenziare.'
+# Quando un giocatore usa il comando /upgrade [costruzione] ma non inserisce una costruzione valida.
+Wrong building: '&cLa costruzione specificata non esiste!'
 
 
 ############################################################
@@ -249,3 +251,5 @@ Tower not placed: '&cLa torre degli arcieri può essere posizionata solo dentro 
 ############################################################
 # Quando si verifica un errore durante il caricamento di una schematic.
 Load error: '&cNon è stato possibile caricare correttamente la schematic %schem.'
+# Quando si verifica un errore durante il posizionamento di una schematic.
+Paste error: '&cSi è verificato un problema durante l''incollamento della schematic %schem.'

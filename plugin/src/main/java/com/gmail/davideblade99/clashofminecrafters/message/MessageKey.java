@@ -35,6 +35,7 @@ public enum MessageKey {
     UNKNOWN_PLAYER("Player never joined", "%player"),
     TOO_BIG_NUMBER("Too big number", "%amount"),
     NO_BUILDINGS("No buildings"),
+    WRONG_BUILDING("Wrong building"),
 
     /* Usage of commands */
     ADD_COMMAND_USAGE("Add command usage"),
@@ -121,7 +122,8 @@ public enum MessageKey {
     TOWER_NOT_PLACED("Tower not placed"),
 
     /* Schematic messages */
-    LOAD_ERROR("Load error", "%schem");
+    LOAD_ERROR("Load error", "%schem"),
+    PASTE_ERROR("Paste error", "%schem");
 
     private final String path;
     private final String[] tags;

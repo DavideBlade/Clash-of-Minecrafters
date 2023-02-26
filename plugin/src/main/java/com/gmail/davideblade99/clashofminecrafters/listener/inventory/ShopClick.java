@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.listener.inventory;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Currency;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.listener.CoMListener;
 import com.gmail.davideblade99.clashofminecrafters.menu.Menu;
 import com.gmail.davideblade99.clashofminecrafters.menu.holder.MenuInventoryHolder;
@@ -15,7 +15,7 @@ import com.gmail.davideblade99.clashofminecrafters.menu.item.BaseItem;
 import com.gmail.davideblade99.clashofminecrafters.menu.item.ConfigItem;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.User;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.util.Pair;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.Material;
@@ -58,31 +58,19 @@ public final class ShopClick extends CoMListener {
             if (event.getSlot() == item.getSlot()) {
                 if (item instanceof ConfigItem) {
                     final ConfigItem configItem = (ConfigItem) item;
-                    final Pair<Integer, Currency> requiredBalance = configItem.getRequiredBalance();
+                    final Pair<Integer, Currencies> requiredBalance = configItem.getRequiredBalance();
                     final ItemStack requiredItem = configItem.getRequiredItem();
                     if (requiredBalance != null) {
                         final int price = requiredBalance.getKey();
-                        final Currency currency = requiredBalance.getValue();
+                        final Currencies currency = requiredBalance.getValue();
 
                         // Check if the player has enough currency
                         if (price != 0 && currency != null) {
                             final User user = plugin.getUser(player);
 
                             if (user.getBalance(currency) < price) {
-                                final String currencyTranslation;
-                                switch (currency) {
-                                    case GEMS:
-                                        currencyTranslation = Messages.getMessage(MessageKey.GEMS);
-                                        break;
-                                    case GOLD:
-                                        currencyTranslation = Messages.getMessage(MessageKey.GOLD);
-                                        break;
-                                    case ELIXIR:
-                                        currencyTranslation = Messages.getMessage(MessageKey.ELIXIR);
-                                        break;
-                                    default:
-                                        throw new IllegalStateException("Unexpected value: " + currency);
-                                }
+                                final String currencyTranslation = user.getBalance().getCurrencyTranslation(currency);
+
                                 MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NOT_ENOUGH_MONEY, currencyTranslation));
                                 player.closeInventory();
                                 return;

@@ -8,7 +8,7 @@ package com.gmail.davideblade99.clashofminecrafters.listener.island;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Permissions;
-import com.gmail.davideblade99.clashofminecrafters.Village;
+import com.gmail.davideblade99.clashofminecrafters.player.Village;
 import com.gmail.davideblade99.clashofminecrafters.listener.IslandListener;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
@@ -50,8 +50,8 @@ public final class AntiGrief extends IslandListener {
         if (player.hasPermission(Permissions.ISLAND_BASE + "build"))
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
-        if (island == null || !island.canBuildOnLocation(block.getLocation())) {
+        final Village island = plugin.getUser(player).getVillage();
+        if (island == null || !island.isInsideVillage(block.getLocation())) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
@@ -67,8 +67,8 @@ public final class AntiGrief extends IslandListener {
         if (player.hasPermission(Permissions.ISLAND_BASE + "build"))
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
-        if (island == null || !island.canBuildOnLocation(block.getLocation())) {
+        final Village island = plugin.getUser(player).getVillage();
+        if (island == null || !island.isInsideVillage(block.getLocation())) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
@@ -105,8 +105,8 @@ public final class AntiGrief extends IslandListener {
         if (player.hasPermission(Permissions.ISLAND_BASE + "build"))
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
-        if (island == null || !island.canBuildOnLocation(hanging.getLocation())) {
+        final Village island = plugin.getUser(player).getVillage();
+        if (island == null || !island.isInsideVillage(hanging.getLocation())) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
@@ -126,8 +126,8 @@ public final class AntiGrief extends IslandListener {
         if (player.hasPermission(Permissions.ISLAND_BASE + "build"))
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
-        if (island == null || !island.canBuildOnLocation(hanging.getLocation())) {
+        final Village island = plugin.getUser(player).getVillage();
+        if (island == null || !island.isInsideVillage(hanging.getLocation())) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
@@ -169,8 +169,8 @@ public final class AntiGrief extends IslandListener {
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
-        if (island == null || !island.canBuildOnLocation(((Horse) invHolder).getLocation())) {
+        final Village island = plugin.getUser(player).getVillage();
+        if (island == null || !island.isInsideVillage(((Horse) invHolder).getLocation())) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
@@ -186,8 +186,8 @@ public final class AntiGrief extends IslandListener {
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
-        if (island == null || !island.canBuildOnLocation(block.getLocation())) {
+        final Village island = plugin.getUser(player).getVillage();
+        if (island == null || !island.isInsideVillage(block.getLocation())) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
@@ -203,8 +203,8 @@ public final class AntiGrief extends IslandListener {
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
-        if (island == null || !island.canBuildOnLocation(block.getLocation())) {
+        final Village island = plugin.getUser(player).getVillage();
+        if (island == null || !island.isInsideVillage(block.getLocation())) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
@@ -220,8 +220,8 @@ public final class AntiGrief extends IslandListener {
         if (player.hasPermission(Permissions.ISLAND_BASE + "drop"))
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
-        if (island == null || !island.canBuildOnLocation(item.getLocation())) {
+        final Village island = plugin.getUser(player).getVillage();
+        if (island == null || !island.isInsideVillage(item.getLocation())) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
@@ -240,7 +240,7 @@ public final class AntiGrief extends IslandListener {
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
+        final Village island = plugin.getUser(player).getVillage();
         if (island == null) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
@@ -260,7 +260,7 @@ public final class AntiGrief extends IslandListener {
                     || itemMat == Material.ITEM_FRAME
                     || itemMat == Material.PAINTING
                     || itemMat == Material.ARMOR_STAND) {
-                if (!island.canBuildOnLocation(block.getLocation())) {
+                if (!island.isInsideVillage(block.getLocation())) {
                     event.setCancelled(true);
                     MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
                     return;
@@ -289,7 +289,7 @@ public final class AntiGrief extends IslandListener {
                 || blockMat.name().endsWith("_GATE")
                 || blockMat.name().endsWith("MINECART")
                 || blockMat == Material.BEACON) {
-            if (!island.canBuildOnLocation(block.getLocation())) {
+            if (!island.isInsideVillage(block.getLocation())) {
                 event.setCancelled(true);
                 MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
             }
@@ -308,8 +308,8 @@ public final class AntiGrief extends IslandListener {
         if (entity.getType() != EntityType.ARMOR_STAND)
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
-        if (island == null || !island.canBuildOnLocation(entity.getLocation())) {
+        final Village island = plugin.getUser(player).getVillage();
+        if (island == null || !island.isInsideVillage(entity.getLocation())) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
@@ -327,8 +327,8 @@ public final class AntiGrief extends IslandListener {
         if (clicked instanceof Painting)
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
-        if (island == null || !island.canBuildOnLocation(clicked.getLocation())) {
+        final Village island = plugin.getUser(player).getVillage();
+        if (island == null || !island.isInsideVillage(clicked.getLocation())) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
@@ -356,8 +356,8 @@ public final class AntiGrief extends IslandListener {
         if (attacker == null)
             return;
 
-        final Village island = plugin.getUser(attacker).getIsland();
-        if (island == null || !island.canBuildOnLocation(target.getLocation())) {
+        final Village island = plugin.getUser(attacker).getVillage();
+        if (island == null || !island.isInsideVillage(target.getLocation())) {
             event.setCancelled(true);
             MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
@@ -376,8 +376,8 @@ public final class AntiGrief extends IslandListener {
         if (player.hasPermission(Permissions.ISLAND_BASE + "pickup"))
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
-        if (island == null || !island.canBuildOnLocation(item.getLocation())) {
+        final Village island = plugin.getUser(player).getVillage();
+        if (island == null || !island.isInsideVillage(item.getLocation())) {
             event.setCancelled(true);
             item.setPickupDelay(50);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
@@ -394,8 +394,8 @@ public final class AntiGrief extends IslandListener {
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
-        if (island == null || !island.canBuildOnLocation(entity.getLocation())) {
+        final Village island = plugin.getUser(player).getVillage();
+        if (island == null || !island.isInsideVillage(entity.getLocation())) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
@@ -413,8 +413,8 @@ public final class AntiGrief extends IslandListener {
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
-        if (island == null || !island.canBuildOnLocation(event.getVehicle().getLocation())) {
+        final Village island = plugin.getUser(player).getVillage();
+        if (island == null || !island.isInsideVillage(event.getVehicle().getLocation())) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
@@ -432,8 +432,8 @@ public final class AntiGrief extends IslandListener {
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
-        if (island == null || !island.canBuildOnLocation(event.getVehicle().getLocation())) {
+        final Village island = plugin.getUser(player).getVillage();
+        if (island == null || !island.isInsideVillage(event.getVehicle().getLocation())) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
@@ -451,8 +451,8 @@ public final class AntiGrief extends IslandListener {
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
 
-        final Village island = plugin.getUser(player).getIsland();
-        if (island == null || !island.canBuildOnLocation(event.getVehicle().getLocation())) {
+        final Village island = plugin.getUser(player).getVillage();
+        if (island == null || !island.isInsideVillage(event.getVehicle().getLocation())) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }

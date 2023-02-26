@@ -4,23 +4,25 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters;
+package com.gmail.davideblade99.clashofminecrafters.player;
 
+import com.gmail.davideblade99.clashofminecrafters.CoM;
+import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.exception.WorldBorderReachedException;
 import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Balance;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
-import com.gmail.davideblade99.clashofminecrafters.setting.bean.BuildingSettings;
-import com.gmail.davideblade99.clashofminecrafters.setting.bean.ExtractorSettings;
+import com.gmail.davideblade99.clashofminecrafters.setting.BuildingLevel;
+import com.gmail.davideblade99.clashofminecrafters.setting.ExtractorLevel;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
-import com.gmail.davideblade99.clashofminecrafters.util.Pair;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ScoreboardUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.number.IntegerUtil;
-import com.gmail.davideblade99.clashofminecrafters.util.thread.NonnullCallback;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -32,21 +34,18 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-//TODO: prevenire gli switch sbagliati (usati per le currency): https://towardsdatascience.com/dont-be-a-basic-coder-and-use-5-possibilities-to-avoid-the-bad-switch-case-c92402f4061
 public final class User {
 
     private final CoM plugin;
     private final AtomicReference<OfflinePlayer> base; // Thread-safe field
-    private int gold;
-    private int elixir;
-    private int gems;
+    private final Balance balance;
     private int trophies;
     private String clanName;
     private int elixirExtractorLevel;
     private int goldExtractorLevel;
     private int archerLevel;
     private Vector archerLoc;
-    private Village island;
+    private Village village;
     private LocalDateTime collectionTime;
     private int townHallLevel;
 
@@ -75,26 +74,22 @@ public final class User {
                 throw new IllegalStateException("Unable to create data for player who has never been on the server!");
 
             final Settings config = plugin.getConfig();
-            this.gold = config.getStartingGold();
-            this.elixir = config.getStartingElixir();
-            this.gems = config.getStartingGems();
+            this.balance = new Balance(config.getStartingGold(), config.getStartingElixir(), config.getStartingGems());
             this.townHallLevel = 1; // The base level of the town hall is 1
 
             // Store default values in the database
-            database.storeUser(uuid, this);
+            updateDatabase();
         } else {
             final UserDatabaseType userDatabaseType = database.fetchUser(uuid); //TODO: questo fetch può essere usato al posto di hasPlayedBefore (se è null non ha mai giocato)
 
-            this.gold = userDatabaseType.gold;
-            this.elixir = userDatabaseType.elixir;
-            this.gems = userDatabaseType.gems;
+            this.balance = userDatabaseType.balance;
             this.trophies = userDatabaseType.trophies;
             this.clanName = userDatabaseType.clanName;
             this.elixirExtractorLevel = userDatabaseType.elixirExtractorLevel;
             this.goldExtractorLevel = userDatabaseType.goldExtractorLevel;
             this.archerLevel = userDatabaseType.archerTowerLevel;
             this.archerLoc = userDatabaseType.archerTowerLoc;
-            this.island = userDatabaseType.island;
+            this.village = userDatabaseType.island;
             this.collectionTime = userDatabaseType.collectionTime;
             this.townHallLevel = userDatabaseType.townHallLevel;
 
@@ -116,138 +111,94 @@ public final class User {
     }
 
     /**
-     * Checks whether the player has sufficient balance to upgrade a building
-     *
-     * @param nextLevel Next level to purchase
-     * @param type      Type of building to upgrade
-     *
-     * @return True if the player can afford it, otherwise false
-     *
-     * @throws IllegalArgumentException If the specified level does not exist for the passed building type
+     * @return The {@link Balance} of the user
      */
-    public boolean hasMoneyToUpgrade(final int nextLevel, @Nonnull final BuildingType type) {
-        final BuildingSettings nextBuilding;
-
-        switch (type) {
-            case ELIXIR_EXTRACTOR:
-                nextBuilding = plugin.getConfig().getElixirExtractor(nextLevel);
-                break;
-            case GOLD_EXTRACTOR:
-                nextBuilding = plugin.getConfig().getGoldExtractor(nextLevel);
-                break;
-            case ARCHER_TOWER:
-                nextBuilding = plugin.getConfig().getArcherTower(nextLevel);
-                break;
-            case TOWN_HALL:
-                nextBuilding = plugin.getConfig().getTownHall(nextLevel);
-                break;
-
-            default:
-                throw new IllegalStateException("Unexpected value: " + type);
-        }
-
-        if (nextBuilding == null)
-            throw new IllegalArgumentException("The \"" + nextLevel + "\" level of the building \"" + type + "\" does not exist");
-
-        return getBalance(nextBuilding.currency) >= nextBuilding.price;
+    public Balance getBalance() {
+        return balance;
     }
 
     /**
-     * @param type Currency in which to obtain the balance
+     * @param currency Currency of which to obtain the balance
      *
      * @return The player's balance for the specified currency
      */
-    public int getBalance(@Nonnull final Currency type) {
-        switch (type) {
-            case GEMS:
-                return gems;
-            case GOLD:
-                return gold;
-            case ELIXIR:
-                return elixir;
-
-            default:
-                throw new IllegalStateException("Unexpected value: " + type);
-        }
+    public int getBalance(@Nonnull final Currencies currency) {
+        return balance.getBalance(currency);
     }
 
-    public int addBalance(final int amount, @Nonnull final Currency type) {
-        final int currentBalance = getBalance(type);
-        final int newBalance = IntegerUtil.saturatedAdd(currentBalance, amount); // Avoid overflow
+    /**
+     * @return The amount of elixir the player owns
+     */
+    public int getElixir() {
+        return balance.getBalance(Currencies.ELIXIR);
+    }
 
-        setBalance(newBalance, type);
+    /**
+     * @return The amount of elixir the player owns
+     */
+    public int getGold() {
+        return balance.getBalance(Currencies.GOLD);
+    }
 
-        final MessageKey word;
-        switch (type) {
-            case GEMS:
-                word = amount == 1 ? MessageKey.GEM : MessageKey.GEMS;
-                break;
-            case GOLD:
-                word = MessageKey.GOLD;
-                break;
-            case ELIXIR:
-                word = MessageKey.ELIXIR;
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + type);
-        }
+    /**
+     * @return The amount of elixir the player owns
+     */
+    public int getGems() {
+        return balance.getBalance(Currencies.GEMS);
+    }
+
+    public int addBalance(final int amount, @Nonnull final Currencies currency) {
+        final int currentBalance = balance.getBalance(currency);
+        final int currencyAdded = balance.addCurrency(currency, amount);
+        final int newBalance = currentBalance + currencyAdded;
+
+        updateDatabase();
+        refreshScoreboard();
 
         if (getBase() instanceof Player) {
-            MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.ADDED_TO_BALANCE, String.valueOf(newBalance - currentBalance), Messages.getMessage(word)));
+            final String currencyTranslation = balance.getCurrencyTranslation(currency);
 
-            if (newBalance == Integer.MAX_VALUE)
+            MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.ADDED_TO_BALANCE, String.valueOf(currencyAdded), currencyTranslation));
+
+            if (newBalance == currency.getMax())
                 MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.MAX_MONEY));
         }
 
-        return newBalance - currentBalance;
+        return currencyAdded;
     }
 
-    public int removeBalance(final int amount, @Nonnull final Currency type) {
-        final int currentBalance = getBalance(type);
-        final int newBalance = Math.max(IntegerUtil.saturatedSub(currentBalance, amount), 0);
+    public int removeBalance(final int amount, @Nonnull final Currencies currency) {
+        final int currencyRemoved = balance.removeCurrency(currency, amount);
 
-        setBalance(newBalance, type);
+        updateDatabase();
+        refreshScoreboard();
 
-        final MessageKey word;
-        switch (type) {
-            case GEMS:
-                word = amount == 1 ? MessageKey.GEM : MessageKey.GEMS;
-                break;
-            case GOLD:
-                word = MessageKey.GOLD;
-                break;
-            case ELIXIR:
-                word = MessageKey.ELIXIR;
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + type);
+        if (getBase() instanceof Player) {
+            final String currencyTranslation = balance.getCurrencyTranslation(currency);
+
+            MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.REMOVED_FROM_BALANCE, String.valueOf(currencyRemoved), currencyTranslation));
         }
 
+        return currencyRemoved;
+    }
+
+    /**
+     * Updates the data in the player's scoreboard if he is an online player
+     *
+     * @since v3.1.4
+     */
+    private void refreshScoreboard() {
         if (getBase() instanceof Player)
-            MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.REMOVED_FROM_BALANCE, String.valueOf(currentBalance - newBalance), Messages.getMessage(word)));
-
-        return currentBalance - newBalance;
+            ScoreboardUtil.refreshData(balance, trophies, ((Player) getBase()).getScoreboard());
     }
 
-    private void setBalance(final int amount, @Nonnull final Currency currency) {
-        switch (currency) {
-            case GEMS:
-                gems = amount;
-                break;
-            case GOLD:
-                gold = amount;
-                break;
-            case ELIXIR:
-                elixir = amount;
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + currency);
-        }
-
+    /**
+     * Update the database with new player data
+     *
+     * @since v3.1.4
+     */
+    private void updateDatabase() {
         plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
-
-        if (getBase() instanceof Player)
-            ScoreboardUtil.refreshData(gems, gold, elixir, trophies, ((Player) getBase()).getScoreboard());
     }
 
     public void addTrophies(final int amount) {
@@ -277,10 +228,8 @@ public final class User {
     private void setTrophies(final int trophies) {
         this.trophies = trophies;
 
-        plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
-
-        if (getBase() instanceof Player)
-            ScoreboardUtil.refreshData(gems, gold, elixir, trophies, ((Player) getBase()).getScoreboard());
+        updateDatabase();
+        refreshScoreboard();
     }
 
     public int getTrophies() {
@@ -295,14 +244,14 @@ public final class User {
     public void setClanName(@Nullable final String clanName) {
         this.clanName = clanName;
 
-        plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
+        updateDatabase();
     }
 
     public void removeClan() {
         setClanName(null);
     }
 
-    public boolean hasBuilding(@Nonnull final BuildingType type) {
+    public boolean hasBuilding(@Nonnull final Buildings type) {
         return getBuildingLevel(type) > 0; // If the level is 0 it means that the player has not unlocked the building
     }
 
@@ -314,7 +263,7 @@ public final class User {
      * @since v3.1.2
      */
     public boolean hasExtractor() {
-        return getBuilding(BuildingType.GOLD_EXTRACTOR) != null || getBuilding(BuildingType.ELIXIR_EXTRACTOR) != null;
+        return getBuilding(Buildings.GOLD_EXTRACTOR) != null || getBuilding(Buildings.ELIXIR_EXTRACTOR) != null;
     }
 
     /**
@@ -324,7 +273,7 @@ public final class User {
      *
      * @return the building level or 0 if the player did not buy the building or some error has occurred
      */
-    public int getBuildingLevel(@Nonnull final BuildingType type) {
+    public int getBuildingLevel(@Nonnull final Buildings type) {
         switch (type) {
             case ARCHER_TOWER:
                 return archerLevel;
@@ -342,29 +291,36 @@ public final class User {
     /**
      * @param type Type of construction to obtain
      *
-     * @return the {@link BuildingSettings} corresponding to the level the player has unlocked or {@code null} if
+     * @return the {@link BuildingLevel} corresponding to the level the player has unlocked or {@code null} if
      * the player has not unlocked the building or if the level is not found among the configured ones (this can
      * happen if, for example, there is a configuration error or if levels have been deleted)
      */
     @Nullable
-    public BuildingSettings getBuilding(@Nonnull final BuildingType type) {
+    public BuildingLevel getBuilding(@Nonnull final Buildings type) {
         final int currentLevel = getBuildingLevel(type);
 
         // If the level is 1, it means that the player has the basic level of the town hall (never upgraded it)
-        if (type == BuildingType.TOWN_HALL && currentLevel == 1)
+        if (type == Buildings.TOWN_HALL && currentLevel == 1)
             return null;
         // If the level is 0 it means that the player does not have the building (never unlocked)
-        if (type != BuildingType.TOWN_HALL && currentLevel == 0)
+        if (type != Buildings.TOWN_HALL && currentLevel == 0)
             return null;
 
         return plugin.getConfig().getBuilding(type, currentLevel);
     }
 
-    public void upgradeBuilding(@Nonnull final BuildingType type) {
-        final int nextLevel = getBuildingLevel(type) + 1;
+    /**
+     * Upgrades the building without performing any checks (player's balance, placement within the village, etc.).
+     * Sends a message to the player if he has already reached the maximum level of the building (can no longer
+     * upgrade it) and if the upgrade was successful. Removes the cost of the upgrade from the player's balance.
+     *
+     * @param building building to upgrade
+     */
+    public void upgradeBuilding(@Nonnull final Buildings building) {
+        final int nextLevel = getBuildingLevel(building) + 1;
 
         final String replacement;
-        switch (type) {
+        switch (building) {
             case ARCHER_TOWER:
                 replacement = Messages.getMessage(MessageKey.ARCHER_TOWER);
                 break;
@@ -379,44 +335,20 @@ public final class User {
                 break;
 
             default:
-                throw new IllegalStateException("Unexpected value: " + type);
+                throw new IllegalStateException("Unexpected building: " + building);
         }
 
         // Max level reached
-        if (nextLevel > plugin.getConfig().getMaxLevel(type)) {
+        if (nextLevel > plugin.getConfig().getMaxLevel(building)) {
             if (getBase() instanceof Player)
                 MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.MAX_LEVEL_REACHED, replacement));
             return;
         }
 
-        final BuildingSettings nextBuilding = plugin.getConfig().getBuilding(type, nextLevel);
-        final int price = nextBuilding.price;
-        final Currency currency = nextBuilding.currency;
+        final BuildingLevel nextBuilding = plugin.getConfig().getBuilding(building, nextLevel);
 
-        if (!hasMoneyToUpgrade(nextLevel, type)) {
-            if (getBase() instanceof Player) {
-                final String currencyTranslation;
-                switch (currency) {
-                    case GEMS:
-                        currencyTranslation = Messages.getMessage(MessageKey.GEMS);
-                        break;
-                    case GOLD:
-                        currencyTranslation = Messages.getMessage(MessageKey.GOLD);
-                        break;
-                    case ELIXIR:
-                        currencyTranslation = Messages.getMessage(MessageKey.ELIXIR);
-                        break;
-                    default:
-                        throw new IllegalStateException("Unexpected value: " + currency);
-                }
-
-                MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.NOT_ENOUGH_MONEY, currencyTranslation));
-            }
-            return;
-        }
-
-        removeBalance(price, currency);
-        setBuildingLevel(nextLevel, type);
+        removeBalance(nextBuilding.price, nextBuilding.currency);
+        setBuildingLevel(nextLevel, building);
 
         if (getBase() instanceof Player)
             MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.UPGRADE_COMPLETED, replacement, String.valueOf(nextLevel)));
@@ -431,7 +363,7 @@ public final class User {
      * @throws IllegalArgumentException If the level is negative
      * @throws IllegalStateException    If the building type does not exist
      */
-    private void setBuildingLevel(final int level, @Nonnull final BuildingType type) {
+    private void setBuildingLevel(final int level, @Nonnull final Buildings type) {
         if (level < 0)
             throw new IllegalArgumentException("Level must be greater than or equal to 0");
 
@@ -452,7 +384,7 @@ public final class User {
                 throw new IllegalStateException("Unexpected value: " + type);
         }
 
-        plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
+        updateDatabase();
     }
 
     @Nullable
@@ -468,12 +400,12 @@ public final class User {
     public void setArcherPos(@Nonnull final Vector position) {
         archerLoc = position;
 
-        plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
+        updateDatabase();
     }
 
     @Nullable
-    public Village getIsland() {
-        return island;
+    public Village getVillage() {
+        return village;
     }
 
     public void createIsland() {
@@ -491,23 +423,34 @@ public final class User {
                 return;
             }
 
-            User.this.island = village;
+            User.this.village = village;
 
-            plugin.getDatabase().storeUser(getBase().getUniqueId(), User.this);
+            updateDatabase();
 
             if (getBase() instanceof Player) {
                 MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.TELEPORTATION));
 
-                island.teleportToSpawn((Player) getBase());
+                this.village.teleportToSpawn((Player) getBase());
             }
         });
     }
 
-    public void setIslandSpawn(@Nonnull final Location loc) {
-        island.spawn = loc;
+    /**
+     * Sets a new spawn point for the player's village
+     *
+     * @param loc New spawn point to be set
+     *
+     * @return True if the location was safe and the new spawn could be set, otherwise false
+     *
+     * @since v3.1.4
+     */
+    public boolean setIslandSpawn(@Nonnull final Location loc) {
+        final boolean result = village.setSpawn(loc);
 
         // Save changes to the database
-        plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
+        updateDatabase();
+
+        return result;
     }
 
     @Nullable
@@ -519,19 +462,19 @@ public final class User {
      * Collects all resources in the extractors unlocked by the player
      */
     public void collectExtractors() {
-        final ExtractorSettings goldExtractor = (ExtractorSettings) this.getBuilding(BuildingType.GOLD_EXTRACTOR);
-        final ExtractorSettings elixirExtractor = (ExtractorSettings) this.getBuilding(BuildingType.ELIXIR_EXTRACTOR);
+        final ExtractorLevel goldExtractor = (ExtractorLevel) this.getBuilding(Buildings.GOLD_EXTRACTOR);
+        final ExtractorLevel elixirExtractor = (ExtractorLevel) this.getBuilding(Buildings.ELIXIR_EXTRACTOR);
 
         if (goldExtractor != null) // If the player bought the gold extractor
-            this.addBalance(getResourcesProduced(goldExtractor, this.collectionTime), Currency.GOLD);
+            this.addBalance(getResourcesProduced(goldExtractor, this.collectionTime), Currencies.GOLD);
         if (elixirExtractor != null) // If the player bought the elixir extractor
-            this.addBalance(getResourcesProduced(elixirExtractor, this.collectionTime), Currency.ELIXIR);
+            this.addBalance(getResourcesProduced(elixirExtractor, this.collectionTime), Currencies.ELIXIR);
 
         // Update collection time
         this.collectionTime = LocalDateTime.now();
 
         // Save changes to the database
-        plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
+        updateDatabase();
     }
 
     /**
@@ -543,7 +486,7 @@ public final class User {
      *
      * @return the amount of resources produced (accumulated in the extractor)
      */
-    public int getResourcesProduced(@Nonnull final ExtractorSettings extractor, @Nonnull final LocalDateTime collectionTime) {
+    public int getResourcesProduced(@Nonnull final ExtractorLevel extractor, @Nonnull final LocalDateTime collectionTime) {
         /*
          * Calculate the hours that have passed since the last time the player collected.
          * For the minutes that are left (less than 60), I calculate the approximate production.
@@ -584,16 +527,16 @@ public final class User {
     public String toString() {
         return "User{" +
                 "uuid=" + getBase().getUniqueId() +
-                ", gold=" + gold +
-                ", elixir=" + elixir +
-                ", gems=" + gems +
+                ", gold=" + balance.getGold() +
+                ", elixir=" + balance.getElixir() +
+                ", gems=" + balance.getGems() +
                 ", trophies=" + trophies +
                 ", clan='" + clanName + "'" +
                 ", elixir extractor level=" + elixirExtractorLevel +
                 ", gold extractor level=" + goldExtractorLevel +
                 ", archer level=" + archerLevel +
                 ", archer location=" + archerLoc +
-                ", island=" + island +
+                ", island=" + village +
                 ", collection time=" + collectionTime +
                 ", town hall level=" + townHallLevel +
                 '}';

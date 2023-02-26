@@ -7,17 +7,18 @@
 package com.gmail.davideblade99.clashofminecrafters.storage.file;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Currency;
-import com.gmail.davideblade99.clashofminecrafters.yaml.PlayerConfiguration;
-import com.gmail.davideblade99.clashofminecrafters.Village;
-import com.gmail.davideblade99.clashofminecrafters.BuildingType;
-import com.gmail.davideblade99.clashofminecrafters.User;
+import com.gmail.davideblade99.clashofminecrafters.player.Village;
+import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
+import com.gmail.davideblade99.clashofminecrafters.geometric.Size2D;
+import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Balance;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.collection.RandomItemExtractor;
-import com.gmail.davideblade99.clashofminecrafters.geometric.Size2D;
-import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
+import com.gmail.davideblade99.clashofminecrafters.yaml.PlayerConfiguration;
 import org.bukkit.Location;
 
 import javax.annotation.Nonnull;
@@ -147,19 +148,19 @@ public final class YAMLDatabase implements PlayerDatabase {
     /**
      * {@inheritDoc}
      */
-    @Nullable
+    @Nonnull
     @Override
     public UserDatabaseType fetchUser(@Nonnull final UUID playerUUID) {
         final PlayerConfiguration conf = new PlayerConfiguration(getPlayerFile(playerUUID));
-        final int gold = conf.getBalance(Currency.GOLD);
-        final int elixir = conf.getBalance(Currency.ELIXIR);
-        final int gems = conf.getBalance(Currency.GEMS);
+        final int gold = conf.getBalance(Currencies.GOLD);
+        final int elixir = conf.getBalance(Currencies.ELIXIR);
+        final int gems = conf.getBalance(Currencies.GEMS);
         final int trophies = conf.getTrophies();
         final String clanName = conf.getClanName();
-        final int townHallLevel = conf.getBuildingLevel(BuildingType.TOWN_HALL);
-        final int elixirExtractorLevel = conf.getBuildingLevel(BuildingType.ELIXIR_EXTRACTOR);
-        final int goldExtractorLevel = conf.getBuildingLevel(BuildingType.GOLD_EXTRACTOR);
-        final int archerTowerLevel = conf.getBuildingLevel(BuildingType.ARCHER_TOWER);
+        final int townHallLevel = conf.getBuildingLevel(Buildings.TOWN_HALL);
+        final int elixirExtractorLevel = conf.getBuildingLevel(Buildings.ELIXIR_EXTRACTOR);
+        final int goldExtractorLevel = conf.getBuildingLevel(Buildings.GOLD_EXTRACTOR);
+        final int archerTowerLevel = conf.getBuildingLevel(Buildings.ARCHER_TOWER);
         final Vector archerTowerPos = conf.getArcherTowerPosition();
 
         final String playerName = plugin.getPlayerHandler().getPlayerName(conf.getUUID());
@@ -174,7 +175,7 @@ public final class YAMLDatabase implements PlayerDatabase {
         final String timestamp = conf.getCollectionTime();
         final LocalDateTime collectionTime = timestamp == null ? null : LocalDateTime.parse(timestamp, CoM.DATE_FORMAT);
 
-        return new UserDatabaseType(gold, elixir, gems, trophies, clanName, elixirExtractorLevel, goldExtractorLevel, archerTowerLevel, archerTowerPos, island, collectionTime, townHallLevel);
+        return new UserDatabaseType(new Balance(gold, elixir, gems), trophies, clanName, elixirExtractorLevel, goldExtractorLevel, archerTowerLevel, archerTowerPos, island, collectionTime, townHallLevel);
     }
 
     /**
@@ -182,37 +183,37 @@ public final class YAMLDatabase implements PlayerDatabase {
      */
     @Override
     public void storeUser(@Nonnull final UUID playerUUID, @Nonnull final User user) {
-        final int gold = user.getBalance(Currency.GOLD);
-        final int elixir = user.getBalance(Currency.ELIXIR);
-        final int gems = user.getBalance(Currency.GEMS);
+        final int gold = user.getGold();
+        final int elixir = user.getElixir();
+        final int gems = user.getGems();
         final int trophies = user.getTrophies();
         final String clanName = user.getClanName();
-        final int townHallLevel = user.getBuildingLevel(BuildingType.TOWN_HALL);
-        final int elixirExtractorLevel = user.getBuildingLevel(BuildingType.ELIXIR_EXTRACTOR);
-        final int goldExtractorLevel = user.getBuildingLevel(BuildingType.GOLD_EXTRACTOR);
-        final int archerLevel = user.getBuildingLevel(BuildingType.ARCHER_TOWER);
+        final int townHallLevel = user.getBuildingLevel(Buildings.TOWN_HALL);
+        final int elixirExtractorLevel = user.getBuildingLevel(Buildings.ELIXIR_EXTRACTOR);
+        final int goldExtractorLevel = user.getBuildingLevel(Buildings.GOLD_EXTRACTOR);
+        final int archerLevel = user.getBuildingLevel(Buildings.ARCHER_TOWER);
         final Vector towerPos = user.getTowerPos();
-        final Village island = user.getIsland();
+        final Village island = user.getVillage();
         final LocalDateTime collectionTime = user.getCollectionTime();
 
 
         final PlayerConfiguration conf = new PlayerConfiguration(getPlayerFile(playerUUID));
 
-        conf.setBalance(Currency.GOLD, gold);
-        conf.setBalance(Currency.ELIXIR, elixir);
-        conf.setBalance(Currency.GEMS, gems);
+        conf.setBalance(Currencies.GOLD, gold);
+        conf.setBalance(Currencies.ELIXIR, elixir);
+        conf.setBalance(Currencies.GEMS, gems);
         conf.setTrophies(trophies);
         conf.setClan(clanName);
-        conf.setBuildingLevel(BuildingType.TOWN_HALL, townHallLevel);
-        conf.setBuildingLevel(BuildingType.ELIXIR_EXTRACTOR, elixirExtractorLevel);
-        conf.setBuildingLevel(BuildingType.GOLD_EXTRACTOR, goldExtractorLevel);
-        conf.setBuildingLevel(BuildingType.ARCHER_TOWER, archerLevel);
+        conf.setBuildingLevel(Buildings.TOWN_HALL, townHallLevel);
+        conf.setBuildingLevel(Buildings.ELIXIR_EXTRACTOR, elixirExtractorLevel);
+        conf.setBuildingLevel(Buildings.GOLD_EXTRACTOR, goldExtractorLevel);
+        conf.setBuildingLevel(Buildings.ARCHER_TOWER, archerLevel);
 
         if (towerPos != null)
             conf.setArcherTowerLocation(towerPos.toString());
 
         if (island != null) {
-            conf.setIslandSpawn(BukkitLocationUtil.toString(island.spawn));
+            conf.setIslandSpawn(BukkitLocationUtil.toString(island.getSpawn()));
             conf.setIslandOrigin(island.origin);
             conf.setIslandSize(island.size);
             conf.setIslandExpansions(island.expansions);

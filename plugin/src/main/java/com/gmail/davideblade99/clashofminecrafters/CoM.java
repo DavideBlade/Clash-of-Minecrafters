@@ -17,6 +17,7 @@ import com.gmail.davideblade99.clashofminecrafters.listener.raid.*;
 import com.gmail.davideblade99.clashofminecrafters.menu.holder.MenuInventoryHolder;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.schematic.awe.AsyncWEPaster;
 import com.gmail.davideblade99.clashofminecrafters.schematic.worldedit.WEPaster;
 import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
@@ -50,7 +51,7 @@ import java.util.UUID;
  *  Supporto per PlaceholderAPI + rendere disabilitabile scoreboard dal config
  *  Tab completer -> vedi FullCloak
  *  Aggiungere tempo massimo al raid
- *  Preview della zona in cui verrebbe incollata la schematic (interfaccia Placeable)
+ *  Preview della zona in cui verrebbe incollata la schematic (interfaccia Placeable) -> tappetti in terra oppure https://www.spigotmc.org/threads/previewing-and-pasting-schematics-block-by-block-nbt-we-api.324817/ <- add-on a pagamento?
  *  Rank in base ai trofei (come le leghe)
  *  Anche il difensore in un raid vince o perde i trofei
  *  API
@@ -105,6 +106,7 @@ public final class CoM extends JavaPlugin {
     private WarHandler warHandler;
     private ArcherHandler archerHandler;
     private GuardianHandler guardianHandler;
+    private UpgradeManager upgradeManager;
 
     public CoM() {
         super();
@@ -116,6 +118,17 @@ public final class CoM extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // Added: supporto per AsyncWorldEdit
+        // Added: Comando /upgrade [building]
+        // Other: Aggiunto messaggio "Wrong building" e "Paste error" nei file dei messaggi
+        // Other: Migliorata la qualità del codice
+        // Fixed: Alcuni messaggi in cui non veniva mostrato correttamente il singolare e il plurale
+        // Fixed: Un importante (ma raro) bug che poteva permettere di incollare le schematic al di fuori del villaggio o di creare delle zone intoccabili in tutti i mondi
+        // Fixed: Un bug che non permetteva di creare un villaggio (era possibile farlo solo con AsyncWorldEdit)
+        // Other: Creata sezione per settaggi dei villaggi nel config.yml //TODO: aggiornare wiki
+        // Other: Cambiato il nome del file "island data.yml" in "village data.yml"
+        // Fixed: Se durante l'upgrade di un edificio si verifica un errore, l'upgrade non viene più registrato come completato
+
         //TODO: suggerimenti: https://www.spigotmc.org/conversations/clash-of-minecrafters.171775/
 
         //TODO: Aggiungere al guardiano teletrasporto casuale dietro il giocatore (cosicché possa sempre raggiungerlo nel caso sia bloccato da dei blocchi)
@@ -144,6 +157,7 @@ public final class CoM extends JavaPlugin {
             warHandler = new WarHandler(this);
             archerHandler = new ArcherHandler(this);
             guardianHandler = new GuardianHandler(this);
+            upgradeManager = new UpgradeManager(this);
 
             registerListeners();
             registerCommands();
@@ -218,6 +232,7 @@ public final class CoM extends JavaPlugin {
         warHandler = null;
         archerHandler = null;
         guardianHandler = null;
+        upgradeManager = null;
 
         MessageUtil.sendWarning("Clash of minecrafters has been disabled. (Version: " + getDescription().getVersion() + ")");
     }
@@ -266,6 +281,11 @@ public final class CoM extends JavaPlugin {
     @Nonnull
     public GuardianHandler getGuardianHandler() {
         return guardianHandler;
+    }
+
+    @Nonnull
+    public UpgradeManager getUpgradeManager() {
+        return upgradeManager;
     }
 
     // This will create a new user if there is not a match

@@ -46,7 +46,7 @@ public final class EntityDeath extends IslandListener {
         event.getDrops().clear();
 
 
-        final Player attacker = plugin.getWarHandler().getAttacker(plugin.getUser(plugin.getGuardianHandler().getOwner(zombie)).getIsland());
+        final Player attacker = plugin.getWarHandler().getAttacker(plugin.getUser(plugin.getGuardianHandler().getOwner(zombie)).getVillage());
         if (attacker == null)
             throw new IllegalStateException("Attacker not found");
 

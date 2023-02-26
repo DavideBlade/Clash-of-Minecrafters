@@ -21,7 +21,7 @@ import java.io.IOException;
  * schematic
  *
  * @see Schematic
- * @since v3.1.3
+ * @since v3.1.4
  */
 public interface SchematicPaster {
 

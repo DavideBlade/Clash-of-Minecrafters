@@ -6,23 +6,14 @@
 
 package com.gmail.davideblade99.clashofminecrafters.schematic;
 
-import javax.annotation.Nonnull;
-
+/**
+ * Enumerates all schematic of the plugin
+ *
+ * @author DavideBlade
+ */
 public enum Schematics {
-    VILLAGE("Village"),
-    GOLD_EXTRACTOR("GoldExtractor"),
-    ELIXIR_EXTRACTOR("ElixirExtractor"),
-    ARCHER_TOWER("ArcherTower");
-
-
-    private final String name;
-
-    Schematics(@Nonnull final String name) {
-        this.name = name;
-    }
-
-    @Nonnull
-    public String getName() {
-        return this.name;
-    }
+    VILLAGE,
+    GOLD_EXTRACTOR,
+    ELIXIR_EXTRACTOR,
+    ARCHER_TOWER
 }

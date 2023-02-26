@@ -7,12 +7,12 @@
 package com.gmail.davideblade99.clashofminecrafters.listener.raid;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Currency;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.event.raid.RaidWinEvent;
 import com.gmail.davideblade99.clashofminecrafters.listener.CoMListener;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.User;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.util.Pair;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.entity.Player;
@@ -42,7 +42,7 @@ public final class RaidWin extends CoMListener {
 
 
         final User user = plugin.getUser(attacker);
-        final Pair<Pair<Integer, Currency>, Integer> raidRewards = plugin.getConfig().getRaidRewards();
+        final Pair<Pair<Integer, Currencies>, Integer> raidRewards = plugin.getConfig().getRaidRewards();
 
         user.addBalance(raidRewards.getKey().getKey(), raidRewards.getKey().getValue());
         user.addTrophies(raidRewards.getValue());

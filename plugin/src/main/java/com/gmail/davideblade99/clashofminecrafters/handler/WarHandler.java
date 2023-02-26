@@ -8,13 +8,13 @@ package com.gmail.davideblade99.clashofminecrafters.handler;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.event.raid.RaidLostEvent;
-import com.gmail.davideblade99.clashofminecrafters.Village;
-import com.gmail.davideblade99.clashofminecrafters.setting.bean.ArcherTowerSettings;
-import com.gmail.davideblade99.clashofminecrafters.setting.bean.BuildingSettings;
-import com.gmail.davideblade99.clashofminecrafters.BuildingType;
+import com.gmail.davideblade99.clashofminecrafters.player.Village;
+import com.gmail.davideblade99.clashofminecrafters.setting.ArcherTowerLevel;
+import com.gmail.davideblade99.clashofminecrafters.setting.BuildingLevel;
+import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.User;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.util.Pair;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.thread.NullableCallback;
@@ -96,15 +96,15 @@ public final class WarHandler {
             setUnderAttack(attacker, targetIsland, taskID);
 
             // Spawn creature
-            plugin.getGuardianHandler().spawn(targetUser, targetIsland.owner, targetIsland.spawn);
+            plugin.getGuardianHandler().spawn(targetUser, targetIsland.owner, targetIsland.getSpawn());
 
-            final BuildingSettings archerTower = targetUser.getBuilding(BuildingType.ARCHER_TOWER);
+            final BuildingLevel archerTower = targetUser.getBuilding(Buildings.ARCHER_TOWER);
             if (archerTower != null) // If the player has archer tower
-                plugin.getArcherHandler().spawn(targetIsland.owner, ((ArcherTowerSettings) archerTower).damage, targetUser.getTowerLoc());
+                plugin.getArcherHandler().spawn(targetIsland.owner, ((ArcherTowerLevel) archerTower).damage, targetUser.getTowerLoc());
 
             // Teleport player
             MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.TELEPORTATION));
-            attacker.teleport(targetIsland.spawn);
+            attacker.teleport(targetIsland.getSpawn());
         });
     }
 

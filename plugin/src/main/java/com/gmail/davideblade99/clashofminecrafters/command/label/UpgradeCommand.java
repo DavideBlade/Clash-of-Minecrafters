@@ -8,11 +8,12 @@ package com.gmail.davideblade99.clashofminecrafters.command.label;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Permissions;
+import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
 import com.gmail.davideblade99.clashofminecrafters.menu.UpgradeShop;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.User;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -32,8 +33,16 @@ public final class UpgradeCommand extends CommandFramework {
 
         final Player player = (Player) sender;
         final User user = plugin.getUser(player);
-        CommandValidator.notNull(user.getIsland(), Messages.getMessage(MessageKey.ISLAND_REQUIRED));
+        CommandValidator.notNull(user.getVillage(), Messages.getMessage(MessageKey.ISLAND_REQUIRED));
 
-        player.openInventory(new UpgradeShop(plugin, user).getInventory());
+        if (args.length == 0) {
+            player.openInventory(new UpgradeShop(plugin, user).getInventory());
+            return;
+        }
+
+        final Buildings building = Buildings.matchBuilding(args[0]);
+        CommandValidator.notNull(building, Messages.getMessage(MessageKey.WRONG_BUILDING));
+
+        plugin.getUpgradeManager().upgrade(player, building);
     }
 }

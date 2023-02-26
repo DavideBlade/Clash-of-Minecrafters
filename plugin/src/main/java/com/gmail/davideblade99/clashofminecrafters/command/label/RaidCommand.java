@@ -11,7 +11,7 @@ import com.gmail.davideblade99.clashofminecrafters.Permissions;
 import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.User;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -35,7 +35,7 @@ public final class RaidCommand extends CommandFramework {
 
         CommandValidator.notNull(user.getClanName(), Messages.getMessage(MessageKey.CLAN_REQUIRED));
         CommandValidator.isTrue(plugin.getWarHandler().isStarted(), Messages.getMessage(MessageKey.WAR_REQUIRED));
-        CommandValidator.notNull(user.getIsland(), Messages.getMessage(MessageKey.ISLAND_REQUIRED));
+        CommandValidator.notNull(user.getVillage(), Messages.getMessage(MessageKey.ISLAND_REQUIRED));
         CommandValidator.isFalse(plugin.getWarHandler().isAttacking(player), Messages.getMessage(MessageKey.ALREADY_ATTACKING));
 
 

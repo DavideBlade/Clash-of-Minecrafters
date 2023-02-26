@@ -7,11 +7,11 @@
 package com.gmail.davideblade99.clashofminecrafters.listener.player;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.Village;
+import com.gmail.davideblade99.clashofminecrafters.player.Village;
 import com.gmail.davideblade99.clashofminecrafters.listener.CoMListener;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.User;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ColorUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -53,7 +53,7 @@ public final class AsyncPlayerPreLogin extends CoMListener {
         if (user == null)
             return;
 
-        final Village island = user.getIsland();
+        final Village island = user.getVillage();
         if (island == null)
             return;
 

@@ -23,7 +23,7 @@ import java.io.IOException;
 /**
  * Class that deals with handling schematics via AsyncWorldEdit
  *
- * @since v3.1.3
+ * @since v3.1.4
  */
 public final class AsyncWEPaster implements SchematicPaster {
 

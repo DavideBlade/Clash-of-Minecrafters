@@ -1,9 +1,3 @@
-/*
- * Copyright (c) DavideBlade.
- *
- * All Rights Reserved.
- */
-
 package com.gmail.davideblade99.clashofminecrafters.command;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;

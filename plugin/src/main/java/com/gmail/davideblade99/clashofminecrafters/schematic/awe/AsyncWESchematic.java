@@ -35,7 +35,7 @@ import java.io.IOException;
 /**
  * Class representing the schematic of AsyncWorldEdit
  *
- * @since v3.1.3
+ * @since v3.1.4
  */
 public final class AsyncWESchematic extends WESchematic {
 

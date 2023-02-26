@@ -7,14 +7,13 @@
 package com.gmail.davideblade99.clashofminecrafters.command.label;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
-import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.Permissions;
 import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
-import com.gmail.davideblade99.clashofminecrafters.Village;
-import com.gmail.davideblade99.clashofminecrafters.User;
+import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
+import com.gmail.davideblade99.clashofminecrafters.message.Messages;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
+import com.gmail.davideblade99.clashofminecrafters.player.Village;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -37,7 +36,7 @@ public final class IslandCommand extends CommandFramework {
             CommandValidator.isTrue(player.hasPermission(Permissions.COMMAND_BASE + "island"), Messages.getMessage(MessageKey.NO_PERMISSION));
 
             final User user = plugin.getUser(player);
-            final Village island = user.getIsland();
+            final Village island = user.getVillage();
             if (island != null) {
                 MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.TELEPORTATION));
                 island.teleportToSpawn(player);
@@ -55,14 +54,13 @@ public final class IslandCommand extends CommandFramework {
 
 
             final User user = plugin.getUser(player);
-
             final Location loc = player.getLocation();
-            final Village playerIsland = user.getIsland();
-            CommandValidator.notNull(playerIsland, Messages.getMessage(MessageKey.ISLAND_REQUIRED));
-            CommandValidator.isTrue(playerIsland.canBuildOnLocation(loc), Messages.getMessage(MessageKey.CANNOT_SET_SPAWN));
-            CommandValidator.isTrue(BukkitLocationUtil.isSafeLocation(loc), Messages.getMessage(MessageKey.LOCATION_NOT_SAFE));
+            final Village playerIsland = user.getVillage();
 
-            user.setIslandSpawn(loc);
+            CommandValidator.notNull(playerIsland, Messages.getMessage(MessageKey.ISLAND_REQUIRED));
+            CommandValidator.isTrue(playerIsland.isInsideVillage(loc), Messages.getMessage(MessageKey.CANNOT_SET_SPAWN));
+
+            CommandValidator.isTrue(user.setIslandSpawn(loc), Messages.getMessage(MessageKey.LOCATION_NOT_SAFE));
 
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.ISLAND_SPAWN_SET));
             return;
