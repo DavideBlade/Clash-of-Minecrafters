@@ -106,6 +106,7 @@ public final class CoM extends JavaPlugin {
     private WarHandler warHandler;
     private ArcherHandler archerHandler;
     private GuardianHandler guardianHandler;
+    private UpgradeManager upgradeManager;
 
     public CoM() {
         super();
@@ -126,6 +127,7 @@ public final class CoM extends JavaPlugin {
         // Fixed: Un bug che non permetteva di creare un villaggio (era possibile farlo solo con AsyncWorldEdit)
         // Other: Creata sezione per settaggi dei villaggi nel config.yml //TODO: aggiornare wiki
         // Other: Cambiato il nome del file "island data.yml" in "village data.yml"
+        // Fixed: Se durante l'upgrade di un edificio si verifica un errore, l'upgrade non viene più registrato come completato
 
         //TODO: suggerimenti: https://www.spigotmc.org/conversations/clash-of-minecrafters.171775/
 
@@ -155,6 +157,7 @@ public final class CoM extends JavaPlugin {
             warHandler = new WarHandler(this);
             archerHandler = new ArcherHandler(this);
             guardianHandler = new GuardianHandler(this);
+            upgradeManager = new UpgradeManager(this);
 
             registerListeners();
             registerCommands();
@@ -229,6 +232,7 @@ public final class CoM extends JavaPlugin {
         warHandler = null;
         archerHandler = null;
         guardianHandler = null;
+        upgradeManager = null;
 
         MessageUtil.sendWarning("Clash of minecrafters has been disabled. (Version: " + getDescription().getVersion() + ")");
     }
@@ -277,6 +281,11 @@ public final class CoM extends JavaPlugin {
     @Nonnull
     public GuardianHandler getGuardianHandler() {
         return guardianHandler;
+    }
+
+    @Nonnull
+    public UpgradeManager getUpgradeManager() {
+        return upgradeManager;
     }
 
     // This will create a new user if there is not a match
