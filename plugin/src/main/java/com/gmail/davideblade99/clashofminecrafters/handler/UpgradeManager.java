@@ -168,7 +168,8 @@ public final class UpgradeManager {
 
                     user.upgradeBuilding(Buildings.ARCHER_TOWER);
                 });
-            }
+            } else
+                user.upgradeBuilding(Buildings.ARCHER_TOWER);
         }
     }
 
@@ -221,6 +222,25 @@ public final class UpgradeManager {
 
                     user.upgradeBuilding(Buildings.ELIXIR_EXTRACTOR);
                 });
+            } else {
+                /*
+                 * Before increasing the level, collect what the extractors were storing.
+                 * This prevents calculation of the extractor's production from the last collection
+                 * with the parameters of the next level.
+                 * Example:
+                 * the player collected 10 hours ago and his extractor produces 100 units per hour.
+                 * So it has produced 1000 units so far. The next level produces 200 units per hour.
+                 * If collecting is not done now, 2000 units would be the result when computing the resources produced.
+                 */
+                user.collectExtractors();
+                /*
+                 * Notifies resource collection only if the player already had an extractor
+                 * (if he is buying the first one, there is nothing to collect)
+                 */
+                if (user.hasBuilding(Buildings.ELIXIR_EXTRACTOR))
+                    MessageUtil.sendMessage((Player) user.getBase(), Messages.getMessage(MessageKey.COLLECTED_RESOURCES));
+
+                user.upgradeBuilding(Buildings.ELIXIR_EXTRACTOR);
             }
         }
     }
@@ -274,6 +294,25 @@ public final class UpgradeManager {
 
                     user.upgradeBuilding(Buildings.GOLD_EXTRACTOR);
                 });
+            } else {
+                /*
+                 * Before increasing the level, collect what the extractors were storing.
+                 * This prevents calculation of the extractor's production from the last collection
+                 * with the parameters of the next level.
+                 * Example:
+                 * the player collected 10 hours ago and his extractor produces 100 units per hour.
+                 * So it has produced 1000 units so far. The next level produces 200 units per hour.
+                 * If collecting is not done now, 2000 units would be the result when computing the resources produced.
+                 */
+                user.collectExtractors();
+                /*
+                 * Notifies resource collection only if the player already had an extractor
+                 * (if he is buying the first one, there is nothing to collect)
+                 */
+                if (user.hasBuilding(Buildings.GOLD_EXTRACTOR))
+                    MessageUtil.sendMessage((Player) user.getBase(), Messages.getMessage(MessageKey.COLLECTED_RESOURCES));
+
+                user.upgradeBuilding(Buildings.GOLD_EXTRACTOR);
             }
         }
     }
