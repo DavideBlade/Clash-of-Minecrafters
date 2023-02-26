@@ -37,10 +37,10 @@ public final class ComCommand extends CommandFramework {
                             "§6-----------[§cCoM commands§6]-----------",
                             "§6/add <amount> <currency> [player] - §cAdd gems, gold or elixir.",
                             "§6/take <amount> <currency> [player] - §cRemove gems, gold or elixir.",
-                            "§6/raid - §cSearch an island of enemies to attack.",
                             "§6/balance - §cGet your balance.",
                             "§6/open <menu> [player] - §cOpen specified menu.",
                             "§6/upgrade - §cOpen the menu with buildings' upgrades.",
+                            "§6/upgrade <building> - §cUpgrade the specified building.",
                             "§cUse §6/com help 3 §cfor read the next page."
                     };
 
@@ -48,6 +48,7 @@ public final class ComCommand extends CommandFramework {
                 } else if (args.length >= 2 && args[1].equalsIgnoreCase("3")) {
                     final String[] helpMessage3 = {
                             "§6-----------[§cCoM commands§6]-----------",
+                            "§6/raid - §cSearch an island of enemies to attack.",
                             "§6/war state - §cCheck the state of clan war.",
                             "§6/trophies - §cCheck how many trophies you have.",
                             "§6/extractors - §cShow your own extractors info.",
