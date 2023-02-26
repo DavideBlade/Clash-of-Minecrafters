@@ -118,17 +118,6 @@ public final class CoM extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Added: supporto per AsyncWorldEdit
-        // Added: Comando /upgrade [building]
-        // Other: Aggiunto messaggio "Wrong building" e "Paste error" nei file dei messaggi
-        // Other: Migliorata la qualità del codice
-        // Fixed: Alcuni messaggi in cui non veniva mostrato correttamente il singolare e il plurale
-        // Fixed: Un importante (ma raro) bug che poteva permettere di incollare le schematic al di fuori del villaggio o di creare delle zone intoccabili in tutti i mondi
-        // Fixed: Un bug che non permetteva di creare un villaggio (era possibile farlo solo con AsyncWorldEdit)
-        // Other: Creata sezione per settaggi dei villaggi nel config.yml //TODO: aggiornare wiki
-        // Other: Cambiato il nome del file "island data.yml" in "village data.yml"
-        // Fixed: Se durante l'upgrade di un edificio si verifica un errore, l'upgrade non viene più registrato come completato
-
         //TODO: suggerimenti: https://www.spigotmc.org/conversations/clash-of-minecrafters.171775/
 
         //TODO: Aggiungere al guardiano teletrasporto casuale dietro il giocatore (cosicché possa sempre raggiungerlo nel caso sia bloccato da dei blocchi)
