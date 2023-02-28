@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.gmail.davideblade99.clashofminecrafters</groupId>
         <artifactId>com-nms</artifactId>
-        <version>3.1.4 alpha</version>
+        <version>3.1.5 beta</version>
     </parent>
 
     <artifactId>com-nms-v1_15_r1</artifactId>
