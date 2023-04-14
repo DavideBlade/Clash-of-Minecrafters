@@ -27,7 +27,6 @@
     <modules>
         <module>nms</module>
         <module>plugin</module>
-        <module>v1_19_r3</module>
     </modules>
 
     <repositories>
