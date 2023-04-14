@@ -27,6 +27,7 @@
     <modules>
         <module>nms</module>
         <module>plugin</module>
+        <module>v1_19_r3</module>
     </modules>
 
     <repositories>
@@ -120,6 +121,12 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>com-nms-v1_19_r2</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>com-nms-v1_19_r3</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
