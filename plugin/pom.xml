@@ -70,6 +70,11 @@
         </dependency>
 
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>com-nms-v1_20_r1</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>
         </dependency>

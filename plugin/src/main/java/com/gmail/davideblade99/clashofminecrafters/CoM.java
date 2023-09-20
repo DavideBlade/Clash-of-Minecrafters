@@ -84,6 +84,8 @@ import java.util.UUID;
 //TODO: https://www.spigotmc.org/resources/1-13-1-18-craftofclans.22966/
 
 //TODO: catch errori non gestiti da nessuno: https://stackoverflow.com/a/13507137 + https://docs.oracle.com/javase/6/docs/api/java/lang/Thread.html#setDefaultUncaughtExceptionHandler%28java.lang.Thread.UncaughtExceptionHandler%29 + https://www.javatpoint.com/java-thread-setdefaultuncaughtexceptionhandler-method + https://stackoverflow.com/a/46591885
+
+//TODO: guardare https://github.com/ManuelGil/Internationalization + https://www.baeldung.com/java-8-localization + https://www.baeldung.com/java-localization-messages-formatting + https://docs.oracle.com/javase/8/docs/technotes/guides/intl/index.html + https://docs.oracle.com/javase/tutorial/i18n/intro/steps.html + https://github.com/Zrips/Jobs/blob/master/src/main/java/com/gamingmesh/jobs/Placeholders/Placeholder.java
 public final class CoM extends JavaPlugin {
 
     /**
@@ -93,7 +95,7 @@ public final class CoM extends JavaPlugin {
     public static final DateTimeFormatter DATE_FORMAT = new DateTimeFormatterBuilder().appendLiteral('[').appendPattern("dd-MM-yyyy HH:mm:ss").appendLiteral(']').toFormatter();
 
     /** List of Minecraft versions on which the plugin has been tested */
-    private final static String[] SUPPORTED_VERSIONS = {"1.14", "1.15", "1.16", "1.17", "1.18", "1.19"};
+    private final static String[] SUPPORTED_VERSIONS = {"1.14", "1.15", "1.16", "1.17", "1.18", "1.19", "1.20"};
 
     private static CoM instance;
 
@@ -341,7 +343,9 @@ public final class CoM extends JavaPlugin {
          * "v1_18_R1" -> Server runs from 1.18 to 1.18.1
          * "v1_18_R2" -> Server runs from 1.18.2
          * "v1_19_R1" -> Server runs from 1.19 to 1.19.2
-         * "v1_19_R2" -> Server is running 1.19.3 (currently)
+         * "v1_19_R2" -> Server is running 1.19.3
+         * "v1_19_R3" -> Server is running 1.19.4
+         * "v1_20_R1" -> Server runs from 1.20 to 1.20.1 (currently)
          */
 
         final ChunkGenerator chunkGenerator;
