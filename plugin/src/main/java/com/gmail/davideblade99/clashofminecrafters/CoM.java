@@ -45,47 +45,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.UUID;
 
-/* TODO list:
- *  Aggiungere comando /com upgrade <NomeStruttura> (permesso: clashofminecrafters.command.?) così che possano essere utilizzati in GUI custom create con altri plugin come ChestCommands -> Grazie a https://www.spigotmc.org/members/fede1132.118978/
- *  Tempi configurabili per l'inizio e la durata della guerra
- *  Supporto per PlaceholderAPI + rendere disabilitabile scoreboard dal config
- *  Tab completer -> vedi FullCloak
- *  Aggiungere tempo massimo al raid
- *  Preview della zona in cui verrebbe incollata la schematic (interfaccia Placeable) -> tappetti in terra oppure https://www.spigotmc.org/threads/previewing-and-pasting-schematics-block-by-block-nbt-we-api.324817/ <- add-on a pagamento?
- *  Rank in base ai trofei (come le leghe)
- *  Anche il difensore in un raid vince o perde i trofei
- *  API
- *  Aggiungere supporto a FastAsyncWorldEdit -> aggiornare wiki
- *  Scudo che permette di non ricevere attacchi (viene dato in automatico a chi perde un raid; in più è acquistabile)
- *  Creare video dimostrativo
- *  Aggiungere boost risorse (temporaneo, es. di 1 ora): ogni volta che un giocatore boostato riceve delle risorse, queste vengono moltiplicate (es. anziché ricevere 10 trofei a seguito della vincita di un raid ne riceve 20)
- *  Aggiungere che alcuni livelli sono sbloccabili solo con determinati livelli del municipio (aggiornare wiki con il nuovo config.yml)
- *  Sistemare permessi di default nel plugin.yml (per es. /trophies potrebbe essere eseguito dai giocatori senza problemi)
- *  Supporto per SQLite e MongoDB
- */
-
-//TODO: leggere: https://dev.mysql.com/doc/refman/8.0/en/innodb-transaction-model.html + https://www.spigotmc.org/threads/best-practices-for-async-sql-i-o.578716/page-2#post-4504656
-
-//TODO: https://github.com/Staartvin/Autorank-2/tree/master/src/me/armar/plugins/autorank
-//TODO: dare un'occhio a: https://www.google.com/search?q=java+configchecker+builder&rlz=1C1JZAP_itIT969IT971&oq=java+configchecker+builder&aqs=chrome..69i57j33i10i160.4092j1j1&sourceid=chrome&ie=UTF-8
-//TODO: dare un'occhiata a: https://helpch.at/
-//TODO: dare un'occhiata a: https://docs.eliteminecraftplugins.com/elitepets/ e https://www.gitbook.com/?utm_source=content&utm_medium=trademark&utm_campaign=-MgzZltL9-2FnEMsC3sM
-//TODO: dare un'occhio (per gli item, cosa poter settare ecc.) a: https://www.spigotmc.org/wiki/mmoitems-item-stats-options/
-//TODO: test SQLite com JUnit: https://www.spigotmc.org/threads/tutorial-plugin-sqlite-junit-testing.293352/
-
-//TODO: info sulla skin delle teste
-// https://www.spigotmc.org/threads/dynamic-player-head-textures.482194/#post-4047576
-// https://www.spigotmc.org/threads/solved-custom-head-texture.74387/
-// https://www.spigotmc.org/threads/tutorial-get-player-heads-without-lag.396186/
-// https://www.google.com/search?q=store+player+head+skin+spigot&rlz=1C1JZAP_itIT969IT971&oq=store+player+head+skin+spigot&aqs=chrome..69i57.4125j0j9&sourceid=chrome&ie=UTF-8
-
-//TODO: 1.18 Clash of Clans buildings: https://www.planetminecraft.com/project/clash-of-clans-every-building-with-every-upgrade-th-1-to-th12/
-
-//TODO: https://www.spigotmc.org/resources/1-13-1-18-craftofclans.22966/
-
-//TODO: catch errori non gestiti da nessuno: https://stackoverflow.com/a/13507137 + https://docs.oracle.com/javase/6/docs/api/java/lang/Thread.html#setDefaultUncaughtExceptionHandler%28java.lang.Thread.UncaughtExceptionHandler%29 + https://www.javatpoint.com/java-thread-setdefaultuncaughtexceptionhandler-method + https://stackoverflow.com/a/46591885
-
-//TODO: guardare https://github.com/ManuelGil/Internationalization + https://www.baeldung.com/java-8-localization + https://www.baeldung.com/java-localization-messages-formatting + https://docs.oracle.com/javase/8/docs/technotes/guides/intl/index.html + https://docs.oracle.com/javase/tutorial/i18n/intro/steps.html + https://github.com/Zrips/Jobs/blob/master/src/main/java/com/gamingmesh/jobs/Placeholders/Placeholder.java
 public final class CoM extends JavaPlugin {
 
     /**
@@ -120,12 +79,6 @@ public final class CoM extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        //TODO: suggerimenti: https://www.spigotmc.org/conversations/clash-of-minecrafters.171775/
-
-        //TODO: Aggiungere al guardiano teletrasporto casuale dietro il giocatore (cosicché possa sempre raggiungerlo nel caso sia bloccato da dei blocchi)
-
-        //TODO: Consigliare di utilizzare HealthBar (configurarlo in modo che funzioni solo nel mondo delle isole)
-
         try {
             if (!checkVersion()) {
                 MessageUtil.sendError("This version is only compatible with the following versions:" + String.join(", ", SUPPORTED_VERSIONS));
@@ -443,45 +396,6 @@ public final class CoM extends JavaPlugin {
 
         return false;
     }
-
-
-    //TODO: fare sito per le traduzioni come quello di essentials
-    //TODO aggiungere ai costruttori che non posso essere aggiunti valori nulli
-
-
-    /*TODO fare sistema di upgrade (/upgrade) con varie schematic per livello (es. livello 1 c'� la schematic ArcherTower1, livello 2 c'� ArcherTower2 e cos� via)
-    ed ologrammi che indicano quanto produce, a che livello � ecc. -> non devono pi� poter distruggere le costruzioni
-    Scriverlo/aggiornarlo sulla wiki.
-    */
-    //TODO aggiungere % all'attacco in base ai cuori del guardiano. Se supera il 50% lo vince senn� lo perde. Se arriva al 100% vince tutti i trofei e tutte le monete senn� (se oltre il 50% ma sotto il 100 n� vince la met�)
-    /*
-    # trophies received if completed the attack at 100%
-    # if the attack is 50%, this value will be divided by two
-    Trophies win: 25
-    # trophies removed if the attack is completed less than 50%
-    Trophies lost: 15
-     */
-    //TODO in base alla % della vittoria fare anche l'exp data al clan
-
-    //TODO aggiornare completamente l'architettura delle isole:
-    // Non posso distruggere niente e le espansioni le devono fare tramite comando (es. /island expand) verso dove guardano.
-    // Aggiornare anche sulla wiki
-
-
-    //TODO alle SQLException fare aggiungere throws SQLException al metodo in modo che possa gestirlo il chiamante in maniera migliore (es. hasArcher(UUID playerUUID) throws SQLException)
-
-    //TODO mettere le rule dei vari mondi impostabili dal config
-    //TODO aggiungere vari livelli delle costruzioni (es. livello 1 dell'estrattore hai una cosa. livello 2 ne hai un'altra ecc.)---> abilitabile del config. se disabilitato usa la schematic del livello 1
-    //TODO clan chat
-    //TODO controllare che la torre degli arcieri e gli estrattori stiano totalmente dentro l'isola e non solo il punto in cui clicca il player
-    // Creare meteore: https://bukkit.org/threads/tutorial-custom-entities-meteor.93899/ (potrei usarlo per creare la palla del mortaio)
-
-    //TODO: https://www.spigotmc.org/resources/essentials-mysql-storage-extension.25673/ -> Estensione di Essentials per salvare su MySQL
-
-    //TODO: i proprietari del clan possono impostare un minimo di trofei necessario affinché i giocatori possano unirsi al clan
-
-    //TODO: rimpire per il 50% la cache con gli ultimi giocatori che sono entrati nel server (o meno, se non ne sono mai entrati così tanti)
-
 
     //TODO: quando possibile non usare questo metodo statico ma passare l'istanza col costruttore
     public static CoM getInstance() {
