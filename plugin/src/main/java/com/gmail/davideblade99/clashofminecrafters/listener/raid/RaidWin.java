@@ -40,12 +40,18 @@ public final class RaidWin extends CoMListener {
 
         plugin.getWarHandler().removeUnderAttack(attacker);
 
-
-        final User user = plugin.getUser(attacker);
+        final User user_attacker = plugin.getUser(attacker);
+        final User user_defender = plugin.getUser(islandOwner);
         final Pair<Pair<Integer, Currencies>, Integer> raidRewards = plugin.getConfig().getRaidRewards();
 
-        user.addBalance(raidRewards.getKey().getKey(), raidRewards.getKey().getValue());
-        user.addTrophies(raidRewards.getValue());
-        plugin.getClanHandler().getClanByName(user.getClanName()).giveRaidExp();
+        user_attacker.addBalance(raidRewards.getKey().getKey(), raidRewards.getKey().getValue());
+        user_attacker.addTrophies(raidRewards.getValue());
+        plugin.getClanHandler().getClanByName(user_attacker.getClanName()).giveRaidExp();
+
+        // Unexpected missing data
+        if (user_defender == null)
+            throw new IllegalStateException("Raid defender \"" + islandOwner + "\" missing from the database");
+        user_defender.removeBalance(raidRewards.getKey().getKey(), raidRewards.getKey().getValue());
+        user_defender.removeTrophies(raidRewards.getValue());
     }
 }

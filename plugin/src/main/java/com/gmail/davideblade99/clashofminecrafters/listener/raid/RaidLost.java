@@ -32,12 +32,12 @@ public final class RaidLost extends CoMListener {
      * <ul>
      *     <li>Kills the guardian and the archer (if any)</li>
      *     <li>Removes the island from the list of those under attack</li>
-     *     <li>Removes trophies and currency from the player</li>
+     *     <li>Removes trophies and currency from the attacker</li>
+     *     <li>Adds trophies and currency to the defender</li>
      *     <li>Teleports the player to the spawn</li>
      *     <li>Sends a message to the player</li>
      * </ul>
      */
-    //TODO: al vincitore non dò trofei? e risorse?
     @EventHandler(priority = EventPriority.HIGH)
     public void onRaidFail(final RaidLostEvent event) {
         final String islandOwner = event.getDefender();
@@ -51,10 +51,17 @@ public final class RaidLost extends CoMListener {
 
         plugin.getWarHandler().removeUnderAttack(attacker);
 
-        final User user = plugin.getUser(attacker);
+        final User user_attacker = plugin.getUser(attacker);
+        final User user_defender = plugin.getUser(islandOwner);
         final Pair<Pair<Integer, Currencies>, Integer> raidPenalty = plugin.getConfig().getRaidPenalty();
 
-        user.removeBalance(raidPenalty.getKey().getKey(), raidPenalty.getKey().getValue());
-        user.removeTrophies(raidPenalty.getValue());
+        user_attacker.removeBalance(raidPenalty.getKey().getKey(), raidPenalty.getKey().getValue());
+        user_attacker.removeTrophies(raidPenalty.getValue());
+
+        // Unexpected missing data
+        if (user_defender == null)
+            throw new IllegalStateException("Raid defender \"" + islandOwner + "\" missing from the database");
+        user_defender.addBalance(raidPenalty.getKey().getKey(), raidPenalty.getKey().getValue());
+        user_defender.addTrophies(raidPenalty.getValue());
     }
 }
