@@ -7,7 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.schematic;
 
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
-import com.gmail.davideblade99.clashofminecrafters.geometric.Size3D;
+import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size3D;
 import com.gmail.davideblade99.clashofminecrafters.util.thread.NullableCallback;
 import org.bukkit.Location;
 

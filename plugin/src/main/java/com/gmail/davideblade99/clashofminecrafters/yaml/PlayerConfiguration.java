@@ -10,8 +10,8 @@ import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.storage.Columns;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
-import com.gmail.davideblade99.clashofminecrafters.geometric.Size2D;
-import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
+import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size2D;
+import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
 import org.bukkit.Location;
 
 import javax.annotation.Nonnull;

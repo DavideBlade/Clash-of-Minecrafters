@@ -4,7 +4,7 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.geometric;
+package com.gmail.davideblade99.clashofminecrafters.util.geometric;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -14,9 +14,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.Serializable;
 
+/**
+ * A simple class for representing a 3D mutable vector.
+ *
+ * @since v3.1.8
+ */
 public final class Vector implements Serializable {
 
-    private static final long serialVersionUID = -8473361306775261624L;
+    private static final long serialVersionUID = -8473361306775261625L;
 
     private int x;
     private int y;

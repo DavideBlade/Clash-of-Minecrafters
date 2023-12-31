@@ -4,11 +4,16 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.geometric;
+package com.gmail.davideblade99.clashofminecrafters.util.geometric;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * A simple class for representing the dimensions of an object in 2D.
+ *
+ * @since v3.1.8
+ */
 public final class Size2D {
 
     private final int width; // x

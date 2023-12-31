@@ -8,7 +8,7 @@ package com.gmail.davideblade99.clashofminecrafters.schematic.awe;
 
 import com.gmail.davideblade99.clashofminecrafters.exception.InvalidSchematicFormatException;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
-import com.gmail.davideblade99.clashofminecrafters.geometric.Vector;
+import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.schematic.worldedit.WESchematic;
 import com.gmail.davideblade99.clashofminecrafters.util.thread.NullableCallback;
 import com.sk89q.worldedit.MaxChangedBlocksException;
