@@ -45,6 +45,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.UUID;
 
+/**
+ * Main plugin class
+ */
 public final class CoM extends JavaPlugin {
 
     /**

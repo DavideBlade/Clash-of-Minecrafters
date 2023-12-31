@@ -152,14 +152,14 @@ permissions:
     description: Gives access to use /extractors command.
     default: op
   com.island.build:
-    description: Gives access to build on island's worlds.
+    description: Gives access to build in the world of villages.
     default: op
   com.island.drop:
-    description: Gives access to drop items on island's worlds.
+    description: Allows dropping items even outside one's village.
     default: op
   com.island.pickup:
-    description: Gives access to pick-up items on island's worlds.
+    description: Allows collecting items in others' villages.
     default: op
   com.island.interact:
-    description: Gives access to interact with items and entities on island's worlds.
+    description: Allows interaction with items and entities in others' villages.
     default: op

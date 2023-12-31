@@ -34,6 +34,9 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Prevents damage to islands by players and game events (e.g., fire)
+ */
 public final class AntiGrief extends IslandListener {
 
     public AntiGrief(@Nonnull final CoM plugin) {
@@ -43,15 +46,11 @@ public final class AntiGrief extends IslandListener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockBreak(final BlockBreakEvent event) {
         final Player player = event.getPlayer();
-        final Block block = event.getBlock();
 
-        if (!isVillageWorld(block.getWorld()))
-            return;
-        if (player.hasPermission(Permissions.ISLAND_BASE + "build"))
+        if (!isVillageWorld(event.getBlock().getWorld()))
             return;
 
-        final Village island = plugin.getUser(player).getVillage();
-        if (island == null || !island.isInsideVillage(block.getLocation())) {
+        if (!player.hasPermission(Permissions.ISLAND_BASE + "build")) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
@@ -60,15 +59,70 @@ public final class AntiGrief extends IslandListener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onBlockPlace(final BlockPlaceEvent event) {
         final Player player = event.getPlayer();
-        final Block block = event.getBlock();
 
-        if (!isVillageWorld(block.getWorld()))
-            return;
-        if (player.hasPermission(Permissions.ISLAND_BASE + "build"))
+        if (!isVillageWorld(event.getBlock().getWorld()))
             return;
 
-        final Village island = plugin.getUser(player).getVillage();
-        if (island == null || !island.isInsideVillage(block.getLocation())) {
+        if (!player.hasPermission(Permissions.ISLAND_BASE + "build")) {
+            event.setCancelled(true);
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onHangingBreakByEntity(final HangingBreakByEntityEvent event) {
+        final Entity entity = event.getRemover();
+        if (!(entity instanceof Player))
+            return;
+
+        final Player player = (Player) entity;
+        final Hanging hanging = event.getEntity();
+        if (hanging.getType() != EntityType.ITEM_FRAME && hanging.getType() != EntityType.PAINTING)
+            return;
+        if (!isVillageWorld(player.getWorld()))
+            return;
+        if (!player.hasPermission(Permissions.ISLAND_BASE + "build")) {
+            event.setCancelled(true);
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onHangingPlace(final HangingPlaceEvent event) {
+        final Player player = event.getPlayer();
+        if (player == null)
+            return;
+
+        final Hanging hanging = event.getEntity();
+        if (hanging.getType() != EntityType.ITEM_FRAME && hanging.getType() != EntityType.PAINTING)
+            return;
+        if (!isVillageWorld(player.getWorld()))
+            return;
+        if (!player.hasPermission(Permissions.ISLAND_BASE + "build")) {
+            event.setCancelled(true);
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent event) {
+        final Player player = event.getPlayer();
+
+        if (!isVillageWorld(player.getWorld()))
+            return;
+        if (!player.hasPermission(Permissions.ISLAND_BASE + "build")) {
+            event.setCancelled(true);
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onPlayerBucketFill(final PlayerBucketFillEvent event) {
+        final Player player = event.getPlayer();
+
+        if (!isVillageWorld(player.getWorld()))
+            return;
+        if (!player.hasPermission(Permissions.ISLAND_BASE + "build")) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
@@ -90,49 +144,11 @@ public final class AntiGrief extends IslandListener {
         event.setCancelled(true);
     }
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onHangingBreakByEntity(final HangingBreakByEntityEvent event) {
-        final Entity entity = event.getRemover();
-        if (!(entity instanceof Player))
-            return;
-
-        final Player player = (Player) entity;
-        final Hanging hanging = event.getEntity();
-        if (hanging.getType() != EntityType.ITEM_FRAME && hanging.getType() != EntityType.PAINTING)
-            return;
-        if (!isVillageWorld(player.getWorld()))
-            return;
-        if (player.hasPermission(Permissions.ISLAND_BASE + "build"))
-            return;
-
-        final Village island = plugin.getUser(player).getVillage();
-        if (island == null || !island.isInsideVillage(hanging.getLocation())) {
-            event.setCancelled(true);
-            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onHangingPlace(final HangingPlaceEvent event) {
-        final Player player = event.getPlayer();
-        if (player == null)
-            return;
-
-        final Hanging hanging = event.getEntity();
-        if (hanging.getType() != EntityType.ITEM_FRAME && hanging.getType() != EntityType.PAINTING)
-            return;
-        if (!isVillageWorld(player.getWorld()))
-            return;
-        if (player.hasPermission(Permissions.ISLAND_BASE + "build"))
-            return;
-
-        final Village island = plugin.getUser(player).getVillage();
-        if (island == null || !island.isInsideVillage(hanging.getLocation())) {
-            event.setCancelled(true);
-            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
-        }
-    }
-
+    /**
+     * Prevents pistons from moving blocks
+     *
+     * @param event Piston extension event
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockPistonExtend(final BlockPistonExtendEvent event) {
         if (!isVillageWorld(event.getBlock().getWorld()))
@@ -143,6 +159,11 @@ public final class AntiGrief extends IslandListener {
             event.setCancelled(true);
     }
 
+    /**
+     * Prevents pistons from moving blocks
+     *
+     * @param event Piston retraction event
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockPistonRetract(final BlockPistonRetractEvent event) {
         if (!isVillageWorld(event.getBlock().getWorld()))
@@ -155,6 +176,11 @@ public final class AntiGrief extends IslandListener {
             event.setCancelled(true);
     }
 
+    /**
+     * Prevents theft of items from others' islands
+     *
+     * @param event Inventory event
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onInventoryOpen(final InventoryOpenEvent event) {
         final InventoryHolder invHolder = event.getInventory().getHolder();
@@ -176,40 +202,11 @@ public final class AntiGrief extends IslandListener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent event) {
-        final Player player = event.getPlayer();
-        final Block block = event.getBlockClicked();
-
-        if (!isVillageWorld(player.getWorld()))
-            return;
-        if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
-            return;
-
-        final Village island = plugin.getUser(player).getVillage();
-        if (island == null || !island.isInsideVillage(block.getLocation())) {
-            event.setCancelled(true);
-            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onPlayerBucketFill(final PlayerBucketFillEvent event) {
-        final Player player = event.getPlayer();
-        final Block block = event.getBlockClicked();
-
-        if (!isVillageWorld(player.getWorld()))
-            return;
-        if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
-            return;
-
-        final Village island = plugin.getUser(player).getVillage();
-        if (island == null || !island.isInsideVillage(block.getLocation())) {
-            event.setCancelled(true);
-            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
-        }
-    }
-
+    /**
+     * Prevents players from throwing items into others' islands
+     *
+     * @param event Drop event
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onDropItem(final PlayerDropItemEvent event) {
         final Player player = event.getPlayer();
@@ -227,6 +224,11 @@ public final class AntiGrief extends IslandListener {
         }
     }
 
+    /**
+     * Prevents players from interacting and modifying with objects (e.g. repeaters) on others' islands
+     *
+     * @param event Interaction event
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerInteract(final PlayerInteractEvent event) {
         final Player player = event.getPlayer();
@@ -296,6 +298,11 @@ public final class AntiGrief extends IslandListener {
         }
     }
 
+    /**
+     * Prevents players from interacting with armor stands on others' islands
+     *
+     * @param event Interaction event
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerInteractAtEntity(final PlayerInteractAtEntityEvent event) {
         final Player player = event.getPlayer();
@@ -315,6 +322,11 @@ public final class AntiGrief extends IslandListener {
         }
     }
 
+    /**
+     * Prevents players from interacting with entities on others' islands
+     *
+     * @param event Interaction event
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerInteractWithEntity(final PlayerInteractEntityEvent event) {
         final Player player = event.getPlayer();
@@ -334,6 +346,34 @@ public final class AntiGrief extends IslandListener {
         }
     }
 
+    /**
+     * Prevents players from shearing entities in others' islands
+     *
+     * @param event Shearing event
+     */
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onPlayerShearEntity(final PlayerShearEntityEvent event) {
+        final Player player = event.getPlayer();
+        final Entity entity = event.getEntity();
+
+        if (!isVillageWorld(player.getWorld()))
+            return;
+        if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
+            return;
+
+        final Village island = plugin.getUser(player).getVillage();
+        if (island == null || !island.isInsideVillage(entity.getLocation())) {
+            event.setCancelled(true);
+            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
+        }
+    }
+
+
+    /**
+     * Prevents destruction of armor stands and item frames
+     *
+     * @param event Damage event
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerDamageEntity(final EntityDamageByEntityEvent event) {
         final Entity target = event.getEntity();
@@ -352,17 +392,18 @@ public final class AntiGrief extends IslandListener {
             if (((Projectile) event.getDamager()).getShooter() instanceof Player)
                 attacker = (Player) ((Projectile) event.getDamager()).getShooter();
 
-        // If attacker isn't player return
-        if (attacker == null)
-            return;
-
-        final Village island = plugin.getUser(attacker).getVillage();
-        if (island == null || !island.isInsideVillage(target.getLocation())) {
+        // If attacker is a player
+        if (attacker == null) {
             event.setCancelled(true);
             MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 
+    /**
+     * Prevents players from picking up items from others' islands
+     *
+     * @param event Pickup event
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerPickupItem(final EntityPickupItemEvent event) {
         final LivingEntity entity = event.getEntity();
@@ -384,23 +425,11 @@ public final class AntiGrief extends IslandListener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onPlayerShearEntity(final PlayerShearEntityEvent event) {
-        final Player player = event.getPlayer();
-        final Entity entity = event.getEntity();
-
-        if (!isVillageWorld(player.getWorld()))
-            return;
-        if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
-            return;
-
-        final Village island = plugin.getUser(player).getVillage();
-        if (island == null || !island.isInsideVillage(entity.getLocation())) {
-            event.setCancelled(true);
-            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
-        }
-    }
-
+    /**
+     * Prevents players from destroying vehicles
+     *
+     * @param event Damage event
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onVehicleDamage(final VehicleDamageEvent event) {
         final Entity damager = event.getAttacker();
@@ -410,16 +439,17 @@ public final class AntiGrief extends IslandListener {
             return;
 
         final Player player = (Player) damager;
-        if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
-            return;
-
-        final Village island = plugin.getUser(player).getVillage();
-        if (island == null || !island.isInsideVillage(event.getVehicle().getLocation())) {
+        if (!player.hasPermission(Permissions.ISLAND_BASE + "interact")) {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
     }
 
+    /**
+     * Prevents players from using vehicles on others' islands
+     *
+     * @param event Damage event
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onVehicleEnter(final VehicleEnterEvent event) {
         final Entity entered = event.getEntered();
@@ -429,25 +459,6 @@ public final class AntiGrief extends IslandListener {
             return;
 
         final Player player = (Player) entered;
-        if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
-            return;
-
-        final Village island = plugin.getUser(player).getVillage();
-        if (island == null || !island.isInsideVillage(event.getVehicle().getLocation())) {
-            event.setCancelled(true);
-            MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onVehicleExit(final VehicleExitEvent event) {
-        final LivingEntity exited = event.getExited();
-        if (!(exited instanceof Player))
-            return;
-        if (!isVillageWorld(exited.getWorld()))
-            return;
-
-        final Player player = (Player) exited;
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
 
