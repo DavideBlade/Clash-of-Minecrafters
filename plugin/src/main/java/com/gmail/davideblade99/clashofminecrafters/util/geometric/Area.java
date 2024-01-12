@@ -9,8 +9,8 @@ package com.gmail.davideblade99.clashofminecrafters.util.geometric;
 import javax.annotation.Nonnull;
 
 /**
- * Class representing an area (1D, 2D or 3D) enclosed between {@link #minCorner} and {@link #maxCorner}, the opposite corners
- * with, respectively, smaller and larger coordinates.
+ * Class representing a 3D area enclosed between {@link #minCorner} and {@link #maxCorner}, the opposite corners with,
+ * respectively, smaller and larger coordinates.
  *
  * @author DavideBlade
  * @since 3.2
@@ -21,29 +21,7 @@ public class Area {
     private final Vector maxCorner;
 
     /**
-     * Initialize a new area (segment) enclosed between the two coordinates x
-     *
-     * @param x1 Initial x coordinate
-     * @param x2 Final x coordinate
-     */
-    public Area(final int x1, final int x2) {
-        this(new Vector(x1, 0, 0), new Vector(x2, 0, 0));
-    }
-
-    /**
-     * Initialize a new area (rectangle) enclosed between the points (x1, y1) and (x2, y2)
-     *
-     * @param x1 x-coordinate of the point (x1, y1)
-     * @param y1 y-coordinate of the point (x1, y1)
-     * @param x2 x-coordinate of the point (x2, y2), opposite to the point (x1, y1)
-     * @param y2 y-coordinate of the point (x2, y2), opposite to the point (x1, y1)
-     */
-    public Area(final int x1, final int y1, final int x2, final int y2) {
-        this(new Vector(x1, y1, 0), new Vector(x2, y2, 0));
-    }
-
-    /**
-     * Initialize a new area (cube) enclosed between the points (x1, y1, z1) and (x2, y2, z2)
+     * Initialize a new area enclosed between the points (x1, y1, z1) and (x2, y2, z2)
      *
      * @param x1 x-coordinate of the point (x1, y1, z1)
      * @param y1 y-coordinate of the point (x1, y1, z1)

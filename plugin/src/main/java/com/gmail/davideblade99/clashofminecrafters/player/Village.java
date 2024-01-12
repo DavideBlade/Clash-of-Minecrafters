@@ -6,6 +6,7 @@
 
 package com.gmail.davideblade99.clashofminecrafters.player;
 
+import com.gmail.davideblade99.clashofminecrafters.util.geometric.Area;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size2D;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
@@ -88,7 +89,7 @@ public final class Village {
     }
 
     /**
-     * It checks whether {@code loc} is within {@code this} village
+     * Checks whether {@code loc} is within {@code this} village
      *
      * @param loc Location to be checked
      *
@@ -101,7 +102,7 @@ public final class Village {
         final int x1 = origin.getX() - expansions.getWidth(), z1 = origin.getZ() + expansions.getLength();
         final int x2 = origin.getX() + (size.getWidth() - 1) + expansions.getWidth(), z2 = origin.getZ() - (size.getLength() - 1) - expansions.getLength();
 
-        return new Vector(loc).isWithinXZ(x1, z1, x2, z2);
+        return new Area(x1, Integer.MIN_VALUE, z1, x2, Integer.MAX_VALUE, z2).contains(new Vector(loc));
     }
 
     @Override
@@ -110,7 +111,7 @@ public final class Village {
             return false;
         else {
             final Village island = (Village) obj;
-            return this.owner.equals(island.owner);
+            return owner.equals(island.owner);
         }
     }
 

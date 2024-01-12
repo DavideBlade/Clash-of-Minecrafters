@@ -45,7 +45,6 @@ public final class PlayerMove extends IslandListener {
         if (island == null)
             return;
 
-        //TODO: funziona?
         if (island.isInsideVillage(from) && !island.isInsideVillage(to))
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.LEFT_ISLAND));
         else if (island.isInsideVillage(to) && !island.isInsideVillage(from))
