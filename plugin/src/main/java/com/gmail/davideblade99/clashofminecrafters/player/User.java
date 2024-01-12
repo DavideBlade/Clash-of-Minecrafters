@@ -331,6 +331,9 @@ public final class User {
     public void newElixirExtractor(@Nonnull final Vector corner1, @Nonnull final Vector corner2) {
         this.elixirExtractor = new ElixirExtractor(1, corner1, corner2);
 
+        // Start collecting resources from now
+        this.collectionTime = LocalDateTime.now();
+
         updateDatabase();
     }
 
@@ -353,6 +356,9 @@ public final class User {
      */
     public void newGoldExtractor(@Nonnull final Vector corner1, @Nonnull final Vector corner2) {
         this.goldExtractor = new GoldExtractor(1, corner1, corner2);
+
+        // Start collecting resources from now
+        this.collectionTime = LocalDateTime.now();
 
         updateDatabase();
     }
@@ -438,6 +444,9 @@ public final class User {
      * Collects all resources in the extractors unlocked by the player
      */
     public void collectExtractors() {
+        if (!hasExtractor())
+            return;
+
         if (hasUnlockedGoldExtractor()) // If the player bought the gold extractor
             /*
              * If any player has a level higher than the current maximum level

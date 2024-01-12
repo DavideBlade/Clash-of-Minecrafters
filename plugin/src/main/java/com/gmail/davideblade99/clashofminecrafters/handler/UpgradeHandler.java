@@ -245,7 +245,7 @@ public final class UpgradeHandler {
                  * Notifies resource collection only if the player already had an extractor
                  * (if he is buying the first one, there is nothing to collect)
                  */
-                if (user.hasUnlockedElixirExtractor())
+                if (user.hasExtractor())
                     MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.COLLECTED_RESOURCES));
 
                 //TODO: ognuno di questi metodi chiama un updateDatabase()
@@ -270,7 +270,7 @@ public final class UpgradeHandler {
              * Notifies resource collection only if the player already had an extractor
              * (if he is buying the first one, there is nothing to collect)
              */
-            if (user.hasUnlockedElixirExtractor())
+            if (user.hasExtractor())
                 MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.COLLECTED_RESOURCES));
 
             //TODO: ognuno di questi metodi chiama un updateDatabase()
@@ -367,7 +367,7 @@ public final class UpgradeHandler {
                  * Notifies resource collection only if the player already had an extractor
                  * (if he is buying the first one, there is nothing to collect)
                  */
-                if (user.hasUnlockedGoldExtractor())
+                if (user.hasExtractor())
                     MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.COLLECTED_RESOURCES));
 
                 //TODO: ognuno di questi metodi chiama un updateDatabase()
@@ -392,7 +392,7 @@ public final class UpgradeHandler {
              * Notifies resource collection only if the player already had an extractor
              * (if he is buying the first one, there is nothing to collect)
              */
-            if (user.hasUnlockedGoldExtractor())
+            if (user.hasExtractor())
                 MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.COLLECTED_RESOURCES));
 
             //TODO: ognuno di questi metodi chiama un updateDatabase()
