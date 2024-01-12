@@ -72,7 +72,7 @@ public class Area {
         final int xSize = maxCorner.getX() - minCorner.getX();
         final int zSize = maxCorner.getZ() - minCorner.getZ();
 
-        return new Vector(minCorner.getX() + xSize / 2, maxCorner.getY() + 1, maxCorner.getZ() + zSize / 2);
+        return new Vector(minCorner.getX() + xSize / 2, maxCorner.getY() + 1, maxCorner.getZ() - zSize / 2);
     }
 
     /**
