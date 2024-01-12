@@ -21,7 +21,8 @@ import java.util.Set;
 /**
  * Class representing the archer tower section in the config.yml
  *
- * @since v3.1.1
+ * @author DavideBlade
+ * @since 3.2
  */
 public final class ArcherTowerConfiguration extends SectionConfiguration {
 
@@ -33,8 +34,8 @@ public final class ArcherTowerConfiguration extends SectionConfiguration {
     private final List<ArcherTowerLevel> archerTowers;
 
     /**
-     * Create a new instance of {@link ArcherTowerConfiguration} and load all the archer towers with {@link
-     * #loadArcherTowers()}
+     * Create a new instance of {@link ArcherTowerConfiguration} and load all the archer towers with
+     * {@link #loadArcherTowers()}
      *
      * @param configuration Configuration containing the archer towers section
      */
@@ -54,9 +55,9 @@ public final class ArcherTowerConfiguration extends SectionConfiguration {
     }
 
     /**
-     * Reads the archer towers section in the {@link SectionConfiguration#section} and builds {@link ArcherTowerLevel}s.
-     * If a misconfigured level (with invalid or missing settings) is encountered, loading will be stopped. Archer
-     * towers loaded to that point, however, will remain valid.
+     * Reads the archer towers section in the {@link SectionConfiguration#section} and builds {@link ArcherTowerLevel}s. If a
+     * misconfigured level (with invalid or missing settings) is encountered, loading will be stopped. Archer towers loaded
+     * to that point, however, will remain valid.
      */
     private void loadArcherTowers() {
         final ConfigurationSection archerSection = super.section;

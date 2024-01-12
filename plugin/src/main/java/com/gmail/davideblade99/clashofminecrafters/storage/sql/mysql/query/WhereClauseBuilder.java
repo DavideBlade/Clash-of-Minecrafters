@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
  * @author DavideBlade
  * @see QueryBuilder
  * @see ExpressionBuilder
- * @since v3.1
+ * @since 3.1
  */
 public final class WhereClauseBuilder {
 

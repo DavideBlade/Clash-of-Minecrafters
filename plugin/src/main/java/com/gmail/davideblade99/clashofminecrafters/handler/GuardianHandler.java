@@ -6,10 +6,9 @@
 
 package com.gmail.davideblade99.clashofminecrafters.handler;
 
-import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.setting.TownHallLevel;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
+import com.gmail.davideblade99.clashofminecrafters.setting.TownHallLevel;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
@@ -40,43 +39,40 @@ public final class GuardianHandler {
      * @param playerName Owner's name
      * @param loc        Location to place the guardian
      *
-     * @since v3.1
+     * @since 3.1
      */
     public void spawn(@Nonnull final User owner, @Nonnull final String playerName, @Nonnull final Location loc) {
         final Zombie zombie = (Zombie) plugin.getVillageHandler().getVillageWorld().spawnEntity(loc, EntityType.ZOMBIE);
+        final TownHallLevel townHall = plugin.getConfig().getExistingTownHall(owner.getTownHallLevel());
 
-        final TownHallLevel townHall = (TownHallLevel) owner.getBuilding(Buildings.TOWN_HALL);
-        if (townHall != null) // The town hall level may not exist
-        {
-            // Set equipment
-            final EntityEquipment equip = zombie.getEquipment();
-            if (townHall.helmet != null) {
-                equip.setHelmet(new ItemStack(townHall.helmet, 1));
-                equip.setHelmetDropChance(0); // Prevent dropping of the helmet
-            }
-            if (townHall.chestplate != null) {
-                equip.setChestplate(new ItemStack(townHall.chestplate, 1));
-                equip.setChestplateDropChance(0); // Prevent dropping of the chestplate
-            }
-            if (townHall.leggings != null) {
-                equip.setLeggings(new ItemStack(townHall.leggings, 1));
-                equip.setLeggingsDropChance(0); // Prevent dropping of the leggings
-            }
-            if (townHall.boots != null) {
-                equip.setBoots(new ItemStack(townHall.boots, 1));
-                equip.setBootsDropChance(0); // Prevent dropping of the boots
-            }
-
-            // Set potion effects
-            if (townHall.potions != null && !townHall.potions.isEmpty()) {
-                for (PotionEffectType potion : townHall.potions)
-                    zombie.addPotionEffect(new PotionEffect(potion, Integer.MAX_VALUE, 1, false, false), true);
-            }
-
-            // Set number of hearts
-            zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(townHall.hearts * 2);
-            zombie.setHealth(townHall.hearts * 2);
+        // Set equipment
+        final EntityEquipment equip = zombie.getEquipment();
+        if (townHall.helmet != null) {
+            equip.setHelmet(new ItemStack(townHall.helmet, 1));
+            equip.setHelmetDropChance(0); // Prevent dropping of the helmet
         }
+        if (townHall.chestplate != null) {
+            equip.setChestplate(new ItemStack(townHall.chestplate, 1));
+            equip.setChestplateDropChance(0); // Prevent dropping of the chestplate
+        }
+        if (townHall.leggings != null) {
+            equip.setLeggings(new ItemStack(townHall.leggings, 1));
+            equip.setLeggingsDropChance(0); // Prevent dropping of the leggings
+        }
+        if (townHall.boots != null) {
+            equip.setBoots(new ItemStack(townHall.boots, 1));
+            equip.setBootsDropChance(0); // Prevent dropping of the boots
+        }
+
+        // Set potion effects
+        if (townHall.potions != null && !townHall.potions.isEmpty()) {
+            for (PotionEffectType potion : townHall.potions)
+                zombie.addPotionEffect(new PotionEffect(potion, Integer.MAX_VALUE, 1, false, false), true);
+        }
+
+        // Set number of hearts
+        zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(townHall.hearts * 2);
+        zombie.setHealth(townHall.hearts * 2);
 
         // General options
         zombie.setCustomName("§6" + playerName + "'s guardian");

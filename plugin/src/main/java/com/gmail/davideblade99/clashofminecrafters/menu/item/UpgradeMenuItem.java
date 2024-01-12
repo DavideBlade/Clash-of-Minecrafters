@@ -7,22 +7,14 @@
 package com.gmail.davideblade99.clashofminecrafters.menu.item;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.exception.InvalidSchematicFormatException;
-import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
-import com.gmail.davideblade99.clashofminecrafters.message.Messages;
-import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
-import com.gmail.davideblade99.clashofminecrafters.setting.BuildingLevel;
-import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
-import org.bukkit.entity.Player;
+import com.gmail.davideblade99.clashofminecrafters.setting.ConfiguredBuilding;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.io.FileNotFoundException;
 
 public abstract class UpgradeMenuItem extends BaseItem {
 
     final CoM plugin;
-    final BuildingLevel nextBuilding;
+    final ConfiguredBuilding nextBuilding;
 
     /**
      * Creates a new instance of the class
@@ -31,9 +23,9 @@ public abstract class UpgradeMenuItem extends BaseItem {
      * @param nextBuilding Next level building (the one to be purchased)
      * @param slot         Slot in which to place the item
      *
-     * @since v3.1.2
+     * @since 3.1.2
      */
-    public UpgradeMenuItem(@Nonnull final CoM plugin, @Nonnull final BuildingLevel nextBuilding, final byte slot) {
+    public UpgradeMenuItem(@Nonnull final CoM plugin, @Nonnull final ConfiguredBuilding nextBuilding, final byte slot) {
         super(nextBuilding.getItem(plugin), slot);
 
         this.plugin = plugin;

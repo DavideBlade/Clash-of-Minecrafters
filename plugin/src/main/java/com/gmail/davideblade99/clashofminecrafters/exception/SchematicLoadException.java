@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 /**
  * Exception indicating a problem while loading a schematic
  *
- * @since v3.1.4
+ * @since 3.1.4
  */
 public final class SchematicLoadException extends SchematicException {
 

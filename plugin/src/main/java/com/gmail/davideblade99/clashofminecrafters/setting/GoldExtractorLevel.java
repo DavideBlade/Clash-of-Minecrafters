@@ -7,7 +7,6 @@
 package com.gmail.davideblade99.clashofminecrafters.setting;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ItemBuilder;
 import org.bukkit.Material;
@@ -20,7 +19,7 @@ import javax.annotation.Nullable;
  * Represents a level of the gold extractor, configured in the config.yml
  *
  * @author DavideBlade
- * @since v3.1.4
+ * @since 3.1.4
  */
 public final class GoldExtractorLevel extends ExtractorLevel {
 
@@ -28,7 +27,7 @@ public final class GoldExtractorLevel extends ExtractorLevel {
      * Creates a new level for the gold extractor with the specified parameters and the default schematic
      * ("GoldExtractor.schematic"), for level 1 only.
      *
-     * @param level      Level of the gold extractor
+     * @param level      Level of the gold extractor, greater than 0
      * @param production Production of the gold extractor
      * @param capacity   Maximum capacity of gold extractor
      * @param price      Cost of building for this {@code level}
@@ -37,7 +36,7 @@ public final class GoldExtractorLevel extends ExtractorLevel {
      * @see #GoldExtractorLevel(int, int, int, int, Currencies, String)
      */
     public GoldExtractorLevel(final int level, final int production, final int capacity, final int price, @Nonnull final Currencies currency) {
-        this(level, production, capacity, price, currency, level == Buildings.GOLD_EXTRACTOR.firstLevel+1 ? "GoldExtractor" : null);
+        this(level, production, capacity, price, currency, level == 1 ? "GoldExtractor" : null);
     }
 
     /**
@@ -48,16 +47,11 @@ public final class GoldExtractorLevel extends ExtractorLevel {
      * @param capacity   Maximum capacity of gold extractor
      * @param price      Cost of building for this {@code level}
      * @param currency   {@code price} currency
-     * @param schematic  Schematic for this {@code level}, which will be pasted at the time of purchase. {@code
-     *                   Null} if this {@code level} does not have a schematic.
-     *
-     * @throws IllegalArgumentException If the level is less than {@link Buildings#firstLevel}
+     * @param schematic  Schematic for this {@code level}, which will be pasted at the time of purchase. {@code Null} if this
+     *                   {@code level} does not have a schematic.
      */
     public GoldExtractorLevel(final int level, final int production, final int capacity, final int price, @Nonnull final Currencies currency, @Nullable final String schematic) {
         super(level, production, capacity, price, currency, schematic);
-
-        if (level < Buildings.GOLD_EXTRACTOR.firstLevel)
-            throw new IllegalArgumentException("Invalid level: must be greater than or equal to " + Buildings.GOLD_EXTRACTOR.firstLevel);
     }
 
     /**
@@ -74,13 +68,5 @@ public final class GoldExtractorLevel extends ExtractorLevel {
         itemBuilder.addLoreLine("&c&lCapacity:&6 " + super.capacity);
 
         return itemBuilder.build();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isFirstLevel() {
-        return super.level == Buildings.GOLD_EXTRACTOR.firstLevel;
     }
 }

@@ -7,8 +7,7 @@
 package com.gmail.davideblade99.clashofminecrafters.menu.item;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
-import com.gmail.davideblade99.clashofminecrafters.setting.BuildingLevel;
+import com.gmail.davideblade99.clashofminecrafters.setting.ConfiguredBuilding;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
@@ -16,25 +15,25 @@ import javax.annotation.Nonnull;
 /**
  * Represents the item used to upgrade elixir extractors
  *
- * @since v3.1.2
+ * @since 3.1.2
  */
 public final class ElixirExtractorUpgradeItem extends UpgradeMenuItem {
 
     /**
      * {@inheritDoc}
      */
-    public ElixirExtractorUpgradeItem(@Nonnull final CoM plugin, @Nonnull final BuildingLevel nextBuilding, final byte slot) {
+    public ElixirExtractorUpgradeItem(@Nonnull final CoM plugin, @Nonnull final ConfiguredBuilding nextBuilding, final byte slot) {
         super(plugin, nextBuilding, slot);
     }
 
     /**
      * {@inheritDoc}
      *
-     * @throws IllegalStateException If the elixir extractor is already at the maximum level or if the player does
-     *                               not own a village (and therefore there is no place to place the building)
+     * @throws IllegalStateException If the player does not own a village (and therefore there is no place to paste the
+     *                               building)
      */
     @Override
     public void onClick(@Nonnull final CoM plugin, @Nonnull final Player clicker) {
-        plugin.getUpgradeManager().upgrade(clicker, Buildings.ELIXIR_EXTRACTOR);
+        plugin.getUpgradeManager().upgradeElixirExtractor(clicker, clicker.getLocation());
     }
 }

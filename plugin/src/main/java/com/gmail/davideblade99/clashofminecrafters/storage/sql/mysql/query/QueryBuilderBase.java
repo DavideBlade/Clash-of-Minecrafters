@@ -24,7 +24,7 @@ import java.sql.*;
  * @see QueryBuilderDelete
  * @see QueryBuilderCreateTable
  * @see QueryBuilderAlterTable
- * @since v3.1
+ * @since 3.1
  */
 abstract class QueryBuilderBase {
     final static char ESCAPE_CHARACTER = '`';

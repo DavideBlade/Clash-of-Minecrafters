@@ -17,7 +17,8 @@ import java.io.Serializable;
 /**
  * A simple class for representing a 3D mutable vector.
  *
- * @since v3.1.8
+ * @author DavideBlade
+ * @since 3.2
  */
 public final class Vector implements Serializable {
 
@@ -66,6 +67,14 @@ public final class Vector implements Serializable {
     }
 
     @Nonnull
+    public Vector add(final int x, final int y, final int z) {
+        this.x += x;
+        this.y += y;
+        this.z += z;
+        return this;
+    }
+
+    @Nonnull
     public Vector subtract(final int x, final int y, final int z) {
         this.x -= x;
         this.y -= y;
@@ -79,13 +88,12 @@ public final class Vector implements Serializable {
     }
 
     /**
-     * Gets a {@link Location} of {@code this} vector with yaw and pitch equal to 0.
+     * Gets a {@link Location} of {@code this} vector with yaw and pitch equal to 0
      *
      * @param world The {@link World} to which to link the {@link Location}.
      *
-     * @return a new location
-     *
-     * @since v3.1.2
+     * @return A new {@link Location}
+     * @since 3.1.2
      */
     @Nonnull
     public Location toBukkitLocation(@Nullable final World world) {

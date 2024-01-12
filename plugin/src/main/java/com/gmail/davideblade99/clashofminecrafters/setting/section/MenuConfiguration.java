@@ -9,7 +9,7 @@ package com.gmail.davideblade99.clashofminecrafters.setting.section;
 import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.menu.Menu;
 import com.gmail.davideblade99.clashofminecrafters.menu.item.BaseItem;
-import com.gmail.davideblade99.clashofminecrafters.menu.item.ConfigItem;
+import com.gmail.davideblade99.clashofminecrafters.menu.item.ConfigurableItem;
 import com.gmail.davideblade99.clashofminecrafters.util.Pair;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ColorUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ItemBuilder;
@@ -33,7 +33,7 @@ import java.util.*;
  * Class representing the menu section in the config.yml
  *
  * @author DavideBlade
- * @since v3.1
+ * @since 3.2
  */
 public final class MenuConfiguration extends SectionConfiguration {
 
@@ -65,8 +65,8 @@ public final class MenuConfiguration extends SectionConfiguration {
     }
 
     /**
-     * Reads the menus section in the {@link SectionConfiguration#section} and builds {@link Menu}s. Menus
-     * containing invalid or missing settings will be ignored.
+     * Reads the menus section in the {@link SectionConfiguration#section} and builds {@link Menu}s. Menus containing invalid
+     * or missing settings will be ignored.
      */
     private void loadMenus() {
         final ConfigurationSection menuSection = super.section;
@@ -116,7 +116,6 @@ public final class MenuConfiguration extends SectionConfiguration {
      *
      * @param itemSection Section of the items in the menu whose items you want to load
      * @param menuSize    Size of the menu whose items are to be loaded
-     *
      * @return A list of items loaded from the configuration
      */
     @Nonnull
@@ -264,19 +263,18 @@ public final class MenuConfiguration extends SectionConfiguration {
             command = ColorUtil.colour(itemSection.getString(itemName + ".Command", null));
 
 
-            items.add(new ConfigItem(itemBuilder.build(), slot, requiredBalance, requiredItem, command));
+            items.add(new ConfigurableItem(itemBuilder.build(), slot, requiredBalance, requiredItem, command));
         }
 
         return items;
     }
 
     /**
-     * Load, from the passed section, the enchantments of the specified item. Enchantments in an invalid format
-     * will be ignored.
+     * Load, from the passed section, the enchantments of the specified item. Enchantments in an invalid format will be
+     * ignored.
      *
      * @param itemSection Item section of a menu from which to get enchantments
      * @param itemName    Name of the item in the section whose enchantments are to be loaded
-     *
      * @return A map containing the enchantments loaded with the corresponding level
      */
     private Map<Enchantment, Integer> loadEnchantments(@Nonnull final ConfigurationSection itemSection, @Nonnull final String itemName) {
@@ -312,12 +310,10 @@ public final class MenuConfiguration extends SectionConfiguration {
     }
 
     /**
-     * Load, from the passed section, the patterns of the specified item. Patterns in an invalid format will be
-     * ignored.
+     * Load, from the passed section, the patterns of the specified item. Patterns in an invalid format will be ignored.
      *
      * @param itemSection Item section of a menu from which to get pattern
      * @param itemName    Name of the item in the section whose patterns are to be loaded
-     *
      * @return A list containing the patterns loaded
      */
     private List<Pattern> loadPatterns(@Nonnull final ConfigurationSection itemSection, @Nonnull final String itemName) {

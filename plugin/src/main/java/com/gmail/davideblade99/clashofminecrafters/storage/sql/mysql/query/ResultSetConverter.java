@@ -16,7 +16,7 @@ import java.util.List;
  * @author DavideBlade
  * @see QueryBuilder
  * @see QueryBuilderBase
- * @since v3.1
+ * @since 3.1
  */
 public interface ResultSetConverter<R> {
 

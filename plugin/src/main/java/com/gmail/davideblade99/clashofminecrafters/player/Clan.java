@@ -26,7 +26,7 @@ import java.util.UUID;
  * Represents an existing clan
  *
  * @author DavideBlade
- * @since v3.1.4
+ * @since 3.1.4
  */
 public final class Clan {
 

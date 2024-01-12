@@ -7,13 +7,15 @@
 package com.gmail.davideblade99.clashofminecrafters.util.geometric;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 import java.io.Serializable;
 
 /**
  * A simple class for representing the dimensions of an object in 3D.
  *
- * @since v3.1.8
+ * @since 3.2
  */
+@Immutable
 public final class Size3D implements Serializable {
 
     private static final long serialVersionUID = -6546543157744332590L;

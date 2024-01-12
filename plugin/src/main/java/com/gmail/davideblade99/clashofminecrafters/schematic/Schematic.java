@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
  * <p>Each class that implements this interface should represent a schematic for a different plugin.</p>
  *
  * @see SchematicPaster
- * @since v3.1.2
+ * @since 3.1.2
  */
 public interface Schematic {
 
@@ -36,7 +36,7 @@ public interface Schematic {
      *                          receive the thrown exception. {@link PastingException} will be thrown in case of
      *                          error during schematic pasting.
      *
-     * @since v3.1.4
+     * @since 3.1.4
      */
     void paste(@Nonnull final Location location, @Nonnull final NullableCallback<PastingException> completionHandler);
 

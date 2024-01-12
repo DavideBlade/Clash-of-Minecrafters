@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
  * Class representing a player's village
  *
  * @author DavideBlade
- * @since v3.1.4
+ * @since 3.1.4
  */
 public final class Village {
 
@@ -36,13 +36,13 @@ public final class Village {
      * Creates a new village
      *
      * @param owner      Village owner
-     * @param spawn      Village spawn
+     * @param spawn      Village spawn point
      * @param origin     Point where the schematic is pasted
      * @param size       Village size
-     * @param expansions Expansions that the village owns
+     * @param expansions Expansions owned by the village
      *
-     * @throws IllegalArgumentException If the {@code spawn} does not have a world (i.e., {@link
-     *                                  Location#getWorld()} {@code = null})
+     * @throws IllegalArgumentException If the {@code spawn} does not have a world (i.e., {@link Location#getWorld()}
+     *                                  {@code = null})
      */
     public Village(@Nonnull final String owner, @Nonnull final Location spawn, @Nonnull final Vector origin, @Nonnull final Size2D size, @Nonnull final Size2D expansions) {
         if (spawn.getWorld() == null)
@@ -68,7 +68,6 @@ public final class Village {
      * @param spawn New spawn point to be set
      *
      * @return True if the location was safe and the new spawn could be set, otherwise false
-     *
      * @see BukkitLocationUtil#isSafeLocation(Location)
      */
     public boolean setSpawn(@Nonnull final Location spawn) {
@@ -89,32 +88,20 @@ public final class Village {
     }
 
     /**
-     * It checks whether the location is within the village
+     * It checks whether {@code loc} is within {@code this} village
      *
      * @param loc Location to be checked
      *
-     * @return True if the location is within the village, otherwise false
+     * @return True if the specified location is within {@code this} village, otherwise false
      */
     public boolean isInsideVillage(@Nonnull final Location loc) {
         if (!spawn.getWorld().equals(loc.getWorld())) // Not village world
             return false;
 
-        int minX = origin.getX() - expansions.getWidth(), minZ = origin.getZ() + expansions.getLength();
-        int maxX = origin.getX() + (size.getWidth() - 1) + expansions.getWidth(), maxZ = origin.getZ() - (size.getLength() - 1) - expansions.getLength();
+        final int x1 = origin.getX() - expansions.getWidth(), z1 = origin.getZ() + expansions.getLength();
+        final int x2 = origin.getX() + (size.getWidth() - 1) + expansions.getWidth(), z2 = origin.getZ() - (size.getLength() - 1) - expansions.getLength();
 
-        if (minX > maxX) {
-            int tmp = minX;
-            minX = maxX;
-            maxX = tmp;
-        }
-        if (minZ > maxZ) {
-            int tmp = minZ;
-            minZ = maxZ;
-            maxZ = tmp;
-        }
-
-        final int x = (int) loc.getX(), z = (int) loc.getZ();
-        return (x >= minX && x <= maxX && z >= minZ && z <= maxZ);
+        return new Vector(loc).isWithinXZ(x1, z1, x2, z2);
     }
 
     @Override
@@ -129,10 +116,10 @@ public final class Village {
 
     @Override
     public String toString() {
-        return "Island{" +
+        return "Village{" +
                 "owner='" + owner + "'" +
                 ", spawn=" + BukkitLocationUtil.toString(spawn) +
-                ", origin=" + origin +
+                ", origin='" + origin + "'" +
                 ", size=" + size +
                 ", expansions=" + expansions +
                 '}';

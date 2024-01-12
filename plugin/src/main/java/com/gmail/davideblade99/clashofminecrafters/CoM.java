@@ -11,7 +11,7 @@ import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
 import com.gmail.davideblade99.clashofminecrafters.command.label.*;
 import com.gmail.davideblade99.clashofminecrafters.handler.*;
 import com.gmail.davideblade99.clashofminecrafters.listener.inventory.ShopClick;
-import com.gmail.davideblade99.clashofminecrafters.listener.island.AntiGrief;
+import com.gmail.davideblade99.clashofminecrafters.listener.village.AntiGrief;
 import com.gmail.davideblade99.clashofminecrafters.listener.player.*;
 import com.gmail.davideblade99.clashofminecrafters.listener.raid.*;
 import com.gmail.davideblade99.clashofminecrafters.menu.holder.MenuInventoryHolder;
@@ -70,7 +70,7 @@ public final class CoM extends JavaPlugin {
     private WarHandler warHandler;
     private ArcherHandler archerHandler;
     private GuardianHandler guardianHandler;
-    private UpgradeManager upgradeManager;
+    private UpgradeHandler upgradeHandler;
 
     public CoM() {
         super();
@@ -104,7 +104,7 @@ public final class CoM extends JavaPlugin {
             warHandler = new WarHandler(this);
             archerHandler = new ArcherHandler(this);
             guardianHandler = new GuardianHandler(this);
-            upgradeManager = new UpgradeManager(this);
+            upgradeHandler = new UpgradeHandler(this);
 
             registerListeners();
             registerCommands();
@@ -179,7 +179,7 @@ public final class CoM extends JavaPlugin {
         warHandler = null;
         archerHandler = null;
         guardianHandler = null;
-        upgradeManager = null;
+        upgradeHandler = null;
 
         MessageUtil.sendWarning("Clash of minecrafters has been disabled. (Version: " + getDescription().getVersion() + ")");
     }
@@ -231,8 +231,8 @@ public final class CoM extends JavaPlugin {
     }
 
     @Nonnull
-    public UpgradeManager getUpgradeManager() {
-        return upgradeManager;
+    public UpgradeHandler getUpgradeManager() {
+        return upgradeHandler;
     }
 
     // This will create a new user if there is not a match

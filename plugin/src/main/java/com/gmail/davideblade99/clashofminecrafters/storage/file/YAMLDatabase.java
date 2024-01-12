@@ -7,17 +7,19 @@
 package com.gmail.davideblade99.clashofminecrafters.storage.file;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.player.Village;
-import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
-import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size2D;
-import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
+import com.gmail.davideblade99.clashofminecrafters.building.ArcherTower;
+import com.gmail.davideblade99.clashofminecrafters.building.ElixirExtractor;
+import com.gmail.davideblade99.clashofminecrafters.building.GoldExtractor;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
+import com.gmail.davideblade99.clashofminecrafters.player.Village;
 import com.gmail.davideblade99.clashofminecrafters.player.currency.Balance;
 import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.collection.RandomItemExtractor;
+import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size2D;
+import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.yaml.PlayerConfiguration;
 import org.bukkit.Location;
 
@@ -56,7 +58,7 @@ public final class YAMLDatabase implements PlayerDatabase {
 
     /**
      * Search randomly through the player files for an existing island
-     *
+     * <p>
      * {@inheritDoc}
      *
      * @throws IllegalStateException If there is any missing data regarding the player or island
@@ -157,11 +159,10 @@ public final class YAMLDatabase implements PlayerDatabase {
         final int gems = conf.getBalance(Currencies.GEMS);
         final int trophies = conf.getTrophies();
         final String clanName = conf.getClanName();
-        final int townHallLevel = conf.getBuildingLevel(Buildings.TOWN_HALL);
-        final int elixirExtractorLevel = conf.getBuildingLevel(Buildings.ELIXIR_EXTRACTOR);
-        final int goldExtractorLevel = conf.getBuildingLevel(Buildings.GOLD_EXTRACTOR);
-        final int archerTowerLevel = conf.getBuildingLevel(Buildings.ARCHER_TOWER);
-        final Vector archerTowerPos = conf.getArcherTowerPosition();
+        final int townHallLevel = conf.getTownHallLevel();
+        final ElixirExtractor elixirExtractor = conf.getElixirExtractor();
+        final GoldExtractor goldExtractor = conf.getGoldExtractor();
+        final ArcherTower archerTower = conf.getArcherTower();
 
         final String playerName = plugin.getPlayerHandler().getPlayerName(conf.getUUID());
         if (playerName == null) // Unexpected missing data
@@ -175,7 +176,7 @@ public final class YAMLDatabase implements PlayerDatabase {
         final String timestamp = conf.getCollectionTime();
         final LocalDateTime collectionTime = timestamp == null ? null : LocalDateTime.parse(timestamp, CoM.DATE_FORMAT);
 
-        return new UserDatabaseType(new Balance(gold, elixir, gems), trophies, clanName, elixirExtractorLevel, goldExtractorLevel, archerTowerLevel, archerTowerPos, island, collectionTime, townHallLevel);
+        return new UserDatabaseType(new Balance(gold, elixir, gems), trophies, clanName, elixirExtractor, goldExtractor, archerTower, island, collectionTime, townHallLevel);
     }
 
     /**
@@ -188,11 +189,10 @@ public final class YAMLDatabase implements PlayerDatabase {
         final int gems = user.getGems();
         final int trophies = user.getTrophies();
         final String clanName = user.getClanName();
-        final int townHallLevel = user.getBuildingLevel(Buildings.TOWN_HALL);
-        final int elixirExtractorLevel = user.getBuildingLevel(Buildings.ELIXIR_EXTRACTOR);
-        final int goldExtractorLevel = user.getBuildingLevel(Buildings.GOLD_EXTRACTOR);
-        final int archerLevel = user.getBuildingLevel(Buildings.ARCHER_TOWER);
-        final Vector towerPos = user.getTowerPos();
+        final int townHallLevel = user.getTownHallLevel();
+        final ElixirExtractor elixirExtractor = user.getElixirExtractor();
+        final GoldExtractor goldExtractor = user.getGoldExtractor();
+        final ArcherTower archerTower = user.getArcherTower();
         final Village island = user.getVillage();
         final LocalDateTime collectionTime = user.getCollectionTime();
 
@@ -204,13 +204,16 @@ public final class YAMLDatabase implements PlayerDatabase {
         conf.setBalance(Currencies.GEMS, gems);
         conf.setTrophies(trophies);
         conf.setClan(clanName);
-        conf.setBuildingLevel(Buildings.TOWN_HALL, townHallLevel);
-        conf.setBuildingLevel(Buildings.ELIXIR_EXTRACTOR, elixirExtractorLevel);
-        conf.setBuildingLevel(Buildings.GOLD_EXTRACTOR, goldExtractorLevel);
-        conf.setBuildingLevel(Buildings.ARCHER_TOWER, archerLevel);
+        conf.setTownHallLevel(townHallLevel);
 
-        if (towerPos != null)
-            conf.setArcherTowerLocation(towerPos.toString());
+        if (elixirExtractor != null)
+            conf.saveElixirExtractor(elixirExtractor);
+
+        if (goldExtractor != null)
+            conf.saveGoldExtractor(goldExtractor);
+
+        if (archerTower != null)
+            conf.saveArcherTower(archerTower);
 
         if (island != null) {
             conf.setIslandSpawn(BukkitLocationUtil.toString(island.getSpawn()));
@@ -233,8 +236,8 @@ public final class YAMLDatabase implements PlayerDatabase {
     //TODO: è pesante (scorre tutti file, che dopo anni diventano tanti) -> va fatto in async
 
     /**
-     * @return An array containing the player files in the {@link #playerFolder}. The array will be empty if the
-     * directory is empty. Returns {@code null} if an I/O error occurs.
+     * @return An array containing the player files in the {@link #playerFolder}. The array will be empty if the directory is
+     * empty. Returns {@code null} if an I/O error occurs.
      */
     @Nullable
     private File[] getPlayerFiles() {

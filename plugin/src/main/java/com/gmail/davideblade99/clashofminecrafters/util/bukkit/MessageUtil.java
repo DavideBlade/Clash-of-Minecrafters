@@ -49,7 +49,7 @@ public final class MessageUtil {
      * @param message Message to send colored
      *
      * @see #sendWarning(CommandSender, String)
-     * @since v3.1
+     * @since 3.1
      */
     public static void sendWarning(@Nullable final String message) {
         sendWarning(Bukkit.getConsoleSender(), message);
@@ -61,7 +61,7 @@ public final class MessageUtil {
      * @param receiver Message receiver
      * @param message  Message to send colored
      *
-     * @since v3.1
+     * @since 3.1
      */
     public static void sendWarning(@Nonnull final CommandSender receiver, @Nullable final String message) {
         sendMessage(receiver, ChatColor.GOLD + message);
@@ -73,7 +73,7 @@ public final class MessageUtil {
      * @param message Message to send colored
      *
      * @see #sendError(CommandSender, String)
-     * @since v3.1
+     * @since 3.1
      */
     public static void sendError(@Nullable final String message) {
         sendError(Bukkit.getConsoleSender(), message);
@@ -85,7 +85,7 @@ public final class MessageUtil {
      * @param receiver Message receiver
      * @param message  Message to send colored
      *
-     * @since v3.1
+     * @since 3.1
      */
     public static void sendError(@Nonnull final CommandSender receiver, @Nullable final String message) {
         sendMessage(receiver, ChatColor.RED + message);
@@ -97,7 +97,7 @@ public final class MessageUtil {
      * @param message Message to send colored
      *
      * @see #sendInfo(CommandSender, String)
-     * @since v3.1
+     * @since 3.1
      */
     public static void sendInfo(@Nullable final String message) {
         sendInfo(Bukkit.getConsoleSender(), message);
@@ -109,7 +109,7 @@ public final class MessageUtil {
      * @param receiver Message receiver
      * @param message  Message to send colored
      *
-     * @since v3.1
+     * @since 3.1
      */
     public static void sendInfo(@Nonnull final CommandSender receiver, @Nullable final String message) {
         sendMessage(receiver, ChatColor.DARK_GRAY + message);

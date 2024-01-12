@@ -21,7 +21,8 @@ import java.util.Set;
 /**
  * Class representing the clan section in the config.yml
  *
- * @since v3.1.1
+ * @author DavideBlade
+ * @since 3.2
  */
 public final class ClanConfiguration extends SectionConfiguration {
 
@@ -30,8 +31,8 @@ public final class ClanConfiguration extends SectionConfiguration {
 
 
     /**
-     * List of {@link ClanLevel}s extracted from the configuration representing, for each level, the exp
-     * required and the command to be executed when a clan reaches the level.
+     * List of {@link ClanLevel}s extracted from the configuration representing, for each level, the exp required and the
+     * command to be executed when a clan reaches the level.
      */
     private final List<ClanLevel> clans;
 
@@ -50,17 +51,15 @@ public final class ClanConfiguration extends SectionConfiguration {
 
     /**
      * @return The list containing the settings of the clans loaded
-     *
-     * @since v3.1.2
      */
     public List<ClanLevel> getClans() {
         return this.clans;
     }
 
     /**
-     * Reads the clans section in the {@link SectionConfiguration#section} and builds {@link Pair}s of required exp
-     * and commands to be executed when the level is reached. If a misconfigured level (with invalid or missing
-     * settings) is encountered, loading will be stopped. Clans loaded to that point, however, will remain valid.
+     * Reads the clans section in the {@link SectionConfiguration#section} and builds {@link Pair}s of required exp and
+     * commands to be executed when the level is reached. If a misconfigured level (with invalid or missing settings) is
+     * encountered, loading will be stopped. Clans loaded to that point, however, will remain valid.
      */
     private void loadClans() {
         final ConfigurationSection clanSection = super.section;

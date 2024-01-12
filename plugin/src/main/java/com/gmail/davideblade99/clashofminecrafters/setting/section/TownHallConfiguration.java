@@ -24,7 +24,7 @@ import java.util.Set;
  * Class representing the town hall section in the config.yml
  *
  * @author DavideBlade
- * @since v3.1.1
+ * @since 3.2
  */
 public final class TownHallConfiguration extends SectionConfiguration {
 
@@ -36,8 +36,7 @@ public final class TownHallConfiguration extends SectionConfiguration {
     private final List<TownHallLevel> townHalls;
 
     /**
-     * Create a new instance of {@link TownHallConfiguration} and load all the town halls with {@link
-     * #loadTownHalls()}
+     * Create a new instance of {@link TownHallConfiguration} and load all the town halls with {@link #loadTownHalls()}
      *
      * @param configuration Configuration containing the town halls section
      */
@@ -58,8 +57,8 @@ public final class TownHallConfiguration extends SectionConfiguration {
 
     /**
      * Reads the town halls section in the {@link SectionConfiguration#section} and builds {@link TownHallLevel}s. If a
-     * misconfigured level (with invalid or missing settings) is encountered, loading will be stopped. Town halls
-     * loaded to that point, however, will remain valid.
+     * misconfigured level (with invalid or missing settings) is encountered, loading will be stopped. Town halls loaded to
+     * that point, however, will remain valid.
      */
     private void loadTownHalls() {
         final ConfigurationSection townHallSection = super.section;
@@ -72,7 +71,7 @@ public final class TownHallConfiguration extends SectionConfiguration {
         }
 
         // Load town hall levels
-        short level = 1;
+        short level = 0;
         for (String townHall : keys) {
             level++;
 

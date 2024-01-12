@@ -7,10 +7,10 @@
 package com.gmail.davideblade99.clashofminecrafters.storage.sql.mysql;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
+import com.gmail.davideblade99.clashofminecrafters.building.ArcherTower;
+import com.gmail.davideblade99.clashofminecrafters.building.ElixirExtractor;
+import com.gmail.davideblade99.clashofminecrafters.building.GoldExtractor;
 import com.gmail.davideblade99.clashofminecrafters.file.log.ErrorLog;
-import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size2D;
-import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.player.Village;
 import com.gmail.davideblade99.clashofminecrafters.player.currency.Balance;
@@ -20,6 +20,8 @@ import com.gmail.davideblade99.clashofminecrafters.storage.sql.mysql.query.*;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size2D;
+import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -84,7 +86,7 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
 
     /**
      * Chooses a player randomly among all those with an island
-     *
+     * <p>
      * {@inheritDoc}
      *
      * @throws IllegalStateException If there is any missing data regarding the player or island
@@ -117,7 +119,7 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
                 if (playerName == null)
                     throw new IllegalStateException("Player name associated with UUID \"" + playerUUID[0] + "\" missing");
                 if (spawn == null || origin == null || size == null || expansions == null)
-                    throw new IllegalStateException("Island of \"" + playerUUID[0] + "\" existing with some missing data");
+                    throw new IllegalStateException("Village of \"" + playerUUID[0] + "\" existing with some missing data");
                 //TODO: notificare al giocatore target
 
                 return new Village(playerName, spawn, origin, size, expansions);
@@ -204,10 +206,61 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
                 final int gems = resultSet.getInt(Columns.GEMS);
                 final int trophies = resultSet.getInt(Columns.TROPHIES);
                 final String clanName = resultSet.getString(Columns.CLAN);
+
+                final ElixirExtractor elixirExtractor;
                 final int elixirExtractorLevel = resultSet.getInt(Columns.ELIXIR_EXTRACTOR_LEVEL);
+                final Vector elixirExtractorCorner1 = Vector.fromString(resultSet.getString(Columns.ELIXIR_EXTRACTOR_MIN_CORNER));
+                final Vector elixirExtractorCorner2 = Vector.fromString(resultSet.getString(Columns.ELIXIR_EXTRACTOR_MAX_CORNER));
+
+                // If the player has an elixir extractor
+                if (elixirExtractorLevel != 0 || elixirExtractorCorner1 != null || elixirExtractorCorner2 != null) {
+                    // Wrong data
+                    if (elixirExtractorCorner1 == null || elixirExtractorCorner2 == null)
+                        throw new IllegalStateException("Elixir extractor of \"" + playerUUID + "\" existing with some missing data");
+                    if (elixirExtractorLevel <= 0)
+                        throw new IllegalStateException("Elixir extractor of \"" + playerUUID + "\" existing with some inconsistent data");
+
+                    elixirExtractor = new ElixirExtractor(elixirExtractorLevel, elixirExtractorCorner1, elixirExtractorCorner2);
+                } else
+                    elixirExtractor = null;
+
+
+                final GoldExtractor goldExtractor;
                 final int goldExtractorLevel = resultSet.getInt(Columns.GOLD_EXTRACTOR_LEVEL);
+                final Vector goldExtractorCorner1 = Vector.fromString(resultSet.getString(Columns.GOLD_EXTRACTOR_MIN_CORNER));
+                final Vector goldExtractorCorner2 = Vector.fromString(resultSet.getString(Columns.GOLD_EXTRACTOR_MAX_CORNER));
+
+                // If the player has a gold extractor
+                if (goldExtractorLevel != 0 || goldExtractorCorner1 != null || goldExtractorCorner2 != null) {
+                    // Wrong data
+                    if (goldExtractorCorner1 == null || goldExtractorCorner2 == null)
+                        throw new IllegalStateException("Gold extractor of \"" + playerUUID + "\" existing with some missing data");
+                    if (goldExtractorLevel <= 0)
+                        throw new IllegalStateException("Gold extractor of \"" + playerUUID + "\" existing with some inconsistent data");
+
+                    goldExtractor = new GoldExtractor(goldExtractorLevel, goldExtractorCorner1, goldExtractorCorner2);
+                } else
+                    goldExtractor = null;
+
+
+                final ArcherTower archerTower;
                 final int archerLevel = resultSet.getInt(Columns.ARCHER_TOWER_LEVEL);
-                final Vector archerPos = Vector.fromString(resultSet.getString(Columns.ARCHER_TOWER_LOCATION));
+                final Vector archerPos = Vector.fromString(resultSet.getString(Columns.TOWER_ARCHER_LOCATION));
+                final Vector archerTowerCorner1 = Vector.fromString(resultSet.getString(Columns.ARCHER_TOWER_MIN_CORNER));
+                final Vector archerTowerCorner2 = Vector.fromString(resultSet.getString(Columns.ARCHER_TOWER_MAX_CORNER));
+
+                // If the player has an archer's tower
+                if (archerLevel != 0 || archerPos != null || archerTowerCorner1 != null || archerTowerCorner2 != null) {
+                    // Wrong data
+                    if (archerPos == null || archerTowerCorner1 == null || archerTowerCorner2 == null)
+                        throw new IllegalStateException("Archer's tower of \"" + playerUUID + "\" existing with some missing data");
+                    if (archerLevel <= 0)
+                        throw new IllegalStateException("Archer's tower of \"" + playerUUID + "\" existing with some inconsistent data");
+
+                    archerTower = new ArcherTower(archerLevel, archerPos, archerTowerCorner1, archerTowerCorner2);
+                } else
+                    archerTower = null;
+
 
                 final Village island;
                 final Location islandSpawn = BukkitLocationUtil.fromString(resultSet.getString(Columns.ISLAND_SPAWN));
@@ -219,7 +272,7 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
                 if (islandSpawn != null || islandOrigin != null || islandSize != null || islandExpansions != null) {
                     // Unexpected missing data
                     if (islandSpawn == null || islandOrigin == null || islandSize == null || islandExpansions == null)
-                        throw new IllegalStateException("Island of \"" + playerUUID + "\" existing with some missing data");
+                        throw new IllegalStateException("Village of \"" + playerUUID + "\" existing with some missing data");
 
                     island = new Village(playerName, islandSpawn, islandOrigin, islandSize, islandExpansions);
                 } else
@@ -230,7 +283,7 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
 
                 final int townHallLevel = resultSet.getInt(Columns.TOWN_HALL_LEVEL);
 
-                return new UserDatabaseType(new Balance(gold, elixir, gems), trophies, clanName, elixirExtractorLevel, goldExtractorLevel, archerLevel, archerPos, island, collectionTime, townHallLevel);
+                return new UserDatabaseType(new Balance(gold, elixir, gems), trophies, clanName, elixirExtractor, goldExtractor, archerTower, island, collectionTime, townHallLevel);
             });
 
         } catch (final SQLException ex) {
@@ -250,11 +303,20 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
         final int gems = user.getGems();
         final int trophies = user.getTrophies();
         final String clan = user.getClanName();
-        final int elixirExtractorLevel = user.getBuildingLevel(Buildings.ELIXIR_EXTRACTOR);
-        final int goldExtractorLevel = user.getBuildingLevel(Buildings.GOLD_EXTRACTOR);
-        final int archerLevel = user.getBuildingLevel(Buildings.ARCHER_TOWER);
-        final int townHallLevel = user.getBuildingLevel(Buildings.TOWN_HALL);
-        final String archerPos = user.getTowerPos() == null ? null : user.getTowerPos().toString();
+        final ElixirExtractor elixirExtractor = user.getElixirExtractor();
+        final int elixirExtractorLevel = elixirExtractor == null ? 0 : elixirExtractor.getLevel();
+        final String elixirExtractorCorner1 = elixirExtractor == null ? null : elixirExtractor.getBuildingArea().getMinCorner().toString();
+        final String elixirExtractorCorner2 = elixirExtractor == null ? null : elixirExtractor.getBuildingArea().getMaxCorner().toString();
+        final GoldExtractor goldExtractor = user.getGoldExtractor();
+        final int goldExtractorLevel = goldExtractor == null ? 0 : goldExtractor.getLevel();
+        final String goldExtractorCorner1 = goldExtractor == null ? null : goldExtractor.getBuildingArea().getMinCorner().toString();
+        final String goldExtractorCorner2 = goldExtractor == null ? null : goldExtractor.getBuildingArea().getMaxCorner().toString();
+        final ArcherTower archerTower = user.getArcherTower();
+        final int archerLevel = archerTower == null ? 0 : archerTower.getLevel();
+        final String archerPos = archerTower == null ? null : archerTower.getArcherPos().toString();
+        final String archerTowerCorner1 = archerTower == null ? null : archerTower.getBuildingArea().getMinCorner().toString();
+        final String archerTowerCorner2 = archerTower == null ? null : archerTower.getBuildingArea().getMaxCorner().toString();
+        final int townHallLevel = user.getTownHallLevel();
         final Village island = user.getVillage();
         final String islandSpawn = island == null ? null : BukkitLocationUtil.toString(island.getSpawn());
         final String islandOrigin = island == null ? null : island.origin.toString();
@@ -271,14 +333,20 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
                 .value(Columns.TROPHIES, trophies)
                 .safeValue(Columns.CLAN)
                 .value(Columns.ELIXIR_EXTRACTOR_LEVEL, elixirExtractorLevel)
+                .value(Columns.ELIXIR_EXTRACTOR_MIN_CORNER, elixirExtractorCorner1)
+                .value(Columns.ELIXIR_EXTRACTOR_MAX_CORNER, elixirExtractorCorner2)
                 .value(Columns.GOLD_EXTRACTOR_LEVEL, goldExtractorLevel)
+                .value(Columns.GOLD_EXTRACTOR_MIN_CORNER, goldExtractorCorner1)
+                .value(Columns.GOLD_EXTRACTOR_MAX_CORNER, goldExtractorCorner2)
                 .value(Columns.ARCHER_TOWER_LEVEL, archerLevel)
+                .value(Columns.TOWER_ARCHER_LOCATION, archerPos)
+                .value(Columns.ARCHER_TOWER_MIN_CORNER, archerTowerCorner1)
+                .value(Columns.ARCHER_TOWER_MAX_CORNER, archerTowerCorner2)
                 .value(Columns.TOWN_HALL_LEVEL, townHallLevel)
                 .value(Columns.ISLAND_SPAWN, islandSpawn)
                 .value(Columns.ISLAND_ORIGIN, islandOrigin)
                 .value(Columns.ISLAND_SIZE, islandSize)
                 .value(Columns.ISLAND_EXPANSIONS, islandExpansions)
-                .value(Columns.ARCHER_TOWER_LOCATION, archerPos)
                 .value(Columns.COLLECTION_TIME, collectionTime)
                 .onDuplicateKeyUpdate(Columns.GOLD, gold)
                 .onDuplicateKeyUpdate(Columns.ELIXIR, elixir)
@@ -293,12 +361,13 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
                 .onDuplicateKeyUpdate(Columns.ISLAND_ORIGIN, islandOrigin)
                 .onDuplicateKeyUpdate(Columns.ISLAND_SIZE, islandSize)
                 .onDuplicateKeyUpdate(Columns.ISLAND_EXPANSIONS, islandExpansions)
-                .onDuplicateKeyUpdate(Columns.ARCHER_TOWER_LOCATION, archerPos)
+                .onDuplicateKeyUpdate(Columns.TOWER_ARCHER_LOCATION, archerPos)
                 .onDuplicateKeyUpdate(Columns.COLLECTION_TIME, collectionTime);
 
         queryBuilder.executeUpdate(getConnectionPool(), new QueryResult() {
             @Override
-            public <R> void completed(@Nonnull final R ignored) { }
+            public <R> void completed(@Nonnull final R ignored) {
+            }
 
             @Override
             public void failed(@Nonnull final SQLException ex) {
@@ -331,9 +400,15 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
                     "Clan: '" + resultSet.getString(Columns.CLAN) + "', " +
                     "Collection timestamp: '" + resultSet.getString(Columns.COLLECTION_TIME) + "', " +
                     "Archer level: '" + resultSet.getInt(Columns.ARCHER_TOWER_LEVEL) + "', " +
-                    "Archer position: '" + resultSet.getString(Columns.ARCHER_TOWER_LOCATION) + "', " +
+                    "Archer position: '" + resultSet.getString(Columns.TOWER_ARCHER_LOCATION) + "', " +
+                    "Archer tower min corner: '" + resultSet.getString(Columns.ARCHER_TOWER_MIN_CORNER) + "', " +
+                    "Archer tower max corner: '" + resultSet.getString(Columns.ARCHER_TOWER_MAX_CORNER) + "', " +
                     "Gold extractor level: '" + resultSet.getInt(Columns.GOLD_EXTRACTOR_LEVEL) + "', " +
+                    "Gold extractor min corner: '" + resultSet.getInt(Columns.GOLD_EXTRACTOR_MIN_CORNER) + "', " +
+                    "Gold extractor max corner: '" + resultSet.getInt(Columns.GOLD_EXTRACTOR_MAX_CORNER) + "', " +
                     "Elixir extractor level: '" + resultSet.getInt(Columns.ELIXIR_EXTRACTOR_LEVEL) + "', " +
+                    "Elixir extractor min corner: '" + resultSet.getInt(Columns.ELIXIR_EXTRACTOR_MIN_CORNER) + "', " +
+                    "Elixir extractor max corner: '" + resultSet.getInt(Columns.ELIXIR_EXTRACTOR_MAX_CORNER) + "', " +
                     "Island spawn: '" + resultSet.getString(Columns.ISLAND_SPAWN) + "', " +
                     "Island origin: '" + resultSet.getString(Columns.ISLAND_ORIGIN) + "', " +
                     "Island size: '" + resultSet.getString(Columns.ISLAND_SIZE) + "', " +
@@ -361,9 +436,15 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
                 .withColumn(Columns.CLAN, "varchar(30) DEFAULT NULL")
                 .withColumn(Columns.COLLECTION_TIME, "varchar(21) DEFAULT NULL")
                 .withColumn(Columns.ARCHER_TOWER_LEVEL, "INT NOT NULL DEFAULT 0")
-                .withColumn(Columns.ARCHER_TOWER_LOCATION, "varchar(60) DEFAULT NULL")
+                .withColumn(Columns.TOWER_ARCHER_LOCATION, "varchar(60) DEFAULT NULL")
+                .withColumn(Columns.ARCHER_TOWER_MIN_CORNER, "varchar(60) DEFAULT NULL")
+                .withColumn(Columns.ARCHER_TOWER_MAX_CORNER, "varchar(60) DEFAULT NULL")
                 .withColumn(Columns.GOLD_EXTRACTOR_LEVEL, "INT NOT NULL DEFAULT 0")
+                .withColumn(Columns.GOLD_EXTRACTOR_MIN_CORNER, "varchar(60) DEFAULT NULL")
+                .withColumn(Columns.GOLD_EXTRACTOR_MAX_CORNER, "varchar(60) DEFAULT NULL")
                 .withColumn(Columns.ELIXIR_EXTRACTOR_LEVEL, "INT NOT NULL DEFAULT 0")
+                .withColumn(Columns.ELIXIR_EXTRACTOR_MIN_CORNER, "varchar(60) DEFAULT NULL")
+                .withColumn(Columns.ELIXIR_EXTRACTOR_MAX_CORNER, "varchar(60) DEFAULT NULL")
                 .withColumn(Columns.TOWN_HALL_LEVEL, "INT UNSIGNED NOT NULL DEFAULT 1")
                 .withColumn(Columns.ISLAND_SPAWN, "varchar(95) DEFAULT NULL")
                 .withColumn(Columns.ISLAND_ORIGIN, "varchar(55) DEFAULT NULL")
@@ -393,12 +474,24 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
                 queryBuilderAlterTable.addColumn(Columns.COLLECTION_TIME, "varchar(21) DEFAULT NULL");
             if (isColumnMissing(databaseName, TABLE_NAME, md, Columns.ARCHER_TOWER_LEVEL))
                 queryBuilderAlterTable.addColumn(Columns.ARCHER_TOWER_LEVEL, "INT NOT NULL DEFAULT 0");
-            if (isColumnMissing(databaseName, TABLE_NAME, md, Columns.ARCHER_TOWER_LOCATION))
-                queryBuilderAlterTable.addColumn(Columns.ARCHER_TOWER_LOCATION, "varchar(60) DEFAULT NULL");
+            if (isColumnMissing(databaseName, TABLE_NAME, md, Columns.TOWER_ARCHER_LOCATION))
+                queryBuilderAlterTable.addColumn(Columns.TOWER_ARCHER_LOCATION, "varchar(60) DEFAULT NULL");
+            if (isColumnMissing(databaseName, TABLE_NAME, md, Columns.ARCHER_TOWER_MIN_CORNER))
+                queryBuilderAlterTable.addColumn(Columns.ARCHER_TOWER_MIN_CORNER, "varchar(60) DEFAULT NULL");
+            if (isColumnMissing(databaseName, TABLE_NAME, md, Columns.ARCHER_TOWER_MAX_CORNER))
+                queryBuilderAlterTable.addColumn(Columns.ARCHER_TOWER_MAX_CORNER, "varchar(60) DEFAULT NULL");
             if (isColumnMissing(databaseName, TABLE_NAME, md, Columns.GOLD_EXTRACTOR_LEVEL))
                 queryBuilderAlterTable.addColumn(Columns.GOLD_EXTRACTOR_LEVEL, "INT NOT NULL DEFAULT 0");
+            if (isColumnMissing(databaseName, TABLE_NAME, md, Columns.GOLD_EXTRACTOR_MIN_CORNER))
+                queryBuilderAlterTable.addColumn(Columns.GOLD_EXTRACTOR_MIN_CORNER, "varchar(60) DEFAULT NULL");
+            if (isColumnMissing(databaseName, TABLE_NAME, md, Columns.GOLD_EXTRACTOR_MAX_CORNER))
+                queryBuilderAlterTable.addColumn(Columns.GOLD_EXTRACTOR_MAX_CORNER, "varchar(60) DEFAULT NULL");
             if (isColumnMissing(databaseName, TABLE_NAME, md, Columns.ELIXIR_EXTRACTOR_LEVEL))
                 queryBuilderAlterTable.addColumn(Columns.ELIXIR_EXTRACTOR_LEVEL, "INT NOT NULL DEFAULT 0");
+            if (isColumnMissing(databaseName, TABLE_NAME, md, Columns.ELIXIR_EXTRACTOR_MIN_CORNER))
+                queryBuilderAlterTable.addColumn(Columns.ELIXIR_EXTRACTOR_MIN_CORNER, "varchar(60) DEFAULT NULL");
+            if (isColumnMissing(databaseName, TABLE_NAME, md, Columns.ELIXIR_EXTRACTOR_MAX_CORNER))
+                queryBuilderAlterTable.addColumn(Columns.ELIXIR_EXTRACTOR_MAX_CORNER, "varchar(60) DEFAULT NULL");
             if (isColumnMissing(databaseName, TABLE_NAME, md, Columns.TOWN_HALL_LEVEL))
                 queryBuilderAlterTable.addColumn(Columns.TOWN_HALL_LEVEL, "INT UNSIGNED NOT NULL DEFAULT 1");
             if (isColumnMissing(databaseName, TABLE_NAME, md, Columns.ISLAND_SPAWN))
@@ -428,9 +521,8 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
      * @param columnName   Name of column to check
      *
      * @return true if the column is not present in the table, otherwise false
-     *
      * @throws SQLException If a database access error occurs
-     * @since v3.1
+     * @since 3.1
      */
     private boolean isColumnMissing(@Nonnull final String databaseName, @Nonnull final String tableName, @Nonnull final DatabaseMetaData metaData, @Nonnull final String columnName) throws SQLException {
         try (ResultSet rs = metaData.getColumns(databaseName, null, tableName, columnName)) {
@@ -439,11 +531,11 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
     }
 
     /**
-     * Search, if online, for the player with UUID {@code executorUUID} and call the method {@link
-     * #notifyAndLogError(Player, UUID, SQLException, Operation, String)}.
+     * Search, if online, for the player with UUID {@code executorUUID} and call the method
+     * {@link #notifyAndLogError(Player, UUID, SQLException, Operation, String)}.
      *
      * @see #notifyAndLogError(Player, UUID, SQLException, Operation, String)
-     * @since v3.1
+     * @since 3.1
      */
     private void notifyAndLogError(@Nonnull final UUID executorUUID, @Nonnull final UUID targetUUID, @Nonnull final SQLException ex, @Nonnull final Operation op, @Nonnull final String action) {
         // If the player is online, notifies the error
@@ -451,18 +543,17 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
     }
 
     /**
-     * Notifies the player that a problem with the database has occurred and logs all exception information in a
-     * file.
+     * Notifies the player that a problem with the database has occurred and logs all exception information in a file.
      *
-     * @param executor   Player who triggered the query and needs to be notified or {@code null}  if no one is to
-     *                   be notified
+     * @param executor   Player who triggered the query and needs to be notified or {@code null}  if no one is to be
+     *                   notified
      * @param targetUUID UUID of the target player of the query
      * @param ex         Exception that occurred
      * @param op         Query type
      * @param action     Action you tried to execute with the failed query
      *
      * @see ErrorLog
-     * @since v3.1
+     * @since 3.1
      */
     private void notifyAndLogError(@Nullable final Player executor, @Nonnull final UUID targetUUID, @Nonnull final SQLException ex, @Nonnull final Operation op, @Nonnull final String action) {
         if (executor != null)

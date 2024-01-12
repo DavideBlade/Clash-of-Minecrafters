@@ -7,14 +7,13 @@
 package com.gmail.davideblade99.clashofminecrafters.handler;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
+import com.gmail.davideblade99.clashofminecrafters.building.ArcherTower;
 import com.gmail.davideblade99.clashofminecrafters.event.raid.RaidLostEvent;
-import com.gmail.davideblade99.clashofminecrafters.player.Village;
-import com.gmail.davideblade99.clashofminecrafters.setting.ArcherTowerLevel;
-import com.gmail.davideblade99.clashofminecrafters.setting.BuildingLevel;
-import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
+import com.gmail.davideblade99.clashofminecrafters.player.Village;
+import com.gmail.davideblade99.clashofminecrafters.setting.ArcherTowerLevel;
 import com.gmail.davideblade99.clashofminecrafters.util.Pair;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.thread.NullableCallback;
@@ -45,8 +44,8 @@ public final class WarHandler {
     private final AtomicReference<WarState> currentState;
 
     /**
-     * If the war has to start, it indicates the time remaining in the countdown, otherwise it indicates the
-     * remaining duration of the war
+     * If the war has to start, it indicates the time remaining in the countdown, otherwise it indicates the remaining
+     * duration of the war
      */
     private final AtomicInteger timer;
 
@@ -71,12 +70,17 @@ public final class WarHandler {
     }
 
     /**
-     * This method handles starting the raid for the player passed as a parameter. Specifically, it deals with: 1.
-     * finding an enemy island to attack 2. teleporting the player to the target island 3. spawn the guardian and
-     * archer (if the defender owns the archer tower) If no island is found after 10 seconds, the search is
-     * aborted.
+     * This method handles starting the raid for the player passed as a parameter. Specifically, it deals with:
+     * <ol>
+     *      <li>finding an enemy village to attack</li>
+     *      <li>teleporting the player to the target village</li>
+     *      <li>spawn the guardian and archer (if the defender owns the archer's tower)</li>
+     * </ol>
+     * If no island is found after 10 seconds, the search is aborted.
      *
      * @param attacker Player who wants to start the raid
+     *
+     * @throws IllegalStateException If an unexpected error occurs with the cache and player data is not found
      */
     public void startRaid(@Nonnull final Player attacker) {
         //TODO: se non ci sono isole nemiche non cominciare neanche a cercare
@@ -89,7 +93,7 @@ public final class WarHandler {
             // Unexpected missing data
             final User targetUser = plugin.getUser(targetIsland.owner);
             if (targetUser == null)
-                throw new IllegalStateException("The User of the player \"" + targetIsland.owner + "\" was not found");
+                throw new IllegalStateException("User of the player \"" + targetIsland.owner + "\" was not found");
 
             // Task that ends the raid after time runs out
             final int taskID = Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getPluginManager().callEvent(new RaidLostEvent(attacker, targetIsland.owner)), plugin.getConfig().getRaidTimeout() * 20L).getTaskId();
@@ -98,9 +102,17 @@ public final class WarHandler {
             // Spawn creature
             plugin.getGuardianHandler().spawn(targetUser, targetIsland.owner, targetIsland.getSpawn());
 
-            final BuildingLevel archerTower = targetUser.getBuilding(Buildings.ARCHER_TOWER);
-            if (archerTower != null) // If the player has archer tower
-                plugin.getArcherHandler().spawn(targetIsland.owner, ((ArcherTowerLevel) archerTower).damage, targetUser.getTowerLoc());
+            final ArcherTower archerTower = targetUser.getArcherTower();
+            if (archerTower != null) { // If the player has archer tower
+                /*
+                 * If any player has a level higher than the current maximum level
+                 * (e.g., some levels have been removed from the config.yml),
+                 * the currently configured maximum level is taken into account.
+                 */
+                final ArcherTowerLevel archerTowerStat = plugin.getConfig().getExistingArcherTower(archerTower.getLevel());
+
+                plugin.getArcherHandler().spawn(targetIsland.owner, archerTowerStat.damage, archerTower.getArcherPos().toBukkitLocation(plugin.getVillageHandler().getVillageWorld()));
+            }
 
             // Teleport player
             MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.TELEPORTATION));
@@ -124,8 +136,8 @@ public final class WarHandler {
             Bukkit.getScheduler().cancelTask(removed.getValue());
     }
 
-    private void setUnderAttack(@Nonnull final Player attacker, @Nonnull final Village i, final int taskID) {
-        attacks.put(attacker, new Pair<>(i, taskID));
+    private void setUnderAttack(@Nonnull final Player attacker, @Nonnull final Village island, final int taskID) {
+        attacks.put(attacker, new Pair<>(island, taskID));
     }
 
     @Nullable
@@ -151,8 +163,8 @@ public final class WarHandler {
     }
 
     /**
-     * Remove all islands under attack and teleport attacker to spawn. This method must be called from the main
-     * thread since it uses the Spigot API, which is not thread-safe.
+     * Remove all islands under attack and teleport attacker to spawn. This method must be called from the main thread since
+     * it uses the Spigot API, which is not thread-safe.
      *
      * @throws IllegalStateException If the method is not called from the main thread
      */
@@ -232,12 +244,11 @@ public final class WarHandler {
     }
 
     /**
-     * Task that deals with finding an enemy island to attack. Sends the result of the lookup to the callback
-     * passed to the constructor {@link #IslandFinder(Player, NullableCallback)}. If no island is found in a
-     * reasonable time {@code null} is returned, otherwise the {@link Village} found.
-     *
-     * The result is passed synchronously, that is, {@link NullableCallback#call(Object)} is called from the main
-     * thread.
+     * Task that deals with finding an enemy island to attack. Sends the result of the lookup to the callback passed to the
+     * constructor {@link #IslandFinder(Player, NullableCallback)}. If no island is found in a reasonable time {@code null}
+     * is returned, otherwise the {@link Village} found.
+     * <p>
+     * The result is passed synchronously, that is, {@link NullableCallback#call(Object)} is called from the main thread.
      */
     private class IslandFinder extends BukkitRunnable {
 
@@ -283,15 +294,14 @@ public final class WarHandler {
         }
 
         /**
-         * Blocking method that is responsible for executing in the main thread the function passed as a parameter
-         * and handling checked exceptions ({@link Exception}) that may occur. Specifically, in case of exceptions,
-         * it will send a notification to the player and print the stack trace.
+         * Blocking method that is responsible for executing in the main thread the function passed as a parameter and
+         * handling checked exceptions ({@link Exception}) that may occur. Specifically, in case of exceptions, it will send
+         * a notification to the player and print the stack trace.
          *
          * @param toExecute Function to be executed on the main thread
          * @param <T>       Type of data returned by the function (executed on the main thread)
          *
          * @return The data produced by the function or {@code null} in case of error
-         *
          * @see #runSync(Supplier)
          */
         @Nullable
@@ -308,14 +318,14 @@ public final class WarHandler {
         }
 
         /**
-         * This method is responsible to execute on the main thread the function passed as a parameter. The future
-         * completes when the function returns and produces its result.
+         * This method is responsible to execute on the main thread the function passed as a parameter. The future completes
+         * when the function returns and produces its result.
          *
          * @param toExecute Function to be executed on the main thread
          * @param <T>       Type of data returned by the function (executed on the main thread)
          *
-         * @return A {@link CompletableFuture<T>} that completes successfully when the function ends its execution.
-         * It completes exceptionally  if an unexpected error occurs.
+         * @return A {@link CompletableFuture<T>} that completes successfully when the function ends its execution. It
+         * completes exceptionally  if an unexpected error occurs.
          */
         @Nonnull
         private <T> CompletableFuture<T> runSync(@Nonnull final Supplier<T> toExecute) {

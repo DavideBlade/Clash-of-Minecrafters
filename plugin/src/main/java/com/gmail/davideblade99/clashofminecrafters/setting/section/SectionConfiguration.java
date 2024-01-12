@@ -9,7 +9,8 @@ import javax.annotation.Nonnull;
  * Class representing a generic section in the config.yml. More specifically, this class represents a specific
  * {@link ConfigurationSection}.
  *
- * @since v3.1.1
+ * @author DavideBlade
+ * @since 3.2
  */
 abstract class SectionConfiguration {
 
@@ -17,8 +18,7 @@ abstract class SectionConfiguration {
     final ConfigurationSection section;
 
     /**
-     * Finds the {@link ConfigurationSection} with the specified path within the {@code configuration} passed as a
-     * parameter
+     * Finds the {@link ConfigurationSection} with the specified path within the {@code configuration} passed as a parameter
      *
      * @param configuration {@link CoMYamlConfiguration} containing the section
      * @param sectionPath   Path of the section in the config.yml

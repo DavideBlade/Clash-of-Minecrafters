@@ -16,7 +16,7 @@ import java.util.Locale;
  * Enumerates all currencies
  *
  * @author DavideBlade
- * @since v3.1.4
+ * @since 3.1.4
  */
 public enum Currencies {
     GEMS, GOLD, ELIXIR;

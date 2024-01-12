@@ -15,22 +15,10 @@ import javax.annotation.Nullable;
  * Enumerates all types of buildings
  *
  * @author DavideBlade
- * @since v3.1.4
+ * @since 3.1.4
  */
 public enum Buildings {
-    TOWN_HALL((byte) 1), ARCHER_TOWER((byte) 0), GOLD_EXTRACTOR((byte) 0), ELIXIR_EXTRACTOR((byte) 0);
-
-    public final byte firstLevel;
-
-    /**
-     * Creates a new building type with the specified base level
-     *
-     * @param firstLevel Starting level of the building. Basically, it is the level that a player gets when he
-     *                   joins the server for the first time and has not yet unlocked any building.
-     */
-    Buildings(final byte firstLevel) {
-        this.firstLevel = firstLevel;
-    }
+    TOWN_HALL, ARCHER_TOWER, GOLD_EXTRACTOR, ELIXIR_EXTRACTOR;
 
     /**
      * @return an array containing only those buildings that are extractors

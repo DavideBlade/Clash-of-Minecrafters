@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
  * Represents a level of a clan, configured in the config.yml
  *
  * @author DavideBlade
- * @since v3.1.4
+ * @since 3.1.4
  */
 public final class ClanLevel {
 

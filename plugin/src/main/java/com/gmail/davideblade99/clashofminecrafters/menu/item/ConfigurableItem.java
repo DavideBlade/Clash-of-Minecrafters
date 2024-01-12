@@ -18,26 +18,29 @@ import javax.annotation.Nullable;
 
 /**
  * Item configurable from config.yml
+ *
+ * @author DavideBlade
+ * @since 3.2
  */
-public final class ConfigItem extends BaseItem {
+public final class ConfigurableItem extends BaseItem {
 
     private final Pair<Integer, Currencies> requiredBalance;
     private final ItemStack requiredItem;
     private final String command;
 
-    public ConfigItem(@Nonnull final ItemStack item, final byte slot, @Nullable final String command) {
+    public ConfigurableItem(@Nonnull final ItemStack item, final byte slot, @Nullable final String command) {
         this(item, slot, null, null, command);
     }
 
-    public ConfigItem(@Nonnull final ItemStack item, final byte slot, @Nullable final Pair<Integer, Currencies> requiredBalance, @Nullable final String command) {
+    public ConfigurableItem(@Nonnull final ItemStack item, final byte slot, @Nullable final Pair<Integer, Currencies> requiredBalance, @Nullable final String command) {
         this(item, slot, requiredBalance, null, command);
     }
 
-    public ConfigItem(@Nonnull final ItemStack item, final byte slot, @Nullable final ItemStack requiredItem, @Nullable final String command) {
+    public ConfigurableItem(@Nonnull final ItemStack item, final byte slot, @Nullable final ItemStack requiredItem, @Nullable final String command) {
         this(item, slot, null, requiredItem, command);
     }
 
-    public ConfigItem(@Nonnull final ItemStack item, final byte slot, @Nullable final Pair<Integer, Currencies> requiredBalance, @Nullable final ItemStack requiredItem, @Nullable final String command) {
+    public ConfigurableItem(@Nonnull final ItemStack item, final byte slot, @Nullable final Pair<Integer, Currencies> requiredBalance, @Nullable final ItemStack requiredItem, @Nullable final String command) {
         super(item, slot);
 
         this.requiredBalance = requiredBalance;

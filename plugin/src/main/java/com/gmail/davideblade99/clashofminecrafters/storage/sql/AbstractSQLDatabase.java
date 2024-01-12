@@ -59,7 +59,7 @@ public abstract class AbstractSQLDatabase implements PlayerDatabase {
     /**
      * @return The manager of connections in the pool
      *
-     * @since v3.1
+     * @since 3.1
      */
     protected final ConnectionPoolManager getConnectionPool() {
         return pool;

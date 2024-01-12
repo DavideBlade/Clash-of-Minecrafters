@@ -31,7 +31,7 @@ import java.io.IOException;
  * @see SchematicPaster
  * @see Schematic
  * @see Schematics
- * @since v3.1.2
+ * @since 3.1.2
  */
 public final class SchematicHandler {
 
@@ -100,7 +100,7 @@ public final class SchematicHandler {
      *                          receive the thrown exception. {@link PastingException} is thrown in case of error
      *                          during schematic pasting.
      *
-     * @since v3.1.4
+     * @since 3.1.4
      */
     public void paste(@Nonnull final Schematic schematic, @Nonnull final Location location, @Nonnull final NullableCallback<PastingException> completionHandler) {
         schematic.paste(location, completionHandler);

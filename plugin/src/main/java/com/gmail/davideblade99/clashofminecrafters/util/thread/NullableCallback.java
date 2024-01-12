@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
  *
  * @param <V> The result type of the method {@link #call(V)}
  *
- * @since v3.0
+ * @since 3.0
  */
 public interface NullableCallback<V> {
 

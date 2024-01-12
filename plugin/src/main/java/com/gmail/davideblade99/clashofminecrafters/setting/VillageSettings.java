@@ -6,15 +6,13 @@
 
 package com.gmail.davideblade99.clashofminecrafters.setting;
 
-import com.gmail.davideblade99.clashofminecrafters.schematic.Pasteable;
-
 import javax.annotation.Nonnull;
 
 /**
  * JavaBean that contains village settings retrieved from config.yml.
  *
  * @author DavideBlade
- * @since v3.1.4
+ * @since 3.1.4
  */
 public final class VillageSettings implements Pasteable {
 

@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 /**
  * Exception indicating a generic error related to schematic operations
  *
- * @since v3.1.4
+ * @since 3.1.4
  */
 public class SchematicException extends Exception {
 

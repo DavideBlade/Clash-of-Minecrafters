@@ -7,7 +7,6 @@
 package com.gmail.davideblade99.clashofminecrafters.setting;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.menu.Menu;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages.Language;
 import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
@@ -319,8 +318,7 @@ public final class Settings extends CoMYamlConfiguration {
 
     /**
      * @return True if the player must be teleported to the spawn when joining the server, otherwise false
-     *
-     * @since v3.1.1
+     * @since 3.1.1
      */
     public boolean teleportOnJoin() {
         return super.getBoolean("Default spawn.On join", false);
@@ -421,8 +419,7 @@ public final class Settings extends CoMYamlConfiguration {
 
     /**
      * @return {@link VillageSettings} Containing the village settings
-     *
-     * @since v3.1.4
+     * @since 3.1.4
      */
     @Nonnull
     public VillageSettings getVillageSettings() {
@@ -430,151 +427,171 @@ public final class Settings extends CoMYamlConfiguration {
     }
 
     /**
-     * @param level Town hall level
+     * Gets the configured statistics of the archer's tower
      *
-     * @return {@link TownHallLevel} corresponding to the specified level or {@code null} if the specified level
-     * does not exist
+     * @param level Level of the archer's tower to be obtained
      *
-     * @since v3.1
+     * @return The {@link ArcherTowerLevel} corresponding to the specified level or, if the specified level does not exist,
+     * corresponding to the configured maximum level.
+     * @throws IllegalArgumentException If the level is not positive
+     * @since 3.2
      */
-    @Nullable
-    public TownHallLevel getTownHall(final int level) {
-        final int index = level - 2;
+    @Nonnull
+    public ArcherTowerLevel getExistingArcherTower(int level) {
+        if (level <= 0)
+            throw new IllegalArgumentException("Building level must be positive");
 
-        return index >= townHalls.size() ? null : townHalls.get(index);
+        if (level > archerTowers.size())
+            level = archerTowers.size();
+
+        return archerTowers.get(level - 1);
     }
 
     /**
-     * @param level Gold extractor level
+     * Gets the configured statistics of the gold extractor
      *
-     * @return {@link GoldExtractorLevel} corresponding to the specified level or {@code null} if the specified
-     * level does not exist
+     * @param level Level of the gold extractor to be obtained
      *
-     * @since v3.1
+     * @return The {@link GoldExtractorLevel} corresponding to the specified level or, if the specified level does not exist,
+     * corresponding to the configured maximum level.
+     * @throws IllegalArgumentException If the level is not positive
+     * @since 3.2
      */
-    @Nullable
-    public GoldExtractorLevel getGoldExtractor(final int level) {
-        final int index = level - 1;
+    @Nonnull
+    public GoldExtractorLevel getExistingGoldExtractor(int level) {
+        if (level <= 0)
+            throw new IllegalArgumentException("Building level must be positive");
 
-        return index >= goldExtractors.size() ? null : goldExtractors.get(index);
+        if (level > goldExtractors.size())
+            level = goldExtractors.size();
+
+        return goldExtractors.get(level - 1);
     }
 
     /**
-     * @param level Elixir extractor level
+     * Gets the configured statistics of the elixir extractor
      *
-     * @return {@link ElixirExtractorLevel} corresponding to the specified level or {@code null} if the
-     * specified level does not exist
+     * @param level Level of the elixir extractor to be obtained
      *
-     * @since v3.1
+     * @return The {@link ElixirExtractorLevel} corresponding to the specified level or, if the specified level does not
+     * exist, corresponding to the configured maximum level.
+     * @throws IllegalArgumentException If the level is not positive
+     * @since 3.2
      */
-    @Nullable
-    public ElixirExtractorLevel getElixirExtractor(final int level) {
-        final int index = level - 1;
+    @Nonnull
+    public ElixirExtractorLevel getExistingElixirExtractor(int level) {
+        if (level <= 0)
+            throw new IllegalArgumentException("Building level must be positive");
 
-        return index >= elixirExtractors.size() ? null : elixirExtractors.get(index);
+        if (level > elixirExtractors.size())
+            level = elixirExtractors.size();
+
+        return elixirExtractors.get(level - 1);
     }
 
     /**
-     * @param level Archer tower level
+     * Gets the configured statistics of the town hall
      *
-     * @return {@link ArcherTowerLevel} corresponding to the specified level or {@code null} if the specified
-     * level does not exist
+     * @param level Level of the town hall to be obtained
      *
-     * @since v3.1
+     * @return The {@link TownHallLevel} corresponding to the specified level or, if the specified level does not exist,
+     * corresponding to the configured maximum level.
+     * @throws IllegalArgumentException If the level is not positive
+     * @since 3.2
      */
-    @Nullable
-    public ArcherTowerLevel getArcherTower(final int level) {
-        final int index = level - 1;
+    @Nonnull
+    public TownHallLevel getExistingTownHall(int level) {
+        if (level <= 0)
+            throw new IllegalArgumentException("Building level must be positive");
 
-        return index >= archerTowers.size() ? null : archerTowers.get(index);
+        if (level > townHalls.size())
+            level = townHalls.size();
+
+        return townHalls.get(level - 1);
     }
 
     /**
-     * @param building Building type
-     *
-     * @return the maximum configured level of the specified building
+     * @return The maximum configured level of the archer tower (0 if the building is disabled)
+     * @since 3.2
      */
-    public int getMaxLevel(@Nonnull final Buildings building) {
-        switch (building) {
-            case ARCHER_TOWER:
-                return archerTowers.size();
-            case GOLD_EXTRACTOR:
-                return goldExtractors.size();
-            case ELIXIR_EXTRACTOR:
-                return elixirExtractors.size();
-            case TOWN_HALL:
-                return townHalls.size() + 1;
-
-            default:
-                throw new IllegalStateException("Unexpected value: " + building);
-        }
+    public int getMaxArcherTowerLevel() {
+        return archerTowers.size();
     }
 
     /**
-     * Check if that type of building is disabled. This occurs when, in the config.yml, the building section is
-     * deleted or is misconfigured.
-     *
-     * @param building Type of the building to be checked
-     *
-     * @return False if building is disabled, otherwise true
-     *
-     * @since v3.1
+     * @return The maximum configured level of the gold extractor (0 if the building is disabled)
+     * @since 3.2
      */
-    public boolean isBuildingEnabled(@Nonnull final Buildings building) {
-        switch (building) {
-            case ARCHER_TOWER:
-                return !archerTowers.isEmpty();
-            case GOLD_EXTRACTOR:
-                return !goldExtractors.isEmpty();
-            case ELIXIR_EXTRACTOR:
-                return !elixirExtractors.isEmpty();
-            case TOWN_HALL:
-                return !townHalls.isEmpty();
+    public int getMaxGoldExtractorLevel() {
+        return goldExtractors.size();
+    }
 
-            default:
-                throw new IllegalStateException("Unexpected value: " + building);
-        }
+    /**
+     * @return The maximum configured level of the elixir extractor (0 if the building is disabled)
+     * @since 3.2
+     */
+    public int getMaxElixirExtractorLevel() {
+        return elixirExtractors.size();
+    }
+
+    /**
+     * @return The maximum configured level of the town hall (0 if the building is disabled)
+     * @since 3.2
+     */
+    public int getMaxTownHallLevel() {
+        return townHalls.size();
+    }
+
+    /**
+     * Check if the archer's tower is disabled. This occurs when, in the config.yml file, the section has been deleted or has
+     * been configured incorrectly.
+     *
+     * @return True if building is enabled, otherwise false
+     * @since 3.2
+     */
+    public boolean isArcherTowerEnabled() {
+        return !archerTowers.isEmpty();
+    }
+
+    /**
+     * Check if the elixir extractor is disabled. This occurs when, in the config.yml file, the section has been deleted or
+     * has been configured incorrectly.
+     *
+     * @return True if building is enabled, otherwise false
+     * @since 3.2
+     */
+    public boolean isElixirExtractorEnabled() {
+        return !elixirExtractors.isEmpty();
+    }
+
+    /**
+     * Check if the gold extractor is disabled. This occurs when, in the config.yml file, the section has been deleted or has
+     * been configured incorrectly.
+     *
+     * @return True if building is enabled, otherwise false
+     * @since 3.2
+     */
+    public boolean isGoldExtractorEnabled() {
+        return !goldExtractors.isEmpty();
+    }
+
+    /**
+     * Check if the town hall is disabled. This occurs when, in the config.yml file, the section has been deleted or has been
+     * configured incorrectly.
+     *
+     * @return True if building is enabled, otherwise false
+     * @since 3.2
+     */
+    public boolean isTownHallEnabled() {
+        return !townHalls.isEmpty();
     }
 
     /**
      * @return True if there is at least one active building, otherwise false
-     *
-     * @since v3.1
+     * @since 3.1
      */
     public boolean anyBuildingEnabled() {
-        for (Buildings type : Buildings.values())
-            if (isBuildingEnabled(type))
-                return true;
-        return false;
-    }
-
-    /**
-     * @param type  Type of building to obtain
-     * @param level Building level in which you are interested
-     *
-     * @return {@link BuildingLevel} corresponding to the specified level or {@code null} if the specified level
-     * does not exist
-     *
-     * @see #getArcherTower(int)
-     * @see #getGoldExtractor(int)
-     * @see #getElixirExtractor(int)
-     * @see #getTownHall(int)
-     */
-    @Nullable
-    public BuildingLevel getBuilding(@Nonnull final Buildings type, final int level) {
-        switch (type) {
-            case ARCHER_TOWER:
-                return getArcherTower(level);
-            case GOLD_EXTRACTOR:
-                return getGoldExtractor(level);
-            case ELIXIR_EXTRACTOR:
-                return getElixirExtractor(level);
-            case TOWN_HALL:
-                return getTownHall(level);
-
-            default:
-                throw new IllegalStateException("Unexpected value: " + type);
-        }
+        return isArcherTowerEnabled() || isGoldExtractorEnabled() || isElixirExtractorEnabled() || isTownHallEnabled();
     }
 
     /**
@@ -589,8 +606,8 @@ public final class Settings extends CoMYamlConfiguration {
     /**
      * @param level Level of which you want to know the command to execute
      *
-     * @return The command to execute when a clan reaches level passed as parameter or {@code null} if no command
-     * has to be executed
+     * @return The command to execute when a clan reaches level passed as parameter or {@code null} if no command has to be
+     * executed
      */
     @Nullable
     public String getClanCommand(final int level) {

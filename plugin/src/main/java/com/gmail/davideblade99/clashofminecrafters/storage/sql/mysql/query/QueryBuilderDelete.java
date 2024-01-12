@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
  * This object can only be instantiated via {@link QueryBuilder}.
  *
  * @author DavideBlade
- * @since v3.1
+ * @since 3.1
  */
 public final class QueryBuilderDelete extends WhereableQueryBuilder {
 

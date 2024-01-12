@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 /**
  * A simple class for representing the dimensions of an object in 2D.
  *
- * @since v3.1.8
+ * @since 3.2
  */
 public final class Size2D {
 

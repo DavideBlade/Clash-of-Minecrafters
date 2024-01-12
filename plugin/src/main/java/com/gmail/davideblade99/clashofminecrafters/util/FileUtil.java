@@ -25,7 +25,7 @@ public final class FileUtil {
      *
      * @param inFile  - the name of embedded file to be copied
      * @param outFile - the file where specified embedded file should be copied
-     * @since v2.0
+     * @since 2.0
      */
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void copyFile(@Nonnull final String inFile, @Nonnull final File outFile) {

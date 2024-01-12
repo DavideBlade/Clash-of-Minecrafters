@@ -21,7 +21,8 @@ import java.util.Set;
 /**
  * Class representing the elixir extractor section in the config.yml
  *
- * @since v3.1.1
+ * @author DavideBlade
+ * @since 3.2
  */
 public final class ElixirExtractorConfiguration extends SectionConfiguration {
 
@@ -33,8 +34,8 @@ public final class ElixirExtractorConfiguration extends SectionConfiguration {
     private final List<ElixirExtractorLevel> elixirExtractors;
 
     /**
-     * Create a new instance of {@link ElixirExtractorConfiguration} and load all the elixir extractors with {@link
-     * #loadElixirExtractors()}
+     * Create a new instance of {@link ElixirExtractorConfiguration} and load all the elixir extractors with
+     * {@link #loadElixirExtractors()}
      *
      * @param configuration Configuration containing the elixir extractors section
      */
@@ -54,9 +55,9 @@ public final class ElixirExtractorConfiguration extends SectionConfiguration {
     }
 
     /**
-     * Reads the elixir extractors section in the {@link SectionConfiguration#section} and builds {@link
-     * ElixirExtractorLevel}s. If a misconfigured level (with invalid or missing settings) is encountered, loading will
-     * be stopped. Elixir extractors loaded to that point, however, will remain valid.
+     * Reads the elixir extractors section in the {@link SectionConfiguration#section} and builds
+     * {@link ElixirExtractorLevel}s. If a misconfigured level (with invalid or missing settings) is encountered, loading
+     * will be stopped. Elixir extractors loaded to that point, however, will remain valid.
      */
     private void loadElixirExtractors() {
         final ConfigurationSection elixirExtractorSection = super.section;

@@ -6,10 +6,9 @@
 
 package com.gmail.davideblade99.clashofminecrafters.menu;
 
-import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.menu.item.*;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -28,8 +27,7 @@ public final class UpgradeShop extends Menu {
     }
 
     /**
-     * Creates items to be used in the upgrade shop based on the user's statistics (e.g. level of unlocked
-     * constructions)
+     * Creates items to be used in the upgrade shop based on the user's statistics (e.g. level of unlocked constructions)
      *
      * @param plugin Plugin instance
      * @param user   User from whom to retrieve information
@@ -42,87 +40,147 @@ public final class UpgradeShop extends Menu {
         final List<BaseItem> items = new ArrayList<>(4);
 
         // Show item only if building is not disabled
-        if (config.isBuildingEnabled(Buildings.ARCHER_TOWER)) {
-            final byte slot = 10;
-            final Buildings currentBuilding = Buildings.ARCHER_TOWER;
-            final int currentLevel = user.getBuildingLevel(currentBuilding);
-
-            items.add(createBuildingItem(plugin, currentBuilding, currentLevel, slot));
-        }
+        if (config.isArcherTowerEnabled())
+            items.add(createArcherTowerUpgradeItem(plugin, user.getArcherTower() == null ? 0 : user.getArcherTower().getLevel(), (byte) 10));
 
         // Show item only if building is not disabled
-        if (config.isBuildingEnabled(Buildings.ELIXIR_EXTRACTOR)) {
-            final byte slot = 13;
-            final Buildings currentBuilding = Buildings.ELIXIR_EXTRACTOR;
-            final int currentLevel = user.getBuildingLevel(currentBuilding);
-
-            items.add(createBuildingItem(plugin, currentBuilding, currentLevel, slot));
-        }
+        if (config.isElixirExtractorEnabled())
+            items.add(createElixirExtractorUpgradeItem(plugin, user.getElixirExtractor() == null ? 0 : user.getElixirExtractor().getLevel(), (byte) 13));
 
         // Show item only if building is not disabled
-        if (config.isBuildingEnabled(Buildings.GOLD_EXTRACTOR)) {
-            final byte slot = 16;
-            final Buildings currentBuilding = Buildings.GOLD_EXTRACTOR;
-            final int currentLevel = user.getBuildingLevel(currentBuilding);
-
-            items.add(createBuildingItem(plugin, currentBuilding, currentLevel, slot));
-        }
+        if (config.isGoldExtractorEnabled())
+            items.add(createGoldExtractorUpgradeItem(plugin, user.getGoldExtractor() == null ? 0 : user.getGoldExtractor().getLevel(), (byte) 16));
 
         // Show item only if building is not disabled
-        if (config.isBuildingEnabled(Buildings.TOWN_HALL)) {
-            final byte slot = 22;
-            final Buildings currentBuilding = Buildings.TOWN_HALL;
-            final int currentLevel = user.getBuildingLevel(currentBuilding);
-
-            items.add(createBuildingItem(plugin, currentBuilding, currentLevel, slot));
-        }
+        if (config.isTownHallEnabled())
+            items.add(createTownHallUpgradeItem(plugin, user.getTownHallLevel(), (byte) 22));
 
         return items;
     }
 
     /**
-     * Builds an item based on the level of construction
+     * Builds the item representing the archer's tower in the menu of upgrades (/upgrade)
      *
-     * @param plugin   Plugin instance
-     * @param building Building type
-     * @param level    Building level
-     * @param slot     Slot in which to place the item
+     * @param plugin Plugin instance
+     * @param level  Current building level
+     * @param slot   Slot in which to place the item
      *
-     * @return A {@link BaseItem}
-     *
-     * @since v3.0.3
+     * @return A new {@link BaseItem}
+     * @since 3.2
      */
-    private static BaseItem createBuildingItem(@Nonnull final CoM plugin, @Nonnull final Buildings building, int level, final byte slot) {
-        final Settings config = plugin.getConfig();
-
-        //TODO: usare max() anziché considerarlo come livello 0 -> meno problemi e più ragionevole -> metterlo nel get() visto che è condiviso tra tutti
+    private static BaseItem createArcherTowerUpgradeItem(@Nonnull final CoM plugin, final int level, final byte slot) {
         /*
          * If any player has a level higher than the current maximum level
          * (e.g., some levels have been removed from the config.yml),
-         * they are treated as if they have not purchased any upgrades
-         * and must therefore start over.
+         * the currently configured maximum level is taken into account.
          */
-        final int maxLevel = config.getMaxLevel(building);
-        if (level > maxLevel)
-            level = building == Buildings.TOWN_HALL ? 1 : 0; // The base level of the town hall is 1 while for other buildings is 0
+        final Settings config = plugin.getConfig();
+        final int maxLevel = config.getMaxArcherTowerLevel();
 
-
-        if (level < maxLevel) {
-            switch (building) {
-                case TOWN_HALL:
-                    return new TownHallUpgradeItem(plugin, config.getBuilding(building, level + 1), slot);
-                case ARCHER_TOWER:
-                    return new ArcherTowerUpgradeItem(plugin, config.getBuilding(building, level + 1), slot);
-                case GOLD_EXTRACTOR:
-                    return new GoldExtractorUpgradeItem(plugin, config.getBuilding(building, level + 1), slot);
-                case ELIXIR_EXTRACTOR:
-                    return new ElixirExtractorUpgradeItem(plugin, config.getBuilding(building, level + 1), slot);
-                default:
-                    throw new IllegalStateException("Unexpected building type: " + building);
-            }
-        } else // Max level
+        if (level < maxLevel)
+            return new ArcherTowerUpgradeItem(plugin, config.getExistingArcherTower(level + 1), slot);
+        else // Max level
         {
-            final ItemStack item = config.getBuilding(building, level).getItem(plugin);
+            final ItemStack item = config.getExistingArcherTower(maxLevel).getItem(plugin);
+            final ItemMeta meta = item.getItemMeta();
+            if (meta != null)
+                meta.setLore(Collections.singletonList(MAX_LEVEL));
+            item.setItemMeta(meta);
+
+            return new UnclickableItem(item, slot);
+        }
+    }
+
+    /**
+     * Builds the item representing the gold extractor in the menu of upgrades (/upgrade)
+     *
+     * @param plugin Plugin instance
+     * @param level  Current building level
+     * @param slot   Slot in which to place the item
+     *
+     * @return A new {@link BaseItem}
+     * @since 3.2
+     */
+    private static BaseItem createGoldExtractorUpgradeItem(@Nonnull final CoM plugin, final int level, final byte slot) {
+        /*
+         * If any player has a level higher than the current maximum level
+         * (e.g., some levels have been removed from the config.yml),
+         * the currently configured maximum level is taken into account.
+         */
+        final Settings config = plugin.getConfig();
+        final int maxLevel = config.getMaxGoldExtractorLevel();
+
+        if (level < maxLevel)
+            return new GoldExtractorUpgradeItem(plugin, config.getExistingGoldExtractor(level + 1), slot);
+        else // Max level
+        {
+            final ItemStack item = config.getExistingGoldExtractor(maxLevel).getItem(plugin);
+            final ItemMeta meta = item.getItemMeta();
+            if (meta != null)
+                meta.setLore(Collections.singletonList(MAX_LEVEL));
+            item.setItemMeta(meta);
+
+            return new UnclickableItem(item, slot);
+        }
+    }
+
+    /**
+     * Builds the item representing the elixir extractor in the menu of upgrades (/upgrade)
+     *
+     * @param plugin Plugin instance
+     * @param level  Current building level
+     * @param slot   Slot in which to place the item
+     *
+     * @return A new {@link BaseItem}
+     * @since 3.2
+     */
+    private static BaseItem createElixirExtractorUpgradeItem(@Nonnull final CoM plugin, final int level, final byte slot) {
+        /*
+         * If any player has a level higher than the current maximum level
+         * (e.g., some levels have been removed from the config.yml),
+         * the currently configured maximum level is taken into account.
+         */
+        final Settings config = plugin.getConfig();
+        final int maxLevel = config.getMaxElixirExtractorLevel();
+
+        if (level < maxLevel)
+            return new ElixirExtractorUpgradeItem(plugin, config.getExistingElixirExtractor(level + 1), slot);
+        else // Max level
+        {
+            final ItemStack item = config.getExistingElixirExtractor(maxLevel).getItem(plugin);
+            final ItemMeta meta = item.getItemMeta();
+            if (meta != null)
+                meta.setLore(Collections.singletonList(MAX_LEVEL));
+            item.setItemMeta(meta);
+
+            return new UnclickableItem(item, slot);
+        }
+    }
+
+    /**
+     * Builds the item representing the town hall in the menu of upgrades (/upgrade)
+     *
+     * @param plugin Plugin instance
+     * @param level  Current building level
+     * @param slot   Slot in which to place the item
+     *
+     * @return A new {@link BaseItem}
+     * @since 3.2
+     */
+    private static BaseItem createTownHallUpgradeItem(@Nonnull final CoM plugin, final int level, final byte slot) {
+        /*
+         * If any player has a level higher than the current maximum level
+         * (e.g., some levels have been removed from the config.yml),
+         * the currently configured maximum level is taken into account.
+         */
+        final Settings config = plugin.getConfig();
+        final int maxLevel = config.getMaxTownHallLevel();
+
+        if (level < maxLevel)
+            return new TownHallUpgradeItem(plugin, config.getExistingTownHall(level + 1), slot);
+        else // Max level
+        {
+            final ItemStack item = config.getExistingTownHall(maxLevel).getItem(plugin);
             final ItemMeta meta = item.getItemMeta();
             if (meta != null)
                 meta.setLore(Collections.singletonList(MAX_LEVEL));

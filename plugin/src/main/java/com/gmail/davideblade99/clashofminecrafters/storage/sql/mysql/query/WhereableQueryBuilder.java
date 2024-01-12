@@ -17,7 +17,7 @@ import java.util.List;
  * @see QueryBuilderSelect
  * @see QueryBuilderUpdate
  * @see QueryBuilderDelete
- * @since v3.1
+ * @since 3.1
  */
 abstract class WhereableQueryBuilder extends QueryBuilderBase {
 

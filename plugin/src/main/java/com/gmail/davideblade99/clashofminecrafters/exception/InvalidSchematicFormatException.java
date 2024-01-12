@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 /**
  * Exception indicating that the format of a schematic file is incorrect
  *
- * @since v3.1.2
+ * @since 3.1.2
  */
 public final class InvalidSchematicFormatException extends SchematicException {
     public InvalidSchematicFormatException() { }

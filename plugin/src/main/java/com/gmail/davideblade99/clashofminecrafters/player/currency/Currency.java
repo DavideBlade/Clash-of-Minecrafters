@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
  *
  * @author DavideBlade
  * @see Currencies
- * @since v3.1.4
+ * @since 3.1.4
  */
 public interface Currency {
 

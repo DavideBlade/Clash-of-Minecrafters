@@ -7,7 +7,6 @@
 package com.gmail.davideblade99.clashofminecrafters.setting;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ItemBuilder;
 import com.google.common.collect.ImmutableList;
@@ -17,14 +16,16 @@ import org.bukkit.potion.PotionEffectType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 import java.util.List;
 
 /**
  * Represents a level of the town hall, configured in the config.yml
  *
  * @author DavideBlade
- * @since v3.1.4
+ * @since 3.1.4
  */
+@Immutable
 public final class TownHallLevel extends BuildingLevel {
 
     private final String command; //TODO: questo comando privato come fa ad essere eseguito?
@@ -62,10 +63,10 @@ public final class TownHallLevel extends BuildingLevel {
     public final List<PotionEffectType> potions;
 
     /**
-     * Creates a new level for the town hall with the specified parameters with the default guardian (without extra
-     * equipment or hearts) and without any schematic
+     * Creates a new level for the town hall with the specified parameters with the default guardian (without extra equipment
+     * or hearts) and without any schematic
      *
-     * @param level    Level of the town hall
+     * @param level    Level of the town hall, greater than 0
      * @param price    Cost of building for this {@code level}
      * @param currency {@code price} currency
      * @param command  Command to be executed when {@code this} level is reached
@@ -79,7 +80,7 @@ public final class TownHallLevel extends BuildingLevel {
     /**
      * Creates a new level for the town hall with the specified parameters and without any schematic
      *
-     * @param level      Level of the town hall
+     * @param level      Level of the town hall, greater than 0
      * @param price      Cost of building for this {@code level}
      * @param currency   {@code price} currency
      * @param command    Command to be executed when {@code this} level is reached
@@ -90,8 +91,7 @@ public final class TownHallLevel extends BuildingLevel {
      * @param boots      Boots of the island guardian
      * @param potions    Effects to apply to the island guardian
      *
-     * @see #TownHallLevel(int, int, Currencies, String, byte, Material, Material, Material, Material, List,
-     * String)
+     * @see #TownHallLevel(int, int, Currencies, String, byte, Material, Material, Material, Material, List, String)
      */
     public TownHallLevel(final int level, final int price, @Nonnull final Currencies currency, @Nullable final String command, final byte hearts, @Nullable final Material helmet, @Nullable final Material chestplate, @Nullable final Material leggings, @Nullable final Material boots, @Nullable final List<PotionEffectType> potions) {
         this(level, price, currency, command, hearts, helmet, chestplate, leggings, boots, potions, null);
@@ -100,7 +100,7 @@ public final class TownHallLevel extends BuildingLevel {
     /**
      * Creates a new level for the town hall with the specified parameters
      *
-     * @param level      Level of the town hall
+     * @param level      Level of the town hall, greater than 0
      * @param price      Cost of building for this {@code level}
      * @param currency   {@code price} currency
      * @param command    Command to be executed when {@code this} level is reached
@@ -110,19 +110,16 @@ public final class TownHallLevel extends BuildingLevel {
      * @param leggings   Leggings of the island guardian
      * @param boots      Boots of the island guardian
      * @param potions    Effects to apply to the island guardian
-     * @param schematic  Schematic for this {@code level}, which will be pasted at the time of purchase. {@code
-     *                   Null} if this {@code level} does not have a schematic.
+     * @param schematic  Schematic for this {@code level}, which will be pasted at the time of purchase. {@code Null} if this
+     *                   {@code level} does not have a schematic.
      *
-     * @throws IllegalArgumentException If the level is less than {@link Buildings#firstLevel} or if the number of
-     *                                  hearts is not positive
+     * @throws IllegalArgumentException If the number of hearts is less than or equal to 0
      */
     public TownHallLevel(final int level, final int price, @Nonnull final Currencies currency, @Nullable final String command, final byte hearts, @Nullable final Material helmet, @Nullable final Material chestplate, @Nullable final Material leggings, @Nullable final Material boots, @Nullable final List<PotionEffectType> potions, @Nullable final String schematic) {
         super(level, price, currency, schematic);
 
-        if (level < Buildings.TOWN_HALL.firstLevel)
-            throw new IllegalArgumentException("Invalid level: must be greater than or equal to " + Buildings.TOWN_HALL.firstLevel);
         if (hearts <= 0)
-            throw new IllegalArgumentException("Invalid health: must be a positive number");
+            throw new IllegalArgumentException("Invalid health: '" + hearts + "' is not a positive number");
 
         this.command = command;
         this.hearts = hearts;
@@ -145,13 +142,5 @@ public final class TownHallLevel extends BuildingLevel {
         itemBuilder.addLoreLine("&7&lPrice:&4 " + super.price + " " + super.currency);
 
         return itemBuilder.build();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isFirstLevel() {
-        return super.level == Buildings.TOWN_HALL.firstLevel;
     }
 }

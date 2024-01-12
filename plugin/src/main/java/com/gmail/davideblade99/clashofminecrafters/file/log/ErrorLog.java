@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
  *
  * @see DumpableData
  * @see #writeLog()
- * @since v3.1
+ * @since 3.1
  */
 public final class ErrorLog {
 
@@ -39,10 +39,7 @@ public final class ErrorLog {
      *
      * @param plugin    Plugin instance
      * @param exception Exception from which to retrieve the stack trace and error details to be logged
-     * @param action    Action that you were trying to execute and that caused the exception (e.g. load user from
-     *                  database)
-     *
-     * @since v3.1
+     * @param action    Action that you were trying to execute and that caused the exception (e.g. load user from database)
      */
     public ErrorLog(@Nonnull final Plugin plugin, @Nonnull final Exception exception, @Nonnull final String action) {
         this(plugin, exception, null, action, (String) null);
@@ -54,10 +51,7 @@ public final class ErrorLog {
      * @param plugin    Plugin instance
      * @param exception Exception from which to retrieve the stack trace and error details to be logged
      * @param target    Target of the action or {@code null} if there is none
-     * @param action    Action that you were trying to execute and that caused the exception (e.g. load user from
-     *                  database)
-     *
-     * @since v3.1
+     * @param action    Action that you were trying to execute and that caused the exception (e.g. load user from database)
      */
     public ErrorLog(@Nonnull final Plugin plugin, @Nonnull final Exception exception, @Nullable final String target, @Nonnull final String action) {
         this(plugin, exception, target, action, (String) null);
@@ -69,13 +63,12 @@ public final class ErrorLog {
      * @param plugin       Plugin instance
      * @param exception    Exception from which to retrieve the stack trace and error details to be logged
      * @param target       Target of the action or {@code null} if there is none
-     * @param action       Action that you were trying to execute and that caused the exception (e.g. load user
-     *                     from database)
+     * @param action       Action that you were trying to execute and that caused the exception (e.g. load user from
+     *                     database)
      * @param dumpableData Class from which to extract a dump of the data to be recorded in the log file using
      *                     {@link DumpableData#getDataDump()} or {@code null} if there is no data to store
      *
      * @see DumpableData#getDataDump()
-     * @since v3.1
      */
     public ErrorLog(@Nonnull final Plugin plugin, @Nonnull final Exception exception, @Nullable final String target, @Nonnull final String action, @Nullable final DumpableData dumpableData) {
         this(plugin, exception, target, action, dumpableData == null ? null : dumpableData.getDataDump());
@@ -87,12 +80,8 @@ public final class ErrorLog {
      * @param plugin    Plugin instance
      * @param exception Exception from which to retrieve the stack trace and error details to be logged
      * @param target    Target of the action or {@code null} if there is none
-     * @param action    Action that you were trying to execute and that caused the exception (e.g. load user from
-     *                  database)
-     * @param dataDump  Dump of the data to be recorded in the log file or {@code null} if there is no data to
-     *                  store
-     *
-     * @since v3.1
+     * @param action    Action that you were trying to execute and that caused the exception (e.g. load user from database)
+     * @param dataDump  Dump of the data to be recorded in the log file or {@code null} if there is no data to store
      */
     public ErrorLog(@Nonnull final Plugin plugin, @Nonnull final Exception exception, @Nullable final String target, @Nonnull final String action, @Nullable final String dataDump) {
         this.plugin = plugin;
@@ -105,8 +94,6 @@ public final class ErrorLog {
     /**
      * Asynchronously writes all error information to a file named {@code sqlerror.<timestamp>.txt}, where {@code
      * <timestamp>} is replaced with the value returned by {@link System#currentTimeMillis()} method.
-     *
-     * @since v3.1
      */
     public void writeLog() {
         final Path filePath = Paths.get(plugin.getDataFolder().getPath(), "sqlerror." + System.currentTimeMillis() + ".txt");

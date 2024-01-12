@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
  * Class representing the {@link Currencies#GEMS} currency
  *
  * @author DavideBlade
- * @since v3.1.4
+ * @since 3.1.4
  */
 public final class Gems implements Currency {
 

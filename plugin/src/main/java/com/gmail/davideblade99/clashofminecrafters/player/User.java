@@ -7,21 +7,22 @@
 package com.gmail.davideblade99.clashofminecrafters.player;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
+import com.gmail.davideblade99.clashofminecrafters.building.ArcherTower;
+import com.gmail.davideblade99.clashofminecrafters.building.ElixirExtractor;
+import com.gmail.davideblade99.clashofminecrafters.building.GoldExtractor;
 import com.gmail.davideblade99.clashofminecrafters.exception.PastingException;
 import com.gmail.davideblade99.clashofminecrafters.exception.WorldBorderReachedException;
-import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.currency.Balance;
 import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
-import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
-import com.gmail.davideblade99.clashofminecrafters.setting.BuildingLevel;
 import com.gmail.davideblade99.clashofminecrafters.setting.ExtractorLevel;
+import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ScoreboardUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.util.number.IntegerUtil;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -41,26 +42,25 @@ public final class User {
     private final Balance balance;
     private int trophies;
     private String clanName;
-    private int elixirExtractorLevel;
-    private int goldExtractorLevel;
-    private int archerLevel;
-    private Vector archerLoc;
+    private ElixirExtractor elixirExtractor;
+    private GoldExtractor goldExtractor;
+    private ArcherTower archerTower;
     private Village village;
     private LocalDateTime collectionTime;
     private int townHallLevel;
 
     /**
-     * Create a new user from the {@code base} player. If he has already played on the server, the data will be
-     * automatically retrieved from the database, otherwise they will be generated.
+     * Create a new user from the {@code base} player. If he has already played on the server, the data will be automatically
+     * retrieved from the database, otherwise they will be generated.
      *
      * @param plugin Plugin instance
      * @param base   Core player
      *
      * @throws RuntimeException         If an error occurs with the database
-     * @throws IllegalArgumentException If the level of the buildings are negative or the level of the town hall is
-     *                                  less than 1
-     * @throws IllegalStateException    If the base player has never entered the server: you are creating a user of
-     *                                  a non-existent player, whose files in the world folder do not even exist
+     * @throws IllegalArgumentException If the level of the buildings are negative or the level of the town hall is less than
+     *                                  1
+     * @throws IllegalStateException    If the base player has never entered the server: you are creating a user of a
+     *                                  non-existent player, whose files in the world folder do not even exist
      */
     public User(@Nonnull final CoM plugin, @Nonnull final OfflinePlayer base) {
         this.plugin = plugin;
@@ -75,7 +75,6 @@ public final class User {
 
             final Settings config = plugin.getConfig();
             this.balance = new Balance(config.getStartingGold(), config.getStartingElixir(), config.getStartingGems());
-            this.townHallLevel = 1; // The base level of the town hall is 1
 
             // Store default values in the database
             updateDatabase();
@@ -85,19 +84,16 @@ public final class User {
             this.balance = userDatabaseType.balance;
             this.trophies = userDatabaseType.trophies;
             this.clanName = userDatabaseType.clanName;
-            this.elixirExtractorLevel = userDatabaseType.elixirExtractorLevel;
-            this.goldExtractorLevel = userDatabaseType.goldExtractorLevel;
-            this.archerLevel = userDatabaseType.archerTowerLevel;
-            this.archerLoc = userDatabaseType.archerTowerLoc;
+            this.elixirExtractor = userDatabaseType.elixirExtractor;
+            this.goldExtractor = userDatabaseType.goldExtractor;
+            this.archerTower = userDatabaseType.archerTower;
             this.village = userDatabaseType.island;
             this.collectionTime = userDatabaseType.collectionTime;
             this.townHallLevel = userDatabaseType.townHallLevel;
 
-            // Valiate levels
-            if (elixirExtractorLevel < 0 || goldExtractorLevel < 0 || archerLevel < 0)
-                throw new IllegalArgumentException("Invalid building level: must be greater than or equal to 0.");
-            if (townHallLevel < 1)
-                throw new IllegalArgumentException("Invalid town hall level: must be greater than or equal to 1.");
+            // Validate town hall level
+            if (townHallLevel < 0)
+                throw new IllegalArgumentException("Invalid town hall level: must be greater than or equal to 0.");
         }
     }
 
@@ -185,7 +181,7 @@ public final class User {
     /**
      * Updates the data in the player's scoreboard if he is an online player
      *
-     * @since v3.1.4
+     * @since 3.1.4
      */
     private void refreshScoreboard() {
         if (getBase() instanceof Player)
@@ -195,9 +191,9 @@ public final class User {
     /**
      * Update the database with new player data
      *
-     * @since v3.1.4
+     * @since 3.2
      */
-    private void updateDatabase() {
+    public void updateDatabase() {
         plugin.getDatabase().storeUser(getBase().getUniqueId(), this);
     }
 
@@ -251,154 +247,135 @@ public final class User {
         setClanName(null);
     }
 
-    public boolean hasBuilding(@Nonnull final Buildings type) {
-        return getBuildingLevel(type) > 0; // If the level is 0 it means that the player has not unlocked the building
+    /**
+     * Checks whether the user owns any level of the archer's tower
+     *
+     * @return True if the user purchased the building, otherwise false
+     * @since 3.2
+     */
+    public boolean hasUnlockedArcherTower() {
+        return archerTower != null;
+    }
+
+    /**
+     * Checks whether the user owns any level of the gold extractor
+     *
+     * @return True if the user purchased the building, otherwise false
+     * @since 3.2
+     */
+    public boolean hasUnlockedGoldExtractor() {
+        return goldExtractor != null;
+    }
+
+    /**
+     * Checks whether the user owns any level of the elixir extractor
+     *
+     * @return True if the user purchased the building, otherwise false
+     * @since 3.2
+     */
+    public boolean hasUnlockedElixirExtractor() {
+        return elixirExtractor != null;
     }
 
     /**
      * Checks whether the player has unlocked at least one type of extractor
      *
      * @return True if the player owns at least one extractor, otherwise false
-     *
-     * @since v3.1.2
+     * @since 3.1.2
      */
     public boolean hasExtractor() {
-        return getBuilding(Buildings.GOLD_EXTRACTOR) != null || getBuilding(Buildings.ELIXIR_EXTRACTOR) != null;
+        return hasUnlockedGoldExtractor() || hasUnlockedElixirExtractor();
     }
 
     /**
-     * Gets the level unlocked by the player for the specified building
+     * Gets the level of the town hall unlocked by the player
      *
-     * @param type Type of building of which to obtain the level
-     *
-     * @return the building level or 0 if the player did not buy the building or some error has occurred
+     * @return the building level or 0 if the player did not buy the building
+     * @since 3.2
      */
-    public int getBuildingLevel(@Nonnull final Buildings type) {
-        switch (type) {
-            case ARCHER_TOWER:
-                return archerLevel;
-            case GOLD_EXTRACTOR:
-                return goldExtractorLevel;
-            case ELIXIR_EXTRACTOR:
-                return elixirExtractorLevel;
-            case TOWN_HALL:
-                return townHallLevel;
-            default:
-                throw new IllegalStateException("Unexpected value: " + type);
-        }
+    public int getTownHallLevel() {
+        return townHallLevel;
     }
 
     /**
-     * @param type Type of construction to obtain
-     *
-     * @return the {@link BuildingLevel} corresponding to the level the player has unlocked or {@code null} if
-     * the player has not unlocked the building or if the level is not found among the configured ones (this can
-     * happen if, for example, there is a configuration error or if levels have been deleted)
-     */
-    @Nullable
-    public BuildingLevel getBuilding(@Nonnull final Buildings type) {
-        final int currentLevel = getBuildingLevel(type);
-
-        // If the level is 1, it means that the player has the basic level of the town hall (never upgraded it)
-        if (type == Buildings.TOWN_HALL && currentLevel == 1)
-            return null;
-        // If the level is 0 it means that the player does not have the building (never unlocked)
-        if (type != Buildings.TOWN_HALL && currentLevel == 0)
-            return null;
-
-        return plugin.getConfig().getBuilding(type, currentLevel);
-    }
-
-    /**
-     * Upgrades the building without performing any checks (player's balance, placement within the village, etc.).
-     * Sends a message to the player if he has already reached the maximum level of the building (can no longer
-     * upgrade it) and if the upgrade was successful. Removes the cost of the upgrade from the player's balance.
-     *
-     * @param building building to upgrade
-     */
-    public void upgradeBuilding(@Nonnull final Buildings building) {
-        final int nextLevel = getBuildingLevel(building) + 1;
-
-        final String replacement;
-        switch (building) {
-            case ARCHER_TOWER:
-                replacement = Messages.getMessage(MessageKey.ARCHER_TOWER);
-                break;
-            case GOLD_EXTRACTOR:
-                replacement = Messages.getMessage(MessageKey.GOLD_EXTRACTOR);
-                break;
-            case ELIXIR_EXTRACTOR:
-                replacement = Messages.getMessage(MessageKey.ELIXIR_EXTRACTOR);
-                break;
-            case TOWN_HALL:
-                replacement = Messages.getMessage(MessageKey.TOWN_HALL);
-                break;
-
-            default:
-                throw new IllegalStateException("Unexpected building: " + building);
-        }
-
-        // Max level reached
-        if (nextLevel > plugin.getConfig().getMaxLevel(building)) {
-            if (getBase() instanceof Player)
-                MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.MAX_LEVEL_REACHED, replacement));
-            return;
-        }
-
-        final BuildingLevel nextBuilding = plugin.getConfig().getBuilding(building, nextLevel);
-
-        removeBalance(nextBuilding.price, nextBuilding.currency);
-        setBuildingLevel(nextLevel, building);
-
-        if (getBase() instanceof Player)
-            MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.UPGRADE_COMPLETED, replacement, String.valueOf(nextLevel)));
-    }
-
-    /**
-     * Set the level of the specified building
+     * Sets the specified level for the town hall
      *
      * @param level New level to set, greater than or equal to 0
-     * @param type  Type of building which level is to be set
      *
      * @throws IllegalArgumentException If the level is negative
-     * @throws IllegalStateException    If the building type does not exist
      */
-    private void setBuildingLevel(final int level, @Nonnull final Buildings type) {
+    public void setTownHallLevel(final int level) {
         if (level < 0)
-            throw new IllegalArgumentException("Level must be greater than or equal to 0");
+            throw new IllegalArgumentException("'" + level + "' is not a valid town hall level: it must be greater than or equal to 0");
 
-        switch (type) {
-            case ARCHER_TOWER:
-                archerLevel = level;
-                break;
-            case GOLD_EXTRACTOR:
-                goldExtractorLevel = level;
-                break;
-            case ELIXIR_EXTRACTOR:
-                elixirExtractorLevel = level;
-                break;
-            case TOWN_HALL:
-                townHallLevel = level;
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + type);
-        }
+        this.townHallLevel = level;
+    }
+
+    /**
+     * @return {@link ElixirExtractor} owned by the player or {@code} if the player has never purchased one
+     * @since 3.2
+     */
+    @Nullable
+    public ElixirExtractor getElixirExtractor() {
+        return elixirExtractor;
+    }
+
+    /**
+     * Creates a new level 1 elixir extractor that replaces the old one and saves it in the database
+     *
+     * @param corner1 Any corner of the building
+     * @param corner2 Corner of building opposite to {@code corner1}
+     *
+     * @since 3.2
+     */
+    public void newElixirExtractor(@Nonnull final Vector corner1, @Nonnull final Vector corner2) {
+        this.elixirExtractor = new ElixirExtractor(1, corner1, corner2);
 
         updateDatabase();
     }
 
+    /**
+     * @return {@link GoldExtractor} owned by the player or {@code} if the player has never purchased one
+     * @since 3.2
+     */
     @Nullable
-    public Location getTowerLoc() {
-        return archerLoc == null ? null : new Location(plugin.getVillageHandler().getVillageWorld(), archerLoc.getX(), archerLoc.getY(), archerLoc.getZ());
+    public GoldExtractor getGoldExtractor() {
+        return goldExtractor;
     }
 
-    @Nullable
-    public Vector getTowerPos() {
-        return archerLoc;
+    /**
+     * Creates a new level 1 gold extractor that replaces the old one and saves it in the database
+     *
+     * @param corner1 Any corner of the building
+     * @param corner2 Corner of building opposite to {@code corner1}
+     *
+     * @since 3.2
+     */
+    public void newGoldExtractor(@Nonnull final Vector corner1, @Nonnull final Vector corner2) {
+        this.goldExtractor = new GoldExtractor(1, corner1, corner2);
+
+        updateDatabase();
     }
 
-    public void setArcherPos(@Nonnull final Vector position) {
-        archerLoc = position;
+    /**
+     * @return {@link ArcherTower} owned by the player or {@code} if the player has never purchased one
+     * @since 3.2
+     */
+    @Nullable
+    public ArcherTower getArcherTower() {
+        return archerTower;
+    }
+
+    /**
+     * Creates a new level 1 archer tower that replaces the old one and saves it in the database
+     *
+     * @param corner1 Any corner of the building
+     * @param corner2 Corner of building opposite to {@code corner1}
+     *
+     * @since 3.2
+     */
+    public void newArcherTower(@Nonnull final Vector corner1, @Nonnull final Vector corner2) {
+        this.archerTower = new ArcherTower(1, corner1, corner2);
 
         updateDatabase();
     }
@@ -441,8 +418,7 @@ public final class User {
      * @param loc New spawn point to be set
      *
      * @return True if the location was safe and the new spawn could be set, otherwise false
-     *
-     * @since v3.1.4
+     * @since 3.1.4
      */
     public boolean setIslandSpawn(@Nonnull final Location loc) {
         final boolean result = village.setSpawn(loc);
@@ -462,13 +438,21 @@ public final class User {
      * Collects all resources in the extractors unlocked by the player
      */
     public void collectExtractors() {
-        final ExtractorLevel goldExtractor = (ExtractorLevel) this.getBuilding(Buildings.GOLD_EXTRACTOR);
-        final ExtractorLevel elixirExtractor = (ExtractorLevel) this.getBuilding(Buildings.ELIXIR_EXTRACTOR);
+        if (hasUnlockedGoldExtractor()) // If the player bought the gold extractor
+            /*
+             * If any player has a level higher than the current maximum level
+             * (e.g., some levels have been removed from the config.yml),
+             * the currently configured maximum level is taken into account.
+             */
+            this.addBalance(getResourcesProduced(plugin.getConfig().getExistingGoldExtractor(goldExtractor.getLevel()), this.collectionTime), Currencies.GOLD);
 
-        if (goldExtractor != null) // If the player bought the gold extractor
-            this.addBalance(getResourcesProduced(goldExtractor, this.collectionTime), Currencies.GOLD);
-        if (elixirExtractor != null) // If the player bought the elixir extractor
-            this.addBalance(getResourcesProduced(elixirExtractor, this.collectionTime), Currencies.ELIXIR);
+        if (hasUnlockedElixirExtractor()) // If the player bought the elixir extractor
+            /*
+             * If any player has a level higher than the current maximum level
+             * (e.g., some levels have been removed from the config.yml),
+             * the currently configured maximum level is taken into account.
+             */
+            this.addBalance(getResourcesProduced(plugin.getConfig().getExistingElixirExtractor(elixirExtractor.getLevel()), this.collectionTime), Currencies.ELIXIR);
 
         // Update collection time
         this.collectionTime = LocalDateTime.now();
@@ -478,8 +462,8 @@ public final class User {
     }
 
     /**
-     * Calculates the resources produced by the specified extractor since the last time the user collected. If the
-     * amount produced exceeds the capacity of the extractor, the capacity will be returned.
+     * Calculates the resources produced by the specified extractor since the last time the user collected. If the amount
+     * produced exceeds the capacity of the extractor, the capacity will be returned.
      *
      * @param extractor      Extractor that produces the resources to be calculated
      * @param collectionTime Timestamp of the last time the player collected from the extractor
@@ -532,10 +516,9 @@ public final class User {
                 ", gems=" + balance.getGems() +
                 ", trophies=" + trophies +
                 ", clan='" + clanName + "'" +
-                ", elixir extractor level=" + elixirExtractorLevel +
-                ", gold extractor level=" + goldExtractorLevel +
-                ", archer level=" + archerLevel +
-                ", archer location=" + archerLoc +
+                ", elixir extractor=" + elixirExtractor +
+                ", gold extractor=" + goldExtractor +
+                ", archer tower=" + archerTower +
                 ", island=" + village +
                 ", collection time=" + collectionTime +
                 ", town hall level=" + townHallLevel +

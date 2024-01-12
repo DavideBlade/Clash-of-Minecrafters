@@ -14,7 +14,7 @@ import java.util.EnumMap;
  *
  * @author DavideBlade
  * @see Currencies
- * @since v3.1.4
+ * @since 3.1.4
  */
 public final class Balance {
 
@@ -73,9 +73,8 @@ public final class Balance {
     }
 
     /**
-     * Adds the specified amount in the specified currency. If with the amount to be added you exceed limit of a
-     * currency, if any, only the amount to reach the maximum will be added. In other words, no overflow can
-     * occur.
+     * Adds the specified amount in the specified currency. If with the amount to be added you exceed limit of a currency, if
+     * any, only the amount to reach the maximum will be added. In other words, no overflow can occur.
      *
      * @param currency Currency of the {@code amount}
      * @param amount   Amount to add
@@ -87,8 +86,8 @@ public final class Balance {
     }
 
     /**
-     * Removed the specified amount in the specified currency. If with the amount to be removed goes below 0, only
-     * the amount to get to 0 will be removed.
+     * Removed the specified amount in the specified currency. If with the amount to be removed goes below 0, only the amount
+     * to get to 0 will be removed.
      *
      * @param currency Currency of the {@code amount}
      * @param amount   Amount to remove

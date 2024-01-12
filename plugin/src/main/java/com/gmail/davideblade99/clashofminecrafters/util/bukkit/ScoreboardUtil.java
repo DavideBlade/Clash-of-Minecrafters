@@ -34,7 +34,7 @@ public final class ScoreboardUtil {
      *
      * @return A new {@link Scoreboard}
      *
-     * @since v3.1.4
+     * @since 3.1.4
      */
     @Nonnull
     public static Scoreboard createScoreboard(@Nonnull final Balance balance, final int trophies) {
@@ -69,7 +69,7 @@ public final class ScoreboardUtil {
      * @param trophies   New trophies to show
      * @param scoreboard Scoreboard to be updated
      *
-     * @since v3.1.4
+     * @since 3.1.4
      */
     public static void refreshData(@Nonnull final Balance balance, final int trophies, @Nonnull final Scoreboard scoreboard) {
         scoreboard.getTeam("Gems").setSuffix(String.valueOf(balance.getGems()));

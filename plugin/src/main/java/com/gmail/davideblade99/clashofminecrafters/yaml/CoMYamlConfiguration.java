@@ -266,7 +266,7 @@ public abstract class CoMYamlConfiguration extends YamlConfiguration {
      * #autoSave} is set
      *
      * @see MemorySection#set(String, Object)
-     * @since v3.0.1
+     * @since 3.0.1
      */
     @Override
     public void set(@Nonnull final String path, @Nullable final Object value) {

@@ -73,7 +73,7 @@ public final class VillageHandler {
      *                              <li>{@link PastingException} is thrown in case of error during schematic pasting</li>
      *                          </ol>
      *
-     * @since v3.1.4
+     * @since 3.1.4
      */
     public void generateVillage(@Nonnull final OfflinePlayer player, @Nonnull final NonnullCallback<Pair<Village, Exception>> completionHandler) {
         final Schematic schematic;
@@ -137,7 +137,7 @@ public final class VillageHandler {
     /**
      * @return The world containing players' villages
      *
-     * @since v3.1.2
+     * @since 3.1.2
      */
     public World getVillageWorld() {
         return Bukkit.getWorld(VILLAGE_WORLD_NAME);
@@ -148,7 +148,7 @@ public final class VillageHandler {
      *
      * @return True if the world passed as the parameter is the village world, otherwise false
      *
-     * @since v3.1.2
+     * @since 3.1.2
      */
     public boolean isVillageWorld(@Nonnull final World world) {
         return world.getName().equals(VILLAGE_WORLD_NAME);

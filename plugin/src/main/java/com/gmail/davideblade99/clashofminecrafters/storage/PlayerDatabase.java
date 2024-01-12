@@ -48,7 +48,7 @@ public interface PlayerDatabase {
      * @return an island chosen randomly from all existing islands. Returns {@code null} only in case of an error
      * or if there are no islands available.
      *
-     * @since v3.0
+     * @since 3.0
      */
     @Nullable
     Village getRandomIsland();
@@ -61,7 +61,7 @@ public interface PlayerDatabase {
      *
      * @return Island found or {@code null} if an error occurs or if no islands are available
      *
-     * @since v3.0
+     * @since 3.0
      */
     @Nullable
     Village getRandomEnemyIsland(@Nonnull final String clanName);
@@ -75,7 +75,7 @@ public interface PlayerDatabase {
      * user is not found
      *
      * @see UserDatabaseType
-     * @since v3.0.1
+     * @since 3.0.1
      */
     @Nullable
     UserDatabaseType fetchUser(@Nonnull final UUID playerUUID);
@@ -86,7 +86,7 @@ public interface PlayerDatabase {
      * @param playerUUID UUID of the player whose data to obtain
      * @param user       User whose data to save
      *
-     * @since v3.1
+     * @since 3.1
      */
     void storeUser(@Nonnull final UUID playerUUID, @Nonnull final User user);
 }

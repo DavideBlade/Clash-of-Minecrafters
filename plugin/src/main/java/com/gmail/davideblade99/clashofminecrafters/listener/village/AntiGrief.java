@@ -4,7 +4,7 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.listener.island;
+package com.gmail.davideblade99.clashofminecrafters.listener.village;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Permissions;
@@ -28,7 +28,6 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
-import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
@@ -36,6 +35,8 @@ import javax.annotation.Nonnull;
 
 /**
  * Prevents damage to islands by players and game events (e.g., fire)
+ *
+ * @since 3.2
  */
 public final class AntiGrief extends IslandListener {
 

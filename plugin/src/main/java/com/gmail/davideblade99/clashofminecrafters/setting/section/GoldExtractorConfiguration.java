@@ -21,7 +21,8 @@ import java.util.Set;
 /**
  * Class representing the gold extractor section in the config.yml
  *
- * @since v3.1.1
+ * @author DavideBlade
+ * @since 3.2
  */
 public final class GoldExtractorConfiguration extends SectionConfiguration {
 
@@ -33,8 +34,8 @@ public final class GoldExtractorConfiguration extends SectionConfiguration {
     private final List<GoldExtractorLevel> goldExtractors;
 
     /**
-     * Create a new instance of {@link GoldExtractorConfiguration} and load all the gold extractors with {@link
-     * #loadGoldExtractors()}
+     * Create a new instance of {@link GoldExtractorConfiguration} and load all the gold extractors with
+     * {@link #loadGoldExtractors()}
      *
      * @param configuration Configuration containing the gold extractors section
      */
@@ -54,9 +55,9 @@ public final class GoldExtractorConfiguration extends SectionConfiguration {
     }
 
     /**
-     * Reads the gold extractors section in the {@link SectionConfiguration#section} and builds {@link
-     * GoldExtractorLevel}s. If a misconfigured level (with invalid or missing settings) is encountered, loading will be
-     * stopped. Gold extractors loaded to that point, however, will remain valid.
+     * Reads the gold extractors section in the {@link SectionConfiguration#section} and builds {@link GoldExtractorLevel}s.
+     * If a misconfigured level (with invalid or missing settings) is encountered, loading will be stopped. Gold extractors
+     * loaded to that point, however, will remain valid.
      */
     private void loadGoldExtractors() {
         final ConfigurationSection goldExtractorSection = super.section;

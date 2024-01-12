@@ -6,8 +6,10 @@
 
 package com.gmail.davideblade99.clashofminecrafters.yaml;
 
+import com.gmail.davideblade99.clashofminecrafters.building.ArcherTower;
+import com.gmail.davideblade99.clashofminecrafters.building.ElixirExtractor;
+import com.gmail.davideblade99.clashofminecrafters.building.GoldExtractor;
 import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
-import com.gmail.davideblade99.clashofminecrafters.building.Buildings;
 import com.gmail.davideblade99.clashofminecrafters.storage.Columns;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size2D;
@@ -73,7 +75,7 @@ public final class PlayerConfiguration extends CoMYamlConfiguration {
     }
 
     /**
-     * @return the timestamp when the player collected from the extractors
+     * @return the timestamp when the player collected from the extractors or {@code null} if not saved
      */
     @Nullable
     public String getCollectionTime() {
@@ -145,18 +147,98 @@ public final class PlayerConfiguration extends CoMYamlConfiguration {
         super.set(Columns.ISLAND_EXPANSIONS, expansions.toString());
     }
 
-    @Nullable
-    public Vector getArcherTowerPosition() {
-        return Vector.fromString(super.getString(Columns.ARCHER_TOWER_LOCATION));
+    /**
+     * Stores all information about the archer's tower in the respective path
+     *
+     * @param archerTower Archer tower to save
+     *
+     * @since 3.2
+     */
+    public void saveArcherTower(@Nonnull final ArcherTower archerTower) {
+        super.set(Columns.ARCHER_TOWER_LEVEL, archerTower.getLevel());
+        super.set(Columns.TOWER_ARCHER_LOCATION, archerTower.getArcherPos().toString());
+        super.set(Columns.ARCHER_TOWER_MIN_CORNER, archerTower.getBuildingArea().getMinCorner().toString());
+        super.set(Columns.ARCHER_TOWER_MAX_CORNER, archerTower.getBuildingArea().getMaxCorner().toString());
     }
 
     /**
-     * Sets the archer tower location to the respective path
-     *
-     * @param location Location to set
+     * @return A new {@link ArcherTower} containing the fetched information or {@code null} if the player does not own an
+     * archer's tower
+     * @since 3.2
      */
-    public void setArcherTowerLocation(@Nullable final String location) {
-        super.set(Columns.ARCHER_TOWER_LOCATION, location);
+    @Nullable
+    public ArcherTower getArcherTower() {
+        final int level = super.getInt(Columns.ARCHER_TOWER_LEVEL);
+        final Vector archerPos = Vector.fromString(super.getString(Columns.TOWER_ARCHER_LOCATION));
+        final Vector towerCorner1 = Vector.fromString(super.getString(Columns.ARCHER_TOWER_MIN_CORNER));
+        final Vector towerCorner2 = Vector.fromString(super.getString(Columns.ARCHER_TOWER_MAX_CORNER));
+
+        if (level < 0 || archerPos == null || towerCorner1 == null || towerCorner2 == null)
+            return null;
+
+        return new ArcherTower(level, archerPos, towerCorner1, towerCorner2);
+    }
+
+    /**
+     * Stores all extractor information in the respective path
+     *
+     * @param goldExtractor Gold extractor to save
+     *
+     * @since 3.2
+     */
+    public void saveGoldExtractor(@Nonnull final GoldExtractor goldExtractor) {
+        super.set(Columns.GOLD_EXTRACTOR_LEVEL, goldExtractor.getLevel());
+        super.set(Columns.GOLD_EXTRACTOR_MIN_CORNER, goldExtractor.getBuildingArea().getMinCorner().toString());
+        super.set(Columns.GOLD_EXTRACTOR_MAX_CORNER, goldExtractor.getBuildingArea().getMaxCorner().toString());
+    }
+
+    /**
+     * @return A new {@link GoldExtractor} containing the fetched information or {@code null} if the player does not own a
+     * gold extractor
+     * @since 3.2
+     */
+    @Nullable
+    public GoldExtractor getGoldExtractor() {
+        final int level = super.getInt(Columns.GOLD_EXTRACTOR_LEVEL);
+        final Vector extractorCorner1 = Vector.fromString(super.getString(Columns.GOLD_EXTRACTOR_MIN_CORNER));
+        final Vector extractorCorner2 = Vector.fromString(super.getString(Columns.GOLD_EXTRACTOR_MAX_CORNER));
+
+        //TODO: se c'è qualche dato si e qualche dato no errore: unexpected missing data - questo per tutti
+        //TODO: copiare MySQL
+        if (level < 0 || extractorCorner1 == null || extractorCorner2 == null)
+            return null;
+
+        return new GoldExtractor(level, extractorCorner1, extractorCorner2);
+    }
+
+    /**
+     * Stores all extractor information in the respective path
+     *
+     * @param elixirExtractor Elixir extractor to save
+     *
+     * @since 3.2
+     */
+    public void saveElixirExtractor(@Nonnull final ElixirExtractor elixirExtractor) {
+        super.set(Columns.ELIXIR_EXTRACTOR_LEVEL, elixirExtractor.getLevel());
+        super.set(Columns.ELIXIR_EXTRACTOR_MIN_CORNER, elixirExtractor.getBuildingArea().getMinCorner().toString());
+        super.set(Columns.ELIXIR_EXTRACTOR_MAX_CORNER, elixirExtractor.getBuildingArea().getMaxCorner().toString());
+    }
+
+    /**
+     * @return A new {@link ElixirExtractor} containing the fetched information or {@code null} if the player does not own an
+     * elixir extractor
+     * @since 3.2
+     */
+    @Nullable
+    public ElixirExtractor getElixirExtractor() {
+        final int level = super.getInt(Columns.ELIXIR_EXTRACTOR_LEVEL);
+        final Vector extractorCorner1 = Vector.fromString(super.getString(Columns.ELIXIR_EXTRACTOR_MIN_CORNER));
+        final Vector extractorCorner2 = Vector.fromString(super.getString(Columns.ELIXIR_EXTRACTOR_MAX_CORNER));
+
+        if (level < 0 || extractorCorner1 == null || extractorCorner2 == null)
+            return null;
+
+        return new ElixirExtractor(level, extractorCorner1, extractorCorner2);
     }
 
     public int getBalance(@Nonnull final Currencies currency) {
@@ -197,62 +279,22 @@ public final class PlayerConfiguration extends CoMYamlConfiguration {
         }
     }
 
-    public boolean hasBuilding(@Nonnull final Buildings type) {
-        switch (type) {
-            case ARCHER_TOWER:
-                return super.contains(Columns.ARCHER_TOWER_LEVEL);
-            case GOLD_EXTRACTOR:
-                return super.contains(Columns.GOLD_EXTRACTOR_LEVEL);
-            case ELIXIR_EXTRACTOR:
-                return super.contains(Columns.ELIXIR_EXTRACTOR_LEVEL);
-            case TOWN_HALL:
-                return super.contains(Columns.TOWN_HALL_LEVEL);
-            default:
-                throw new IllegalStateException("Unexpected value: " + type);
-        }
-    }
-
-    public int getBuildingLevel(@Nonnull final Buildings type) {
-        switch (type) {
-            case ARCHER_TOWER:
-                return super.getInt(Columns.ARCHER_TOWER_LEVEL);
-            case GOLD_EXTRACTOR:
-                return super.getInt(Columns.GOLD_EXTRACTOR_LEVEL);
-            case ELIXIR_EXTRACTOR:
-                return super.getInt(Columns.ELIXIR_EXTRACTOR_LEVEL);
-            case TOWN_HALL:
-                return super.getInt(Columns.TOWN_HALL_LEVEL, 1);
-            default:
-                throw new IllegalStateException("Unexpected value: " + type);
-        }
+    /**
+     * Sets the level of the town hall to the respective path
+     *
+     * @param level The new level to set
+     *
+     * @since 3.2
+     */
+    public void setTownHallLevel(final int level) {
+        super.set(Columns.TOWN_HALL_LEVEL, level);
     }
 
     /**
-     * Sets the level of the building specified to the respective path
-     *
-     * @param type  Building type to set
-     * @param level New level to set
+     * @return The level of the town hall
+     * @since 3.2
      */
-    public void setBuildingLevel(@Nonnull final Buildings type, final int level) {
-        switch (type) {
-            case ARCHER_TOWER:
-                super.set(Columns.ARCHER_TOWER_LEVEL, level);
-                break;
-
-            case GOLD_EXTRACTOR:
-                super.set(Columns.GOLD_EXTRACTOR_LEVEL, level);
-                break;
-
-            case ELIXIR_EXTRACTOR:
-                super.set(Columns.ELIXIR_EXTRACTOR_LEVEL, level);
-                break;
-
-            case TOWN_HALL:
-                super.set(Columns.TOWN_HALL_LEVEL, level);
-                break;
-
-            default:
-                throw new IllegalStateException("Unexpected value: " + type);
-        }
+    public int getTownHallLevel() {
+        return super.getInt(Columns.TOWN_HALL_LEVEL, 1);
     }
 }

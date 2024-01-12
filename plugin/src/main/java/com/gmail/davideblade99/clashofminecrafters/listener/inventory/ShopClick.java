@@ -12,7 +12,7 @@ import com.gmail.davideblade99.clashofminecrafters.listener.CoMListener;
 import com.gmail.davideblade99.clashofminecrafters.menu.Menu;
 import com.gmail.davideblade99.clashofminecrafters.menu.holder.MenuInventoryHolder;
 import com.gmail.davideblade99.clashofminecrafters.menu.item.BaseItem;
-import com.gmail.davideblade99.clashofminecrafters.menu.item.ConfigItem;
+import com.gmail.davideblade99.clashofminecrafters.menu.item.ConfigurableItem;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
@@ -56,10 +56,10 @@ public final class ShopClick extends CoMListener {
         final Menu menu = ((MenuInventoryHolder) holder).getShop(); // Shop clicked
         for (BaseItem item : menu.getItems()) {
             if (event.getSlot() == item.getSlot()) {
-                if (item instanceof ConfigItem) {
-                    final ConfigItem configItem = (ConfigItem) item;
-                    final Pair<Integer, Currencies> requiredBalance = configItem.getRequiredBalance();
-                    final ItemStack requiredItem = configItem.getRequiredItem();
+                if (item instanceof ConfigurableItem) {
+                    final ConfigurableItem configurableItem = (ConfigurableItem) item;
+                    final Pair<Integer, Currencies> requiredBalance = configurableItem.getRequiredBalance();
+                    final ItemStack requiredItem = configurableItem.getRequiredItem();
                     if (requiredBalance != null) {
                         final int price = requiredBalance.getKey();
                         final Currencies currency = requiredBalance.getValue();

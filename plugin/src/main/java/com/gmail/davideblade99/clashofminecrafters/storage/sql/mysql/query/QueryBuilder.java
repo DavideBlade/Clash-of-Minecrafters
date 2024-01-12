@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
  * @see QueryBuilderDelete
  * @see QueryBuilderCreateTable
  * @see QueryBuilderAlterTable
- * @since v3.1
+ * @since 3.1
  */
 public final class QueryBuilder {
 
