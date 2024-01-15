@@ -51,8 +51,8 @@ import java.util.UUID;
 public final class CoM extends JavaPlugin {
 
     /**
-     * Formatter used by the whole plugin which formats dates to something like "[17-03-2001 19:18:35]" for any
-     * given {@link LocalDateTime}.
+     * Formatter used by the whole plugin which formats dates to something like "[17-03-2001 19:18:35]" for any given
+     * {@link LocalDateTime}.
      */
     public static final DateTimeFormatter DATE_FORMAT = new DateTimeFormatterBuilder().appendLiteral('[').appendPattern("dd-MM-yyyy HH:mm:ss").appendLiteral(']').toFormatter();
 
@@ -301,7 +301,9 @@ public final class CoM extends JavaPlugin {
          * "v1_19_R1" -> Server runs from 1.19 to 1.19.2
          * "v1_19_R2" -> Server is running 1.19.3
          * "v1_19_R3" -> Server is running 1.19.4
-         * "v1_20_R1" -> Server runs from 1.20 to 1.20.1 (currently)
+         * "v1_20_R1" -> Server runs from 1.20 to 1.20.1
+         * "v1_20_R2" -> Server is running 1.20.2
+         * "v1_20_R3" -> Server runs from 1.20.3 to 1.20.4 (currently)
          */
 
         final ChunkGenerator chunkGenerator;
