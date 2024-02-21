@@ -4,9 +4,8 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.world.v1_19_R1;
+package com.gmail.davideblade99.clashofminecrafters.world;
 
-import com.gmail.davideblade99.clashofminecrafters.world.BaseEmptyWorldGenerator;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.WorldInfo;
@@ -14,7 +13,13 @@ import org.bukkit.generator.WorldInfo;
 import java.util.Collections;
 import java.util.List;
 
-public final class EmptyWorldGenerator extends BaseEmptyWorldGenerator {
+/**
+ * Class responsible for generating empty chunks (air only) with the Plain biome
+ *
+ * @see EmptyWorldGenerator
+ * @since 3.2.2
+ */
+public final class PlainsEmptyWorldGenerator extends EmptyWorldGenerator {
 
     @Override
     public BiomeProvider getDefaultBiomeProvider(final WorldInfo worldInfo) {

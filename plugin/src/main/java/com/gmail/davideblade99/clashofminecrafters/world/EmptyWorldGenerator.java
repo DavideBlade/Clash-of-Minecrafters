@@ -7,7 +7,9 @@
 package com.gmail.davideblade99.clashofminecrafters.world;
 
 import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 
@@ -15,9 +17,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class BaseEmptyWorldGenerator extends ChunkGenerator {
+/**
+ * Class responsible for generating empty chunks (air only)
+ *
+ * @see Server#createWorld(WorldCreator)
+ * @see WorldCreator#generator(ChunkGenerator)
+ * @since 3.2.2
+ */
+public class EmptyWorldGenerator extends ChunkGenerator {
 
-    public BaseEmptyWorldGenerator() {
+    public EmptyWorldGenerator() {
         super();
     }
 
