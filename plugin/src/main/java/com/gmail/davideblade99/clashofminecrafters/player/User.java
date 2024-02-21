@@ -77,6 +77,7 @@ public final class User {
 
             final Settings config = plugin.getConfig();
             this.balance = new Balance(config.getStartingGold(), config.getStartingElixir(), config.getStartingGems());
+            setTownHallLevel(1);
 
             // Store default values in the database
             updateDatabase();
@@ -92,10 +93,6 @@ public final class User {
             this.village = userDatabaseType.island;
             this.collectionTime = userDatabaseType.collectionTime;
             setTownHallLevel(userDatabaseType.townHallLevel);
-
-            // Validate town hall level
-            if (townHallLevel < 0)
-                throw new IllegalArgumentException("Invalid town hall level: must be greater than or equal to 0.");
         }
     }
 
