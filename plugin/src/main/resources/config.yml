@@ -183,8 +183,6 @@ Menus:
 # Command - Command executed (by the console) when a player upgrades the town hall - OPTIONAL
 # Guardian - Statistics of the guardian which defends the village under attack - OPTIONAL
 # Health - Number of hearts (for comparison: one player has 10) - OPTIONAL
-# Equipment - Material of the 4 armor pieces (Helmet, Chestplate, Leggings, Boots) - OPTIONAL
-# Potions - List of guardian effects - OPTIONAL
 Town halls:
   1:
     Price: 4000
