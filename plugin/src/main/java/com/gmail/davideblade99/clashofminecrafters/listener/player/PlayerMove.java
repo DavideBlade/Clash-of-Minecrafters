@@ -7,8 +7,9 @@
 package com.gmail.davideblade99.clashofminecrafters.listener.player;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
+import com.gmail.davideblade99.clashofminecrafters.handler.VillageHandler;
 import com.gmail.davideblade99.clashofminecrafters.player.Village;
-import com.gmail.davideblade99.clashofminecrafters.listener.IslandListener;
+import com.gmail.davideblade99.clashofminecrafters.listener.VillageListener;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
@@ -20,7 +21,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import javax.annotation.Nonnull;
 
-public final class PlayerMove extends IslandListener {
+public final class PlayerMove extends VillageListener {
 
     public PlayerMove(@Nonnull final CoM plugin) {
         super(plugin);
@@ -36,7 +37,7 @@ public final class PlayerMove extends IslandListener {
 
         final Location from = event.getFrom();
         final Location to = event.getTo();
-        if (!isVillageWorld(player.getWorld()))
+        if (!VillageHandler.isVillageWorld(player.getWorld()))
             return;
         if (from.getBlockX() == to.getBlockX() && from.getBlockY() == to.getBlockY() && from.getBlockZ() == to.getBlockZ())
             return;

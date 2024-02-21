@@ -65,9 +65,9 @@ public final class VillageHandler {
      * <p>If any exception is thrown, it is passed to the callback received as a parameter.</p>
      *
      * @param player            Player to create island to
-     * @param completionHandler Callback that will be invoked when the operation is completed. It will have the
-     *                          created village as a parameter if the operation is completed successfully,
-     *                          otherwise it will receive the thrown exception. List of possible exceptions:
+     * @param completionHandler Callback that will be invoked when the operation is completed. It will have the created
+     *                          village as a parameter if the operation is completed successfully, otherwise it will receive
+     *                          the thrown exception. List of possible exceptions:
      *                          <ul>
      *                              <li>{@link WorldBorderReachedException} is thrown if there is no space left for other villages</li>
      *                              <li>{@link PastingException} is thrown in case of error during schematic pasting</li>
@@ -117,7 +117,7 @@ public final class VillageHandler {
                 }
 
                 // Create village
-                final Village village = new Village(player.getName(), spawn, origin, new Size2D(schematic.getSize()), new Size2D(VillageHandler.this.expansions));
+                final Village village = new Village(player.getUniqueId(), spawn, origin, new Size2D(schematic.getSize()), new Size2D(VillageHandler.this.expansions));
                 completionHandler.call(new Pair<>(village, null));
             }
         });
@@ -136,7 +136,6 @@ public final class VillageHandler {
 
     /**
      * @return The world containing players' villages
-     *
      * @since 3.1.2
      */
     public World getVillageWorld() {
@@ -144,13 +143,15 @@ public final class VillageHandler {
     }
 
     /**
-     * @param world World to check
+     * @param world {@link World} to check
      *
-     * @return True if the world passed as the parameter is the village world, otherwise false
-     *
-     * @since 3.1.2
+     * @return True if the world passed as parameter is the world of villages, otherwise false
+     * @since 3.2.2
      */
-    public boolean isVillageWorld(@Nonnull final World world) {
-        return world.getName().equals(VILLAGE_WORLD_NAME);
+    public static boolean isVillageWorld(@Nullable final World world) {
+        if (world == null)
+            return false;
+
+        return VILLAGE_WORLD_NAME.equals(world.getName());
     }
 }

@@ -122,7 +122,7 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
                     throw new IllegalStateException("Village of \"" + playerUUID[0] + "\" existing with some missing data");
                 //TODO: notificare al giocatore target
 
-                return new Village(playerName, spawn, origin, size, expansions);
+                return new Village(playerUUID[0], spawn, origin, size, expansions);
             });
         } catch (final SQLException ex) {
             //TODO: notificare al giocatore che la sta cercando
@@ -173,7 +173,7 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
                     throw new IllegalStateException("Island of \"" + playerUUID[0] + "\" existing with some missing data");
                 //TODO: notificare al giocatore
 
-                return new Village(playerName, spawn, origin, size, expansions);
+                return new Village(playerUUID[0], spawn, origin, size, expansions);
             });
         } catch (final SQLException ex) {
             //TODO: notificare al giocatore che la sta cercando
@@ -262,28 +262,28 @@ public final class MySQLDatabase extends AbstractSQLDatabase {
                     archerTower = null;
 
 
-                final Village island;
+                final Village village;
                 final Location islandSpawn = BukkitLocationUtil.fromString(resultSet.getString(Columns.ISLAND_SPAWN));
                 final Vector islandOrigin = Vector.fromString(resultSet.getString(Columns.ISLAND_ORIGIN));
                 final Size2D islandSize = Size2D.fromString(resultSet.getString(Columns.ISLAND_SIZE));
                 final Size2D islandExpansions = Size2D.fromString(resultSet.getString(Columns.ISLAND_EXPANSIONS));
 
-                // If the player has an island
+                // If the player has a village
                 if (islandSpawn != null || islandOrigin != null || islandSize != null || islandExpansions != null) {
                     // Unexpected missing data
                     if (islandSpawn == null || islandOrigin == null || islandSize == null || islandExpansions == null)
                         throw new IllegalStateException("Village of \"" + playerUUID + "\" existing with some missing data");
 
-                    island = new Village(playerName, islandSpawn, islandOrigin, islandSize, islandExpansions);
+                    village = new Village(playerUUID, islandSpawn, islandOrigin, islandSize, islandExpansions);
                 } else
-                    island = null;
+                    village = null;
 
                 final String collectionTimeStr = resultSet.getString(Columns.COLLECTION_TIME);
                 final LocalDateTime collectionTime = collectionTimeStr != null ? LocalDateTime.parse(collectionTimeStr, CoM.DATE_FORMAT) : null;
 
                 final int townHallLevel = resultSet.getInt(Columns.TOWN_HALL_LEVEL);
 
-                return new UserDatabaseType(new Balance(gold, elixir, gems), trophies, clanName, elixirExtractor, goldExtractor, archerTower, island, collectionTime, townHallLevel);
+                return new UserDatabaseType(new Balance(gold, elixir, gems), trophies, clanName, elixirExtractor, goldExtractor, archerTower, village, collectionTime, townHallLevel);
             });
 
         } catch (final SQLException ex) {

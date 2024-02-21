@@ -11,9 +11,8 @@ import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
 import com.gmail.davideblade99.clashofminecrafters.command.label.*;
 import com.gmail.davideblade99.clashofminecrafters.handler.*;
 import com.gmail.davideblade99.clashofminecrafters.listener.inventory.ShopClick;
-import com.gmail.davideblade99.clashofminecrafters.listener.village.AntiGrief;
+import com.gmail.davideblade99.clashofminecrafters.listener.village.*;
 import com.gmail.davideblade99.clashofminecrafters.listener.player.*;
-import com.gmail.davideblade99.clashofminecrafters.listener.raid.*;
 import com.gmail.davideblade99.clashofminecrafters.menu.holder.MenuInventoryHolder;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
@@ -68,8 +67,7 @@ public final class CoM extends JavaPlugin {
     private VillageHandler villageHandler;
     private SchematicHandler schematicHandler;
     private WarHandler warHandler;
-    private ArcherHandler archerHandler;
-    private GuardianHandler guardianHandler;
+    private BuildingTroopRegistry buildingTroopRegistry;
     private UpgradeHandler upgradeHandler;
 
     public CoM() {
@@ -102,8 +100,7 @@ public final class CoM extends JavaPlugin {
             villageHandler = new VillageHandler(this);
             schematicHandler = new SchematicHandler(this);
             warHandler = new WarHandler(this);
-            archerHandler = new ArcherHandler(this);
-            guardianHandler = new GuardianHandler(this);
+            buildingTroopRegistry = new BuildingTroopRegistry(this);
             upgradeHandler = new UpgradeHandler(this);
 
             registerListeners();
@@ -177,8 +174,7 @@ public final class CoM extends JavaPlugin {
         villageHandler = null;
         schematicHandler = null;
         warHandler = null;
-        archerHandler = null;
-        guardianHandler = null;
+        buildingTroopRegistry = null;
         upgradeHandler = null;
 
         MessageUtil.sendWarning("Clash of minecrafters has been disabled. (Version: " + getDescription().getVersion() + ")");
@@ -220,14 +216,13 @@ public final class CoM extends JavaPlugin {
         return warHandler;
     }
 
+    /**
+     * @return Building troop register {@link BuildingTroopRegistry}
+     * @since 3.2.2
+     */
     @Nonnull
-    public ArcherHandler getArcherHandler() {
-        return archerHandler;
-    }
-
-    @Nonnull
-    public GuardianHandler getGuardianHandler() {
-        return guardianHandler;
+    public BuildingTroopRegistry getBuildingTroopRegistry() {
+        return buildingTroopRegistry;
     }
 
     @Nonnull
@@ -318,21 +313,22 @@ public final class CoM extends JavaPlugin {
         final World world = getServer().createWorld(new WorldCreator(VillageHandler.VILLAGE_WORLD_NAME).generator(chunkGenerator)); // Load or create world
 
         // Setup world
-        world.setDifficulty(Difficulty.EASY);
-        world.setPVP(false);
+        world.setDifficulty(Difficulty.PEACEFUL);
+        world.setPVP(true); // Troops (NPCs) are players, so PvP must be enabled (a listener prevents pvp between players)
         world.setSpawnFlags(true, false);
         world.setAutoSave(true);
         world.setKeepSpawnInMemory(false);
 
         world.setAnimalSpawnLimit(0);
-        world.setMonsterSpawnLimit(5);
+        world.setMonsterSpawnLimit(0);
         world.setWaterAnimalSpawnLimit(0);
 
         world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
-        world.setGameRule(GameRule.DO_MOB_SPAWNING, false); // Block natural spawn
+        world.setGameRule(GameRule.DO_MOB_SPAWNING, false); // Blocks natural spawn
         world.setGameRule(GameRule.KEEP_INVENTORY, false);
         world.setGameRule(GameRule.MOB_GRIEFING, false);
         world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false);
+        world.setGameRule(GameRule.DO_MOB_LOOT, false); // Stops mob drops
 
 
         MessageUtil.sendInfo("World of villages has been loaded.");
@@ -378,16 +374,14 @@ public final class CoM extends JavaPlugin {
         pm.registerEvents(new PlayerJoin(this), this);
         pm.registerEvents(new ShopClick(this), this);
         pm.registerEvents(new PlayerMove(this), this);
-        pm.registerEvents(new EntityDamageByEntity(this), this);
-        pm.registerEvents(new EntityDeath(this), this);
+        pm.registerEvents(new BuildingTroopDamage(this), this);
+        pm.registerEvents(new BuildingTroopDeath(this), this);
         pm.registerEvents(new PlayerDeath(this), this);
         pm.registerEvents(new PlayerQuit(this), this);
-        pm.registerEvents(new EntityCombust(this), this);
         pm.registerEvents(new AsyncPlayerPreLogin(this), this);
         pm.registerEvents(new RaidWin(this), this);
         pm.registerEvents(new RaidLost(this), this);
         pm.registerEvents(new AntiGrief(this), this);
-        pm.registerEvents(new EntityChangeTarget(this), this);
     }
 
     /**

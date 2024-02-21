@@ -6,7 +6,7 @@ author: DavideBlade
 description: ${project.description}
 load: POSTWORLD
 website: https://www.spigotmc.org/resources/clash-of-minecrafters.31180/
-depend: [WorldEdit]
+depend: [WorldEdit, Citizens, Sentinel]
 softdepend: [AsyncWorldEdit]
 commands:
   com:

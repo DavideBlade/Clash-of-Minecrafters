@@ -189,40 +189,26 @@ Town halls:
   1:
     Price: 4000
     Currency: elixir
-    Command: 'say %player''s town hall has reached level 2!'
     Guardian:
       Health: 15
   2:
     Price: 9000
     Currency: gold
-    Command: 'say %player''s town hall has reached level 3!'
+    Command: 'say %player''s town hall has reached level 2!'
     Guardian:
       Health: 20
   3:
     Price: 16000
     Currency: elixir
-    Command: 'say %player''s town hall has reached level 4!'
+    Command: 'say %player''s town hall has reached level 3!'
     Guardian:
       Health: 20
-      Equipment:
-        Helmet: LEATHER_HELMET
-        Chestplate: LEATHER_CHESTPLATE
-        Leggings: LEATHER_LEGGINGS
-        Boots: LEATHER_BOOTS
   4:
     Price: 25000
     Currency: gold
-    Command: 'say %player''s town hall has reached level 5!'
+    Command: 'say %player''s town hall has reached level 4!'
     Guardian:
       Health: 20
-      Equipment:
-        Helmet: IRON_HELMET
-        Chestplate: IRON_CHESTPLATE
-        Leggings: IRON_LEGGINGS
-        Boots: IRON_BOOTS
-      Potions:
-        - Speed
-        - Regeneration
 
 ############################################################
 # +------------------------------------------------------+ #

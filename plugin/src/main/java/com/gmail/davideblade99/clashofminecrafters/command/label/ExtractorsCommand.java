@@ -48,11 +48,6 @@ public final class ExtractorsCommand extends CommandFramework {
 
             // If the player unlocked the gold extractor
             if (goldExtractor != null) {
-                /*
-                 * If any player has a level higher than the current maximum level
-                 * (e.g., some levels have been removed from the config.yml),
-                 * the currently configured maximum level is taken into account.
-                 */
                 final GoldExtractorLevel goldExtractorStats = plugin.getConfig().getExistingGoldExtractor(goldExtractor.getLevel());
 
                 MessageUtil.sendMessage(sender, Messages.getMessage(MessageKey.EXTRACTORS_INFO, Messages.getMessage(MessageKey.GOLD_EXTRACTOR) + "\n", Integer.toString(goldExtractorStats.level), Integer.toString(goldExtractorStats.production), Integer.toString(user.getResourcesProduced(goldExtractorStats, user.getCollectionTime())), Integer.toString(goldExtractorStats.capacity)));
@@ -60,11 +55,6 @@ public final class ExtractorsCommand extends CommandFramework {
 
             // If the player unlocked the elixir extractor
             if (elixirExtractor != null) {
-                /*
-                 * If any player has a level higher than the current maximum level
-                 * (e.g., some levels have been removed from the config.yml),
-                 * the currently configured maximum level is taken into account.
-                 */
                 final ElixirExtractorLevel elixirExtractorStats = plugin.getConfig().getExistingElixirExtractor(elixirExtractor.getLevel());
 
                 MessageUtil.sendMessage(sender, Messages.getMessage(MessageKey.EXTRACTORS_INFO, Messages.getMessage(MessageKey.ELIXIR_EXTRACTOR) + "\n", Integer.toString(elixirExtractorStats.level), Integer.toString(elixirExtractorStats.production), Integer.toString(user.getResourcesProduced(elixirExtractorStats, user.getCollectionTime())), Integer.toString(elixirExtractorStats.capacity)));

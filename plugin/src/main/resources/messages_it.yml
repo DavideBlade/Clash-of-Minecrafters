@@ -150,10 +150,8 @@ Searching: '&6Ricerca villaggio...'
 Island not available: '&cNessuna isola da attaccare trovata. Riprova tra qualche minuto.'
 # Quando un giocatore prova ad attaccare un'altra isola nonostante la guerra non sia ancora iniziata.
 Must be in war: '&cPrima di combattere deve iniziare la guerra!'
-# Quando un giocatore prova a colpire il guardiano di un'isola sotto attacco da un altro giocatore.
-Cannot hit guardian: '&cNon puoi colpire i guardiani delle isole sotto attacco da altri giocatori!'
-# Quando un giocatore prova a colpire l'arciere di un'isola sotto attacco da un altro giocatore.
-Cannot hit archer: '&cNon puoi colpire gli arcieri delle isole sotto attacco da altri giocatori!'
+# Quando un giocatore prova a colpire una truppa che possiede o quella di un villaggio che non sta attaccando.
+Cannot hit troop: '&cPuoi colpire solo le truppe del villaggio che stai attaccando.'
 # Quando un giocatore prova ad attaccare un'isola nonostante ne stia già attaccando una.
 Already attacking: '&cStai già attaccando un villaggio!'
 # Quando un giocatore, durante un raid, uccide il guardiano dell'isola che sta attaccando.

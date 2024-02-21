@@ -10,9 +10,7 @@ import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.setting.TownHallLevel;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.yaml.CoMYamlConfiguration;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.potion.PotionEffectType;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -79,28 +77,6 @@ public final class TownHallConfiguration extends SectionConfiguration {
             final Currencies currency = Currencies.matchCurrency(townHallSection.getString(townHall + ".Currency", null));
             final String command = townHallSection.getString(townHall + ".Command", null);
             final byte hearts = (byte) townHallSection.getInt(townHall + ".Guardian.Health", -1); //TODO: differenziare il caso in cui è -1 perché non lo ha configurato (ammesso) o perché ha settato lui -1
-            final Material helmet = Material.matchMaterial(townHallSection.getString(townHall + ".Guardian.Equipment.Helmet", ""));
-            final Material chestplate = Material.matchMaterial(townHallSection.getString(townHall + ".Guardian.Equipment.Chestplate", ""));
-            final Material leggings = Material.matchMaterial(townHallSection.getString(townHall + ".Guardian.Equipment.Leggings", ""));
-            final Material boots = Material.matchMaterial(townHallSection.getString(townHall + ".Guardian.Equipment.Boots", ""));
-
-            final List<?> effectString = townHallSection.getList(townHall + ".Guardian.Equipment.Potions", null);
-            final List<PotionEffectType> potions;
-            if (effectString == null)
-                potions = null;
-            else {
-                potions = new ArrayList<>(effectString.size());
-                for (Object obj : effectString) {
-                    if (!(obj instanceof String))
-                        continue;
-
-                    final PotionEffectType potion = PotionEffectType.getByName((String) obj);
-                    if (potion != null)
-                        potions.add(potion);
-                    else
-                        MessageUtil.sendWarning("Warning! The potion effect \"" + obj + "\" of level \"" + townHall + "\" town hall (in the config) will be ignored, because it does not exist.");
-                }
-            }
 
 
             if (price < 0) {
@@ -114,7 +90,7 @@ public final class TownHallConfiguration extends SectionConfiguration {
                 return;
             }
 
-            this.townHalls.add(new TownHallLevel(level, price, currency, command, hearts, helmet, chestplate, leggings, boots, potions));
+            this.townHalls.add(new TownHallLevel(level, price, currency, command, hearts));
         }
     }
 }

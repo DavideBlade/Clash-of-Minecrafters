@@ -53,11 +53,11 @@ public final class AsyncPlayerPreLogin extends CoMListener {
         if (user == null)
             return;
 
-        final Village island = user.getVillage();
-        if (island == null)
+        final Village village = user.getVillage();
+        if (village == null)
             return;
 
-        if (plugin.getWarHandler().isUnderAttack(island))
+        if (plugin.getWarHandler().isUnderAttack(village))
             event.disallow(Result.KICK_OTHER, ColorUtil.colour(Messages.getMessage(MessageKey.ISLAND_UNDER_ATTACK)));
     }
 }

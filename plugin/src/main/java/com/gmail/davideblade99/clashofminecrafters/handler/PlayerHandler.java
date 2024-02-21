@@ -29,7 +29,7 @@ public final class PlayerHandler extends CacheLoader<String, User> {
 
     private final CoM plugin;
     private final UUIDMap uuidMap;
-    private final LoadingCache<String, User> players; // <uuid, User>
+    private final LoadingCache<String, User> players; // <UUID, User>
 
     public PlayerHandler(@Nonnull final CoM plugin) {
         this.plugin = plugin;
@@ -55,14 +55,13 @@ public final class PlayerHandler extends CacheLoader<String, User> {
     }
 
     /**
-     * Returns the cached User related to the UUID passed. If it is not in the cache,
-     * a new User will be generated with the information in the current database by calling {@link #load(String)}.
-     * If there is no information (the player never entered the server) null will be returned.
+     * Returns the cached {@link User} related to the UUID passed. If it is not in the cache, a new {@link User} will be
+     * generated with the information in the current database by calling {@link #load(String)}. If there is no information
+     * (the player never entered the server) {@code null} will be returned.
      *
-     * @param uuid Player UUID
+     * @param uuid UUID of the player to be searched
      *
-     * @return The User relative to the UUID or null, in case there is no information
-     *
+     * @return The {@link User} relative to the UUID or {@code null}, in case there is no information
      * @see #load(String)
      */
     @Nullable
@@ -75,16 +74,13 @@ public final class PlayerHandler extends CacheLoader<String, User> {
     }
 
     /**
-     * Called each time an attempt is made to obtain an element (key)
-     * from the cache that is not contained therein.
-     * This method generates the value that will be associated with the searched key.
+     * Called each time an attempt is made to obtain an element (key) from the cache that is not contained therein. This
+     * method generates the value that will be associated with the searched key.
      *
      * @param playerUUID UUID of the player to be searched
      *
      * @return Return the {@link User} found
-     *
-     * @throws Exception Thrown if the player does not exist (= has never logged
-     *                   into the server, so does not have a file)
+     * @throws Exception Thrown if the player does not exist (= has never logged into the server, so does not have a file)
      */
     @Nonnull
     @Override

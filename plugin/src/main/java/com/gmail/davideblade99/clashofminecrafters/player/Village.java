@@ -6,28 +6,31 @@
 
 package com.gmail.davideblade99.clashofminecrafters.player;
 
-import com.gmail.davideblade99.clashofminecrafters.util.geometric.Area;
-import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size2D;
-import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
+import com.gmail.davideblade99.clashofminecrafters.handler.VillageHandler;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.BukkitLocationUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
+import com.gmail.davideblade99.clashofminecrafters.util.geometric.Area;
+import com.gmail.davideblade99.clashofminecrafters.util.geometric.Size2D;
+import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.UUID;
 
 /**
  * Class representing a player's village
  *
  * @author DavideBlade
- * @since 3.1.4
+ * @since 3.2.2
  */
 public final class Village {
 
-    public final String owner;
+    public final UUID owner;
     private Location spawn;
     public final Vector origin;
     public final Size2D size;
@@ -36,18 +39,18 @@ public final class Village {
     /**
      * Creates a new village
      *
-     * @param owner      Village owner
+     * @param owner      UUID of the player owning the village
      * @param spawn      Village spawn point
      * @param origin     Point where the schematic is pasted
      * @param size       Village size
      * @param expansions Expansions owned by the village
      *
-     * @throws IllegalArgumentException If the {@code spawn} does not have a world (i.e., {@link Location#getWorld()}
-     *                                  {@code = null})
+     * @throws IllegalArgumentException If the world in which to spawn the archer is not the village world
+     * @see VillageHandler#isVillageWorld(World)
      */
-    public Village(@Nonnull final String owner, @Nonnull final Location spawn, @Nonnull final Vector origin, @Nonnull final Size2D size, @Nonnull final Size2D expansions) {
-        if (spawn.getWorld() == null)
-            throw new IllegalArgumentException("Invalid spawn: does not have a specified world");
+    public Village(@Nonnull final UUID owner, @Nonnull final Location spawn, @Nonnull final Vector origin, @Nonnull final Size2D size, @Nonnull final Size2D expansions) {
+        if (!VillageHandler.isVillageWorld(spawn.getWorld()))
+            throw new IllegalArgumentException("Villages can only exist in the world of villages");
 
         this.owner = owner;
         this.spawn = spawn;
@@ -80,6 +83,8 @@ public final class Village {
     }
 
     public void teleportToSpawn(@Nonnull final Player player) {
+        // TODO: impedire di creare un edificio sopra il punto di spawn, in questo modo non e' necessario dover controllare ogni volta che lo spawn sia sicuro
+        // TODO: Una volta fatto, rimuovere tutti i controlli ed i messaggi
         if (BukkitLocationUtil.isSafeLocation(spawn))
             player.teleport(spawn);
         else {
@@ -110,17 +115,22 @@ public final class Village {
         if (!(obj instanceof Village))
             return false;
         else {
-            final Village island = (Village) obj;
-            return owner.equals(island.owner);
+            final Village village = (Village) obj;
+            return owner.equals(village.owner);
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return owner.hashCode();
     }
 
     @Override
     public String toString() {
         return "Village{" +
-                "owner='" + owner + "'" +
-                ", spawn=" + BukkitLocationUtil.toString(spawn) +
-                ", origin='" + origin + "'" +
+                "owner=" + owner +
+                ", spawn=" + spawn +
+                ", origin=" + origin +
                 ", size=" + size +
                 ", expansions=" + expansions +
                 '}';
