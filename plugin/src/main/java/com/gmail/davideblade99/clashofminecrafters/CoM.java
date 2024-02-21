@@ -11,8 +11,8 @@ import com.gmail.davideblade99.clashofminecrafters.command.CommandFramework;
 import com.gmail.davideblade99.clashofminecrafters.command.label.*;
 import com.gmail.davideblade99.clashofminecrafters.handler.*;
 import com.gmail.davideblade99.clashofminecrafters.listener.inventory.ShopClick;
-import com.gmail.davideblade99.clashofminecrafters.listener.village.*;
 import com.gmail.davideblade99.clashofminecrafters.listener.player.*;
+import com.gmail.davideblade99.clashofminecrafters.listener.village.*;
 import com.gmail.davideblade99.clashofminecrafters.menu.holder.MenuInventoryHolder;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
@@ -24,11 +24,11 @@ import com.gmail.davideblade99.clashofminecrafters.storage.DatabaseFactory;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.sql.AbstractSQLDatabase;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
+import com.gmail.davideblade99.clashofminecrafters.world.PlainsEmptyWorldGenerator;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.server.PluginDisableEvent;
-import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -56,7 +56,7 @@ public final class CoM extends JavaPlugin {
     public static final DateTimeFormatter DATE_FORMAT = new DateTimeFormatterBuilder().appendLiteral('[').appendPattern("dd-MM-yyyy HH:mm:ss").appendLiteral(']').toFormatter();
 
     /** List of Minecraft versions on which the plugin has been tested */
-    private final static String[] SUPPORTED_VERSIONS = {"1.14", "1.15", "1.16", "1.17", "1.18", "1.19", "1.20"};
+    private final static String[] SUPPORTED_VERSIONS = {"1.18", "1.19", "1.20"};
 
     private static CoM instance;
 
@@ -284,33 +284,7 @@ public final class CoM extends JavaPlugin {
     }
 
     private void setupVillageWorld() {
-        /*
-         * "v1_14_R1" -> Server runs from 1.14.x
-         * "v1_15_R1" -> Server runs from 1.15.x
-         * "v1_16_R1" -> Server is running 1.16 or 1.16.1
-         * "v1_16_R2" -> Server is running 1.16.2 or 1.16.3
-         * "v1_16_R3" -> Server is running 1.16.4 or 1.16.5
-         * "v1_17_R1" -> Server runs from 1.17 to 1.17.1
-         * "v1_18_R1" -> Server runs from 1.18 to 1.18.1
-         * "v1_18_R2" -> Server runs from 1.18.2
-         * "v1_19_R1" -> Server runs from 1.19 to 1.19.2
-         * "v1_19_R2" -> Server is running 1.19.3
-         * "v1_19_R3" -> Server is running 1.19.4
-         * "v1_20_R1" -> Server runs from 1.20 to 1.20.1
-         * "v1_20_R2" -> Server is running 1.20.2
-         * "v1_20_R3" -> Server runs from 1.20.3 to 1.20.4 (currently)
-         */
-
-        final ChunkGenerator chunkGenerator;
-        try {
-            final String packageName = CoM.class.getPackage().getName();
-            final String internalsName = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-            chunkGenerator = (ChunkGenerator) Class.forName(packageName + ".world." + internalsName + ".EmptyWorldGenerator").getDeclaredConstructor().newInstance();
-        } catch (final Exception unknownVersion) {
-            throw new RuntimeException("Unknown server version: " + Bukkit.getServer().getClass().getPackage().getName());
-        }
-
-        final World world = getServer().createWorld(new WorldCreator(VillageHandler.VILLAGE_WORLD_NAME).generator(chunkGenerator)); // Load or create world
+        final World world = getServer().createWorld(new WorldCreator(VillageHandler.VILLAGE_WORLD_NAME).generator(new PlainsEmptyWorldGenerator())); // Load or create world
 
         // Setup world
         world.setDifficulty(Difficulty.PEACEFUL);
