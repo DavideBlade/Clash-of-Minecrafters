@@ -37,5 +37,12 @@ public final class PlayerJoin extends CoMListener {
             player.teleport(config.getSpawn());
 
         player.setScoreboard(ScoreboardUtil.createScoreboard(user.getBalance(), user.getTrophies()));
+
+        // Spawn NPCs in the player's village
+        if (user.getVillage() != null) {
+            plugin.getBuildingTroopRegistry().createGuardian(user);
+            if (user.hasUnlockedArcherTower())
+                plugin.getBuildingTroopRegistry().createArcher(user);
+        }
     }
 }

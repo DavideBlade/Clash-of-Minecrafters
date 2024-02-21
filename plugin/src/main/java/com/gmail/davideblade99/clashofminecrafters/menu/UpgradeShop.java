@@ -69,11 +69,6 @@ public final class UpgradeShop extends Menu {
      * @since 3.2
      */
     private static BaseItem createArcherTowerUpgradeItem(@Nonnull final CoM plugin, final int level, final byte slot) {
-        /*
-         * If any player has a level higher than the current maximum level
-         * (e.g., some levels have been removed from the config.yml),
-         * the currently configured maximum level is taken into account.
-         */
         final Settings config = plugin.getConfig();
         final int maxLevel = config.getMaxArcherTowerLevel();
 
@@ -102,11 +97,6 @@ public final class UpgradeShop extends Menu {
      * @since 3.2
      */
     private static BaseItem createGoldExtractorUpgradeItem(@Nonnull final CoM plugin, final int level, final byte slot) {
-        /*
-         * If any player has a level higher than the current maximum level
-         * (e.g., some levels have been removed from the config.yml),
-         * the currently configured maximum level is taken into account.
-         */
         final Settings config = plugin.getConfig();
         final int maxLevel = config.getMaxGoldExtractorLevel();
 
@@ -135,11 +125,6 @@ public final class UpgradeShop extends Menu {
      * @since 3.2
      */
     private static BaseItem createElixirExtractorUpgradeItem(@Nonnull final CoM plugin, final int level, final byte slot) {
-        /*
-         * If any player has a level higher than the current maximum level
-         * (e.g., some levels have been removed from the config.yml),
-         * the currently configured maximum level is taken into account.
-         */
         final Settings config = plugin.getConfig();
         final int maxLevel = config.getMaxElixirExtractorLevel();
 
@@ -168,11 +153,6 @@ public final class UpgradeShop extends Menu {
      * @since 3.2
      */
     private static BaseItem createTownHallUpgradeItem(@Nonnull final CoM plugin, final int level, final byte slot) {
-        /*
-         * If any player has a level higher than the current maximum level
-         * (e.g., some levels have been removed from the config.yml),
-         * the currently configured maximum level is taken into account.
-         */
         final Settings config = plugin.getConfig();
         final int maxLevel = config.getMaxTownHallLevel();
 

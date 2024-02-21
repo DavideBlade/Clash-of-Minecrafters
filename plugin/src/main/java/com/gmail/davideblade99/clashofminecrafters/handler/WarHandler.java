@@ -13,7 +13,6 @@ import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.player.Village;
-import com.gmail.davideblade99.clashofminecrafters.setting.ArcherTowerLevel;
 import com.gmail.davideblade99.clashofminecrafters.util.Pair;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.thread.NullableCallback;
@@ -49,7 +48,7 @@ public final class WarHandler {
      */
     private final AtomicInteger timer;
 
-    /** Map associating the islands under attack with its attacker and the task id that counts the time of the raid */
+    /** Map associating the villages under attack with its attacker and the task id that counts the time of the raid */
     private final Map<Player, Pair<Village, Integer>> attacks;
 
     public WarHandler(@Nonnull final CoM plugin) {
@@ -83,51 +82,42 @@ public final class WarHandler {
      * @throws IllegalStateException If an unexpected error occurs with the cache and player data is not found
      */
     public void startRaid(@Nonnull final Player attacker) {
-        //TODO: se non ci sono isole nemiche non cominciare neanche a cercare
-        new IslandFinder(attacker, targetIsland -> {
-            if (targetIsland == null) {
+        //TODO: se non ci sono villaggi nemiche non cominciare neanche a cercare
+        new IslandFinder(attacker, villageFound -> {
+            if (villageFound == null) {
                 MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.ISLAND_NOT_AVAILABLE));
                 return;
             }
 
-            // Unexpected missing data
-            final User targetUser = plugin.getUser(targetIsland.owner);
-            if (targetUser == null)
-                throw new IllegalStateException("User of the player \"" + targetIsland.owner + "\" was not found");
+            final User defender = plugin.getUser(villageFound.owner);
+            if (defender == null) // Unexpected missing data
+                throw new IllegalStateException("User of the player \"" + villageFound.owner + "\" was not found");
 
             // Task that ends the raid after time runs out
-            final int taskID = Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getPluginManager().callEvent(new RaidLostEvent(attacker, targetIsland.owner)), plugin.getConfig().getRaidTimeout() * 20L).getTaskId();
-            setUnderAttack(attacker, targetIsland, taskID);
+            final int taskID = Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getPluginManager().callEvent(new RaidLostEvent(attacker, defender)), plugin.getConfig().getRaidTimeout() * 20L).getTaskId();
+            setUnderAttack(attacker, villageFound, taskID);
 
-            // Spawn creature
-            plugin.getGuardianHandler().spawn(targetUser, targetIsland.owner, targetIsland.getSpawn());
+            // Spawn guardian
+            plugin.getBuildingTroopRegistry().createGuardian(defender, attacker);
 
-            final ArcherTower archerTower = targetUser.getArcherTower();
-            if (archerTower != null) { // If the player has archer tower
-                /*
-                 * If any player has a level higher than the current maximum level
-                 * (e.g., some levels have been removed from the config.yml),
-                 * the currently configured maximum level is taken into account.
-                 */
-                final ArcherTowerLevel archerTowerStat = plugin.getConfig().getExistingArcherTower(archerTower.getLevel());
-
-                plugin.getArcherHandler().spawn(targetIsland.owner, archerTowerStat.damage, archerTower.getArcherPos().toBukkitLocation(plugin.getVillageHandler().getVillageWorld()));
-            }
+            final ArcherTower archerTower = defender.getArcherTower();
+            if (archerTower != null) // If the player has archer tower
+                plugin.getBuildingTroopRegistry().createArcher(defender, attacker);
 
             // Teleport player
             MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.TELEPORTATION));
-            attacker.teleport(targetIsland.getSpawn());
+            attacker.teleport(villageFound.getSpawn());
         });
     }
 
-    public boolean isUnderAttack(@Nonnull final Village i) {
-        return getAttacker(i) != null;
+    public boolean isUnderAttack(@Nonnull final Village village) {
+        return getAttacker(village) != null;
     }
 
     /**
-     * Removes the island attacked by the player passed as a parameter from the list of those under attack
+     * Removes the village attacked by the player passed as a parameter from the list of those under attack
      *
-     * @param attacker Player who is attacking the island
+     * @param attacker Player who is attacking the village
      */
     public void removeUnderAttack(@Nonnull final Player attacker) {
         final Pair<Village, Integer> removed = attacks.remove(attacker);
@@ -136,14 +126,14 @@ public final class WarHandler {
             Bukkit.getScheduler().cancelTask(removed.getValue());
     }
 
-    private void setUnderAttack(@Nonnull final Player attacker, @Nonnull final Village island, final int taskID) {
-        attacks.put(attacker, new Pair<>(island, taskID));
+    private void setUnderAttack(@Nonnull final Player attacker, @Nonnull final Village village, final int taskID) {
+        attacks.put(attacker, new Pair<>(village, taskID));
     }
 
     @Nullable
-    public Player getAttacker(@Nonnull final Village i) {
+    public Player getAttacker(@Nonnull final Village village) {
         for (Map.Entry<Player, Pair<Village, Integer>> entry : attacks.entrySet()) {
-            if (entry.getValue().getKey().equals(i))
+            if (entry.getValue().getKey().equals(village))
                 return entry.getKey();
         }
         return null;
@@ -154,10 +144,15 @@ public final class WarHandler {
     }
 
     /**
-     * Get island attacked by specified player
+     * Gets the village attacked by the specified player
+     *
+     * @param attacker Attacking player
+     *
+     * @return The attacked village or {@code null}, if not found
+     * @since 3.2.2
      */
     @Nullable
-    public Village getAttackedIsland(@Nonnull final Player attacker) {
+    public Village getAttackedVillage(@Nonnull final Player attacker) {
         final Pair<Village, Integer> pair = attacks.get(attacker);
         return pair == null ? null : pair.getKey();
     }
@@ -174,7 +169,7 @@ public final class WarHandler {
 
         for (Map.Entry<Player, Pair<Village, Integer>> entry : attacks.entrySet()) {
             final Player attacker = entry.getKey();
-            final Village island = entry.getValue().getKey();
+            final Village village = entry.getValue().getKey();
             final int taskID = entry.getValue().getValue();
 
             Bukkit.getScheduler().cancelTask(taskID);
@@ -182,8 +177,7 @@ public final class WarHandler {
             attacker.teleport(plugin.getConfig().getSpawn());
             MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.RAID_CANCELLED, reason));
 
-            plugin.getGuardianHandler().kill(island.owner);
-            plugin.getArcherHandler().kill(island.owner);
+            plugin.getBuildingTroopRegistry().removeTroops(plugin.getUser(village.owner));
         }
         attacks.clear();
     }
@@ -268,28 +262,28 @@ public final class WarHandler {
             while (System.currentTimeMillis() <= end) // After 10 seconds break the loop
             {
                 // Database and getUser() are not thread-safe
-                final Village targetIsland = supplySync(() -> {
-                    // Choose a target island (of a player in a different clan)
+                final Village villageFound = supplySync(() -> {
+                    // Choose a target village (of a player in a different clan)
                     return plugin.getDatabase().getRandomEnemyIsland(plugin.getUser(attacker).getClanName());
                 });
-                if (targetIsland == null)
-                    break; // Island not found
+                if (villageFound == null)
+                    break; // Village not found
 
                 // getUser() is not thread-safe
-                final User targetUser = supplySync(() -> plugin.getUser(targetIsland.owner));
+                final User targetUser = supplySync(() -> plugin.getUser(villageFound.owner));
                 if (targetUser == null)
-                    throw new IllegalStateException("The User of the player \"" + targetIsland.owner + "\" was not found");
+                    throw new IllegalStateException("User of the player \"" + villageFound.owner + "\" was not found");
 
-                // If the player is online or the island is already under attack
-                if (targetUser.getBase().isOnline() || isUnderAttack(targetIsland))
+                // If the village owner is online or the village is already under attack
+                if (targetUser.getBase().isOnline() || isUnderAttack(villageFound))
                     continue;
 
-                // Island found
-                Bukkit.getScheduler().runTask(plugin, () -> callback.call(targetIsland)); // Go back on main thread
+                // Village found
+                Bukkit.getScheduler().runTask(plugin, () -> callback.call(villageFound)); // Go back on main thread
                 return;
             }
 
-            // Island not found
+            // Village not found
             Bukkit.getScheduler().runTask(plugin, () -> callback.call(null)); // Go back on main thread
         }
 

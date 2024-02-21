@@ -18,12 +18,14 @@ import com.gmail.davideblade99.clashofminecrafters.player.currency.Balance;
 import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.setting.ExtractorLevel;
 import com.gmail.davideblade99.clashofminecrafters.setting.Settings;
+import com.gmail.davideblade99.clashofminecrafters.setting.TownHallLevel;
 import com.gmail.davideblade99.clashofminecrafters.storage.PlayerDatabase;
 import com.gmail.davideblade99.clashofminecrafters.storage.type.bean.UserDatabaseType;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.ScoreboardUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
 import com.gmail.davideblade99.clashofminecrafters.util.number.IntegerUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -89,7 +91,7 @@ public final class User {
             this.archerTower = userDatabaseType.archerTower;
             this.village = userDatabaseType.island;
             this.collectionTime = userDatabaseType.collectionTime;
-            this.townHallLevel = userDatabaseType.townHallLevel;
+            setTownHallLevel(userDatabaseType.townHallLevel);
 
             // Validate town hall level
             if (townHallLevel < 0)
@@ -300,19 +302,19 @@ public final class User {
     /**
      * Sets the specified level for the town hall
      *
-     * @param level New level to set, greater than or equal to 0
+     * @param level New level to set, greater than 0
      *
-     * @throws IllegalArgumentException If the level is negative
+     * @throws IllegalArgumentException If the level is not positive
      */
     public void setTownHallLevel(final int level) {
-        if (level < 0)
-            throw new IllegalArgumentException("'" + level + "' is not a valid town hall level: it must be greater than or equal to 0");
+        if (level <= 0)
+            throw new IllegalArgumentException("'" + level + "' is not a valid town hall level: it must be greater than 0");
 
         this.townHallLevel = level;
     }
 
     /**
-     * @return {@link ElixirExtractor} owned by the player or {@code} if the player has never purchased one
+     * @return {@link ElixirExtractor} owned by the player or {@code null} if the player has never purchased one
      * @since 3.2
      */
     @Nullable
@@ -397,7 +399,7 @@ public final class User {
             final Exception exception = result.getValue();
 
             if (exception != null) {
-                if (getBase() instanceof Player) {
+                if (getBase() instanceof Player) { // Player may have disconnected during the pasting
                     if (exception instanceof PastingException)
                         MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.ISLAND_CREATION_ERROR));
                     if (exception instanceof WorldBorderReachedException)
@@ -407,10 +409,18 @@ public final class User {
             }
 
             User.this.village = village;
+            setTownHallLevel(1);
+
+            final TownHallLevel firstTownHall = plugin.getConfig().getExistingTownHall(1);
+            if (firstTownHall.command != null)
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), firstTownHall.command.replace("%player", plugin.getPlayerHandler().getPlayerName(getBase().getUniqueId())));
+
+            // Spawn the guardian
+            plugin.getBuildingTroopRegistry().createGuardian(this);
 
             updateDatabase();
 
-            if (getBase() instanceof Player) {
+            if (getBase() instanceof Player) { // Player may have disconnected during the pasting
                 MessageUtil.sendMessage((Player) getBase(), Messages.getMessage(MessageKey.TELEPORTATION));
 
                 this.village.teleportToSpawn((Player) getBase());
@@ -448,11 +458,6 @@ public final class User {
             return;
 
         if (hasUnlockedGoldExtractor()) // If the player bought the gold extractor
-            /*
-             * If any player has a level higher than the current maximum level
-             * (e.g., some levels have been removed from the config.yml),
-             * the currently configured maximum level is taken into account.
-             */
             this.addBalance(getResourcesProduced(plugin.getConfig().getExistingGoldExtractor(goldExtractor.getLevel()), this.collectionTime), Currencies.GOLD);
 
         if (hasUnlockedElixirExtractor()) // If the player bought the elixir extractor

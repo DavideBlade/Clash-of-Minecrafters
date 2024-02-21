@@ -8,10 +8,11 @@ package com.gmail.davideblade99.clashofminecrafters.listener.village;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.Permissions;
-import com.gmail.davideblade99.clashofminecrafters.player.Village;
-import com.gmail.davideblade99.clashofminecrafters.listener.IslandListener;
+import com.gmail.davideblade99.clashofminecrafters.handler.VillageHandler;
+import com.gmail.davideblade99.clashofminecrafters.listener.VillageListener;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
+import com.gmail.davideblade99.clashofminecrafters.player.Village;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -22,6 +23,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -30,15 +32,17 @@ import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.projectiles.ProjectileSource;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
 
 /**
  * Prevents damage to islands by players and game events (e.g., fire)
  *
  * @since 3.2
  */
-public final class AntiGrief extends IslandListener {
+public final class AntiGrief extends VillageListener {
 
     public AntiGrief(@Nonnull final CoM plugin) {
         super(plugin);
@@ -48,7 +52,7 @@ public final class AntiGrief extends IslandListener {
     public void onBlockBreak(final BlockBreakEvent event) {
         final Player player = event.getPlayer();
 
-        if (!isVillageWorld(event.getBlock().getWorld()))
+        if (!VillageHandler.isVillageWorld(event.getBlock().getWorld()))
             return;
 
         if (!player.hasPermission(Permissions.ISLAND_BASE + "build")) {
@@ -61,7 +65,7 @@ public final class AntiGrief extends IslandListener {
     public void onBlockPlace(final BlockPlaceEvent event) {
         final Player player = event.getPlayer();
 
-        if (!isVillageWorld(event.getBlock().getWorld()))
+        if (!VillageHandler.isVillageWorld(event.getBlock().getWorld()))
             return;
 
         if (!player.hasPermission(Permissions.ISLAND_BASE + "build")) {
@@ -80,7 +84,7 @@ public final class AntiGrief extends IslandListener {
         final Hanging hanging = event.getEntity();
         if (hanging.getType() != EntityType.ITEM_FRAME && hanging.getType() != EntityType.PAINTING)
             return;
-        if (!isVillageWorld(player.getWorld()))
+        if (!VillageHandler.isVillageWorld(player.getWorld()))
             return;
         if (!player.hasPermission(Permissions.ISLAND_BASE + "build")) {
             event.setCancelled(true);
@@ -97,7 +101,7 @@ public final class AntiGrief extends IslandListener {
         final Hanging hanging = event.getEntity();
         if (hanging.getType() != EntityType.ITEM_FRAME && hanging.getType() != EntityType.PAINTING)
             return;
-        if (!isVillageWorld(player.getWorld()))
+        if (!VillageHandler.isVillageWorld(player.getWorld()))
             return;
         if (!player.hasPermission(Permissions.ISLAND_BASE + "build")) {
             event.setCancelled(true);
@@ -109,7 +113,7 @@ public final class AntiGrief extends IslandListener {
     public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent event) {
         final Player player = event.getPlayer();
 
-        if (!isVillageWorld(player.getWorld()))
+        if (!VillageHandler.isVillageWorld(player.getWorld()))
             return;
         if (!player.hasPermission(Permissions.ISLAND_BASE + "build")) {
             event.setCancelled(true);
@@ -121,7 +125,7 @@ public final class AntiGrief extends IslandListener {
     public void onPlayerBucketFill(final PlayerBucketFillEvent event) {
         final Player player = event.getPlayer();
 
-        if (!isVillageWorld(player.getWorld()))
+        if (!VillageHandler.isVillageWorld(player.getWorld()))
             return;
         if (!player.hasPermission(Permissions.ISLAND_BASE + "build")) {
             event.setCancelled(true);
@@ -131,7 +135,7 @@ public final class AntiGrief extends IslandListener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onBurnBlock(final BlockBurnEvent event) {
-        if (!isVillageWorld(event.getBlock().getWorld()))
+        if (!VillageHandler.isVillageWorld(event.getBlock().getWorld()))
             return;
 
         event.setCancelled(true);
@@ -139,7 +143,7 @@ public final class AntiGrief extends IslandListener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onBlockSpread(final BlockSpreadEvent event) {
-        if (!isVillageWorld(event.getSource().getWorld()) && !isVillageWorld(event.getBlock().getWorld()))
+        if (!VillageHandler.isVillageWorld(event.getSource().getWorld()) && !VillageHandler.isVillageWorld(event.getBlock().getWorld()))
             return;
 
         event.setCancelled(true);
@@ -152,7 +156,7 @@ public final class AntiGrief extends IslandListener {
      */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockPistonExtend(final BlockPistonExtendEvent event) {
-        if (!isVillageWorld(event.getBlock().getWorld()))
+        if (!VillageHandler.isVillageWorld(event.getBlock().getWorld()))
             return;
 
         // If the piston moves blocks
@@ -167,7 +171,7 @@ public final class AntiGrief extends IslandListener {
      */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockPistonRetract(final BlockPistonRetractEvent event) {
-        if (!isVillageWorld(event.getBlock().getWorld()))
+        if (!VillageHandler.isVillageWorld(event.getBlock().getWorld()))
             return;
         if (!event.isSticky())
             return;
@@ -191,7 +195,7 @@ public final class AntiGrief extends IslandListener {
         final Player player = (Player) event.getPlayer();
         if (!(invHolder instanceof Horse))
             return;
-        if (!isVillageWorld(player.getWorld()))
+        if (!VillageHandler.isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
@@ -213,7 +217,7 @@ public final class AntiGrief extends IslandListener {
         final Player player = event.getPlayer();
         final Item item = event.getItemDrop();
 
-        if (!isVillageWorld(player.getWorld()))
+        if (!VillageHandler.isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "drop"))
             return;
@@ -238,7 +242,7 @@ public final class AntiGrief extends IslandListener {
 
         if (block == null)
             return;
-        if (!isVillageWorld(player.getWorld()))
+        if (!VillageHandler.isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
@@ -309,7 +313,7 @@ public final class AntiGrief extends IslandListener {
         final Player player = event.getPlayer();
         final Entity entity = event.getRightClicked();
 
-        if (!isVillageWorld(player.getWorld()))
+        if (!VillageHandler.isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
@@ -333,7 +337,7 @@ public final class AntiGrief extends IslandListener {
         final Player player = event.getPlayer();
         final Entity clicked = event.getRightClicked();
 
-        if (!isVillageWorld(player.getWorld()))
+        if (!VillageHandler.isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
@@ -357,7 +361,7 @@ public final class AntiGrief extends IslandListener {
         final Player player = event.getPlayer();
         final Entity entity = event.getEntity();
 
-        if (!isVillageWorld(player.getWorld()))
+        if (!VillageHandler.isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
@@ -378,7 +382,7 @@ public final class AntiGrief extends IslandListener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerDamageEntity(final EntityDamageByEntityEvent event) {
         final Entity target = event.getEntity();
-        if (!isVillageWorld(target.getWorld()))
+        if (!VillageHandler.isVillageWorld(target.getWorld()))
             return;
         if (target.hasPermission(Permissions.ISLAND_BASE + "interact"))
             return;
@@ -394,7 +398,7 @@ public final class AntiGrief extends IslandListener {
                 attacker = (Player) ((Projectile) event.getDamager()).getShooter();
 
         // If attacker is a player
-        if (attacker == null) {
+        if (attacker != null) {
             event.setCancelled(true);
             MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
@@ -413,7 +417,7 @@ public final class AntiGrief extends IslandListener {
 
         final Item item = event.getItem();
         final Player player = (Player) entity;
-        if (!isVillageWorld(player.getWorld()))
+        if (!VillageHandler.isVillageWorld(player.getWorld()))
             return;
         if (player.hasPermission(Permissions.ISLAND_BASE + "pickup"))
             return;
@@ -436,7 +440,7 @@ public final class AntiGrief extends IslandListener {
         final Entity damager = event.getAttacker();
         if (!(damager instanceof Player))
             return;
-        if (!isVillageWorld(damager.getWorld()))
+        if (!VillageHandler.isVillageWorld(damager.getWorld()))
             return;
 
         final Player player = (Player) damager;
@@ -456,7 +460,7 @@ public final class AntiGrief extends IslandListener {
         final Entity entered = event.getEntered();
         if (!(entered instanceof Player))
             return;
-        if (!isVillageWorld(entered.getWorld()))
+        if (!VillageHandler.isVillageWorld(entered.getWorld()))
             return;
 
         final Player player = (Player) entered;
@@ -468,5 +472,53 @@ public final class AntiGrief extends IslandListener {
             event.setCancelled(true);
             MessageUtil.sendMessage(player, Messages.getMessage(MessageKey.NO_PERMISSION));
         }
+    }
+
+    /**
+     * Prevents players from damaging each other
+     *
+     * @param event Damage event
+     *
+     * @since 3.2.2
+     */
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onPlayerDamageByPlayer(final EntityDamageByEntityEvent event) {
+        final Entity damaged = event.getEntity();
+        Entity damager = event.getDamager();
+
+        // Define shooter
+        if (damager instanceof Projectile)
+            if (((Projectile) damager).getShooter() instanceof Player)
+                damager = (Player) ((Projectile) event.getDamager()).getShooter();
+
+        if (damaged.hasMetadata("NPC") || damager.hasMetadata("NPC"))
+            return; // Damaged or damager is a NPC
+        if (!(damager instanceof Player) || !(damaged instanceof Player))
+            return; // Damaged or damager is not a player
+
+        event.setCancelled(true); // PvP not allowed
+    }
+
+    /**
+     * Prevents players from damaging each other via potions
+     *
+     * @param event Potion splash event
+     *
+     * @since 3.2.2
+     */
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onPlayerDamageByPlayer(final PotionSplashEvent event) {
+        final Collection<LivingEntity> damaged = event.getAffectedEntities();
+        final ProjectileSource thrower = event.getPotion().getShooter();
+
+        if (!(thrower instanceof Player))
+            return;
+        if (((LivingEntity) thrower).hasMetadata("NPC"))
+            return;
+
+        // Thrower is a real player
+        for (LivingEntity e : damaged)
+            if (e instanceof Player && !e.hasMetadata("NPC")) // If the damaged entity is a player
+                event.setIntensity(e, 0); // Do not apply the effect to the player
     }
 }

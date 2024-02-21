@@ -32,10 +32,12 @@ public final class PlayerQuit extends CoMListener {
         if (user.getVillage() == null)
             return;
 
-        final Village attackedIsland = plugin.getWarHandler().getAttackedIsland(player);
+        plugin.getBuildingTroopRegistry().removeTroops(user); // Removes the troops from the player's village
+
+        final Village attackedIsland = plugin.getWarHandler().getAttackedVillage(player);
         if (attackedIsland == null)
             return;
 
-        Bukkit.getPluginManager().callEvent(new RaidLostEvent(player, attackedIsland.owner));
+        Bukkit.getPluginManager().callEvent(new RaidLostEvent(player, plugin.getUser(attackedIsland.owner)));
     }
 }

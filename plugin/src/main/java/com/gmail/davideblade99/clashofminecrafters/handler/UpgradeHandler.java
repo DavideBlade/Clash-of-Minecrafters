@@ -20,6 +20,7 @@ import com.gmail.davideblade99.clashofminecrafters.schematic.Schematic;
 import com.gmail.davideblade99.clashofminecrafters.setting.*;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import com.gmail.davideblade99.clashofminecrafters.util.geometric.Vector;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -141,6 +142,9 @@ public final class UpgradeHandler {
                     final Vector corner1 = new Vector(origin.getBlockX(), origin.getBlockY(), origin.getBlockZ());
                     final Vector corner2 = new Vector(origin.getBlockX() + (schematic.getSize().getWidth() - 1), origin.getBlockY() + (schematic.getSize().getHeight() - 1), origin.getBlockZ() - (schematic.getSize().getLength() - 1));
                     user.newArcherTower(corner1, corner2);
+
+                    // Spawn the archer
+                    plugin.getBuildingTroopRegistry().createArcher(user);
                 }
 
                 //TODO: ognuno di questi metodi chiama un updateDatabase()
@@ -438,6 +442,8 @@ public final class UpgradeHandler {
             return;
         }
 
+        if (nextTownHall.command != null)
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), nextTownHall.command.replace("%player", player.getName()));
         //TODO: parte per l'incollamento della schematic
 
         //TODO: ognuno di questi metodi chiama un updateDatabase()

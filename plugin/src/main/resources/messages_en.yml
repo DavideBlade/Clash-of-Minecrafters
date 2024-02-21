@@ -150,10 +150,8 @@ Searching: '&6Searching village...'
 Island not available: '&cNo island to attack found. Try again after a few minutes.'
 # When a player tries to raid another island even though the war has not yet started.
 Must be in war: '&cBefore fighting, war must begin!'
-# When a player tries to hit the guardian of an island under attack by another player.
-Cannot hit guardian: '&cYou cannot hit guardians of islands under attack by other players!'
-# When a player tries to hit the archer of an island under attack by another player.
-Cannot hit archer: '&cYou cannot hit archers of islands under attack by other players!'
+# When a player tries to hit his own troop or one of a village he is not attacking.
+Cannot hit troop: '&cYou can only hit the troops of the village you are attacking.'
 # When a player tries to raid an island even though he is already attacking one.
 Already attacking: '&cYou are already attacking a village.'
 # When a player, during a raid, kills the guardian of the island he is attacking.

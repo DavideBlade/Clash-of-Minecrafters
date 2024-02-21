@@ -8,8 +8,10 @@ package com.gmail.davideblade99.clashofminecrafters.listener.player;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
 import com.gmail.davideblade99.clashofminecrafters.event.raid.RaidLostEvent;
+import com.gmail.davideblade99.clashofminecrafters.handler.VillageHandler;
+import com.gmail.davideblade99.clashofminecrafters.listener.VillageListener;
+import com.gmail.davideblade99.clashofminecrafters.player.User;
 import com.gmail.davideblade99.clashofminecrafters.player.Village;
-import com.gmail.davideblade99.clashofminecrafters.listener.IslandListener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,7 +20,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import javax.annotation.Nonnull;
 
-public final class PlayerDeath extends IslandListener {
+public final class PlayerDeath extends VillageListener {
 
     public PlayerDeath(@Nonnull final CoM plugin) {
         super(plugin);
@@ -28,11 +30,15 @@ public final class PlayerDeath extends IslandListener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerDeath(final PlayerDeathEvent event) {
         final Player player = event.getEntity();
-        if (!isVillageWorld(player.getWorld()))
+        if (!VillageHandler.isVillageWorld(player.getWorld()))
             return;
 
-        final Village island = plugin.getUser(player).getVillage();
-        if (island != null && !island.isInsideVillage(player.getLocation())) // If player dies out of own island
+        if (player.hasMetadata("NPC"))
+            return; // The player is a NPC
+
+        final User defender = plugin.getUser(player);
+        final Village village = defender.getVillage();
+        if (village != null && !village.isInsideVillage(player.getLocation())) // If player dies out of own village
         {
             // Prevent the loss of inventory and exp
             event.setDroppedExp(0);
@@ -40,8 +46,8 @@ public final class PlayerDeath extends IslandListener {
         }
 
         // If player dies during a raid
-        final Village attackedIsland = plugin.getWarHandler().getAttackedIsland(player);
+        final Village attackedIsland = plugin.getWarHandler().getAttackedVillage(player);
         if (attackedIsland != null)
-            Bukkit.getPluginManager().callEvent(new RaidLostEvent(player, attackedIsland.owner));
+            Bukkit.getPluginManager().callEvent(new RaidLostEvent(player, defender));
     }
 }

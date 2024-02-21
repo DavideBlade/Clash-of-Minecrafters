@@ -85,20 +85,20 @@ public final class YAMLDatabase implements PlayerDatabase {
             final Size2D size = conf.getIslandSize();
             final Size2D expansions = conf.getIslandExpansions();
             if (spawn == null && origin == null && size == null && expansions == null)
-                continue; // The player does not have an island
+                continue; // The player does not have a village
 
             // Unexpected missing data
             if (playerName == null)
                 throw new IllegalStateException("Player name associated with UUID \"" + conf.getUUID() + "\" missing");
             if (spawn == null || origin == null || size == null || expansions == null)
-                throw new IllegalStateException("Island of \"" + conf.getUUID() + "\" existing with some missing data");
+                throw new IllegalStateException("Village of \"" + conf.getUUID() + "\" existing with some missing data");
             //TODO: notificare al giocatore
 
-            // Island found
-            return new Village(playerName, spawn, origin, size, expansions);
+            // Village found
+            return new Village(conf.getUUID(), spawn, origin, size, expansions);
         }
 
-        return null; // No island available
+        return null; // No village available
     }
 
     /**
@@ -138,11 +138,11 @@ public final class YAMLDatabase implements PlayerDatabase {
             if (playerName == null)
                 throw new IllegalStateException("Player name associated with UUID \"" + conf.getUUID() + "\" missing");
             if (spawn == null || origin == null || size == null || expansions == null)
-                throw new IllegalStateException("Island of \"" + conf.getUUID() + "\" existing with some missing data");
+                throw new IllegalStateException("Village of \"" + conf.getUUID() + "\" existing with some missing data");
             //TODO: notificare al giocatore
 
             // Island found
-            return new Village(playerName, spawn, origin, size, expansions);
+            return new Village(conf.getUUID(), spawn, origin, size, expansions);
         }
         return null; // No island available
     }
@@ -171,12 +171,12 @@ public final class YAMLDatabase implements PlayerDatabase {
         final Vector islandOrigin = conf.getIslandOrigin();
         final Size2D islandSize = conf.getIslandSize();
         final Size2D islandExpansions = conf.getIslandExpansions();
-        final Village island = islandSpawn != null && islandOrigin != null && islandSize != null && islandExpansions != null ? new Village(playerName, islandSpawn, islandOrigin, islandSize, islandExpansions) : null;
+        final Village village = islandSpawn != null && islandOrigin != null && islandSize != null && islandExpansions != null ? new Village(playerUUID, islandSpawn, islandOrigin, islandSize, islandExpansions) : null;
 
         final String timestamp = conf.getCollectionTime();
         final LocalDateTime collectionTime = timestamp == null ? null : LocalDateTime.parse(timestamp, CoM.DATE_FORMAT);
 
-        return new UserDatabaseType(new Balance(gold, elixir, gems), trophies, clanName, elixirExtractor, goldExtractor, archerTower, island, collectionTime, townHallLevel);
+        return new UserDatabaseType(new Balance(gold, elixir, gems), trophies, clanName, elixirExtractor, goldExtractor, archerTower, village, collectionTime, townHallLevel);
     }
 
     /**

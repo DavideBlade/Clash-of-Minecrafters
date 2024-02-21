@@ -441,6 +441,11 @@ public final class Settings extends CoMYamlConfiguration {
         if (level <= 0)
             throw new IllegalArgumentException("Building level must be positive");
 
+        /*
+         * If any player has a level higher than the current maximum level
+         * (e.g., some levels have been removed from the config.yml),
+         * the currently configured maximum level is taken into account.
+         */
         if (level > archerTowers.size())
             level = archerTowers.size();
 
@@ -462,6 +467,11 @@ public final class Settings extends CoMYamlConfiguration {
         if (level <= 0)
             throw new IllegalArgumentException("Building level must be positive");
 
+        /*
+         * If any player has a level higher than the current maximum level
+         * (e.g., some levels have been removed from the config.yml),
+         * the currently configured maximum level is taken into account.
+         */
         if (level > goldExtractors.size())
             level = goldExtractors.size();
 
@@ -483,6 +493,11 @@ public final class Settings extends CoMYamlConfiguration {
         if (level <= 0)
             throw new IllegalArgumentException("Building level must be positive");
 
+        /*
+         * If any player has a level higher than the current maximum level
+         * (e.g., some levels have been removed from the config.yml),
+         * the currently configured maximum level is taken into account.
+         */
         if (level > elixirExtractors.size())
             level = elixirExtractors.size();
 
@@ -504,6 +519,11 @@ public final class Settings extends CoMYamlConfiguration {
         if (level <= 0)
             throw new IllegalArgumentException("Building level must be positive");
 
+        /*
+         * If any player has a level higher than the current maximum level
+         * (e.g., some levels have been removed from the config.yml),
+         * the currently configured maximum level is taken into account.
+         */
         if (level > townHalls.size())
             level = townHalls.size();
 

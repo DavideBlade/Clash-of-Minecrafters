@@ -4,15 +4,15 @@
  * All Rights Reserved.
  */
 
-package com.gmail.davideblade99.clashofminecrafters.listener.raid;
+package com.gmail.davideblade99.clashofminecrafters.listener.village;
 
 import com.gmail.davideblade99.clashofminecrafters.CoM;
-import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.event.raid.RaidLostEvent;
 import com.gmail.davideblade99.clashofminecrafters.listener.CoMListener;
 import com.gmail.davideblade99.clashofminecrafters.message.MessageKey;
 import com.gmail.davideblade99.clashofminecrafters.message.Messages;
 import com.gmail.davideblade99.clashofminecrafters.player.User;
+import com.gmail.davideblade99.clashofminecrafters.player.currency.Currencies;
 import com.gmail.davideblade99.clashofminecrafters.util.Pair;
 import com.gmail.davideblade99.clashofminecrafters.util.bukkit.MessageUtil;
 import org.bukkit.entity.Player;
@@ -21,6 +21,12 @@ import org.bukkit.event.EventPriority;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Manages the event related to the loss of a raid
+ *
+ * @author DavideBlade
+ * @since 3.2.2
+ */
 public final class RaidLost extends CoMListener {
 
     public RaidLost(@Nonnull final CoM plugin) {
@@ -40,28 +46,23 @@ public final class RaidLost extends CoMListener {
      */
     @EventHandler(priority = EventPriority.HIGH)
     public void onRaidFail(final RaidLostEvent event) {
-        final String islandOwner = event.getDefender();
+        final User defender = event.getDefender();
         final Player attacker = event.getAttacker();
+        final Pair<Pair<Integer, Currencies>, Integer> raidPenalty = plugin.getConfig().getRaidPenalty();
+        final User userAttacker = plugin.getUser(attacker);
 
         attacker.teleport(plugin.getConfig().getSpawn());
-        MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.RAID_FAILUIRE, islandOwner));
 
-        plugin.getGuardianHandler().kill(islandOwner);
-        plugin.getArcherHandler().kill(islandOwner);
+        plugin.getBuildingTroopRegistry().removeTroops(defender);
 
         plugin.getWarHandler().removeUnderAttack(attacker);
 
-        final User user_attacker = plugin.getUser(attacker);
-        final User user_defender = plugin.getUser(islandOwner);
-        final Pair<Pair<Integer, Currencies>, Integer> raidPenalty = plugin.getConfig().getRaidPenalty();
+        userAttacker.removeBalance(raidPenalty.getKey().getKey(), raidPenalty.getKey().getValue());
+        userAttacker.removeTrophies(raidPenalty.getValue());
 
-        user_attacker.removeBalance(raidPenalty.getKey().getKey(), raidPenalty.getKey().getValue());
-        user_attacker.removeTrophies(raidPenalty.getValue());
+        defender.addBalance(raidPenalty.getKey().getKey(), raidPenalty.getKey().getValue());
+        defender.addTrophies(raidPenalty.getValue());
 
-        // Unexpected missing data
-        if (user_defender == null)
-            throw new IllegalStateException("Raid defender \"" + islandOwner + "\" missing from the database");
-        user_defender.addBalance(raidPenalty.getKey().getKey(), raidPenalty.getKey().getValue());
-        user_defender.addTrophies(raidPenalty.getValue());
+        MessageUtil.sendMessage(attacker, Messages.getMessage(MessageKey.RAID_FAILUIRE, defender.getBase().getName()));
     }
 }
