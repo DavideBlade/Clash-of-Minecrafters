@@ -77,6 +77,7 @@
         </resources>
 
         <plugins>
+            <!-- Shade plugin required to embed HikariCP within the .jar file -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
