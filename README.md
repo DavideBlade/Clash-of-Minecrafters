@@ -6,3 +6,4 @@
 - `master` - release branch: here the code is stable
 - `Feature/` - contain feature additions/removals
 - `BugFix/` - contain bug fixes
+- `Modernization/` - contain generalized code refactoring
